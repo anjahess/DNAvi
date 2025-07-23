@@ -145,11 +145,11 @@ You can now go to you results folder:
 
 In the plots folder, you will find various plots summarizing fragmentomic traces of your samples.
 
-![Test Image 5](tests/img/plot_example_2.png)
+![DNA Image 1](static/plot_example_2.png)
 
 In case you provided a metadata file, each category will result in its own plot. In the example below, the 27 samples stem from
 two experiments, and we can see the integrated profile plot for each expeirment below:
-![Test Image 5](tests/img/plot_example_1.png)
+![DNA Image 2](static/plot_example_1.png)
 
 ## 5. Multi-file input
 
