@@ -19,7 +19,7 @@ sys.path.insert(0, f"{maindir}/src")
 sys.path.insert(0, f"{maindir}/src")
 from constants import YLABEL, YCOL, XCOL, XLABEL
 from plotting import lineplot, ladderplot, peakplot, gridplot
-from data_checks import check_file
+from data_checks import check_file, check_ladder
 import logging
 
 def wide_to_long(df, id_var="pos", var_name="sample", value_name="value"):
@@ -40,8 +40,8 @@ def wide_to_long(df, id_var="pos", var_name="sample", value_name="value"):
     return df_long
 
 
-def peak2basepairs(df, qc_save_dir, ladder_type="auto", y_label=YLABEL, x_label=XLABEL,
-                   ladder_dir=""):
+def peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL,
+                   ladder_dir="", ladder_type="custom"):
     """
     Define the maxima in the ladder EPG.
 
@@ -52,17 +52,12 @@ def peak2basepairs(df, qc_save_dir, ladder_type="auto", y_label=YLABEL, x_label=
     ladder2type = {}
     return_df = df.copy()
 
-    detected_ladders = [e for e in df.columns if "Ladder" in e]
-    if not detected_ladders:
-        error = "Input file misformatted (no ladder/too few columns)."
-        print(error)
-        exit()
     #####################################################################
-    # 1. Iterate through ladders
+    # 1. In the signal matrix: iterate through ladder columns
     #####################################################################
+
     for i, ladder in enumerate([e for e in df.columns if "Ladder" in e]):
         ladder_id = ladder.replace(' ', '').replace(':', '')
-
         #################################################################
         # 1.1 Get values and find maxima (require at least 50% of max)
         #################################################################
@@ -70,8 +65,8 @@ def peak2basepairs(df, qc_save_dir, ladder_type="auto", y_label=YLABEL, x_label=
         max_peak = array.max()
         min_peak_height = max_peak*0.2
 
-        if "adjust" in ladder:
-            # Customize ladder if detection not working in auto
+        # Potential to customize the ladder specs manually (for developers)
+        if "adjust" in ladder_type:
             peaks, _ = find_peaks(array, distance=20,  # 10 pos apart
                                   height=50)  # minimum height
         else:
@@ -84,45 +79,23 @@ def peak2basepairs(df, qc_save_dir, ladder_type="auto", y_label=YLABEL, x_label=
         ##################################################################
         # 1.2 Detect ladder type
         ##################################################################
-        ladder_df = pd.read_csv(f"{ladder_dir}")
+        check_ladder(ladder_dir)
+        ladder_df = pd.read_csv(ladder_dir)
+        ref = "custom"
+        ladder_df["Basepairs"].astype(int).values.tolist()[::-1]
+        peak_annos = ladder_df["Basepairs"].astype(int).values.tolist()[::-1]
+        print(peak_annos)
+        exit()
         try:
             if "marker" in ladder_df["Peak"]:
+                print("--- MARKER DETECTED.")
+                exit()
                 logging.info("Markers detected")
             if "Basepairs" in ladder_df.columns:
                 logging.info("Basepairs detected")
         except:
-            error = ("Peak or Basepairs column in ladder file missing.")
-            return None, error
-        ##################################################################
-        # DATA SANITY CHECKS
-        ##################################################################
-        if (ladder_df['Peak'].isnull().values.any() or
-                ladder_df['Basepairs'].isnull().values.any()):
-            error = ("Empty positions in ladder file detected. "
-                     "Make sure Peak/Basepairs column have the same length.")
-            return None, error
-
-        if (ladder_df["Basepairs"].dtypes != float and
-                (ladder_df["Basepairs"].dtypes != int)):
-            error = ("Peak column in ladder file contains "
-                     "invalid data (not int or float).")
-            return None, error
-
-        zero_count = ladder_df['Basepairs'].value_counts().get(0, 0)
-        if zero_count > 0:
-            error = ("Detected Zeros in Basepairs column. "
-                     "That's not allowed...sorry")
-            return None, error
-
-        ref = "custom"
-        ladder_df["Basepairs"].astype(int).values.tolist()[::-1]
-        peak_annos = ladder_df["Basepairs"].astype(int).values.tolist()[::-1]
-
-        if not sorted(peak_annos) == peak_annos:
-            error = ("Your markers in ladder file are not sorted by "
-                     "basepair size. That's not allowed...sorry")
-            return None, error
-
+            print("Peak or Basepairs column in ladder file missing.")
+            exit()
         peak_dict = {ref: peak_annos}
 
         # Now redo (basic if no ladder info is given)
@@ -297,6 +270,7 @@ def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="b
     """
 
     if peak_dict:
+        print(peak_dict)
         #################################################################
         # 1. Remove the marker bands (lowest / top band)
         #################################################################
@@ -414,6 +388,9 @@ def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None):
     for directory in [save_dir, plot_dir, qc_dir]:
         os.makedirs(directory, exist_ok=True)
 
+    print("------------------------------------------------------------")
+    print("        Calculating basepair positions based on ladder")
+    print("------------------------------------------------------------")
     peak_dict, error = peak2basepairs(df, qc_dir,ladder_dir=path_to_ladder)
     df = pd.read_csv(basepair_translation_file, header=0, index_col=0)
 

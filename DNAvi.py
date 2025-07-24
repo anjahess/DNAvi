@@ -45,8 +45,8 @@ parser.add_argument('-i', '--input',
                     type=check_input,
                     metavar='<input-file-or-folder>',
                     nargs='?', #single file
-                    help='Path to electropherogram table file or image file '
-                         'OR directory containing those files. '
+                    help='Path to electropherogram table file or image '
+                         'file OR directory containing those files. '
                          'Accepted formats: .csv/.png/.jpeg/.jpg '
                          'or directory containing those.')
 
@@ -54,24 +54,25 @@ parser.add_argument('-l', '--ladder',
                     type=check_ladder,
                     metavar='<ladder-file>',
                     nargs='?', #single file
-                    help='Path to ladder table file. Accepted format: .csv',
+                    help='Path to ladder table file. Accepted format: '
+                         '.csv',
                     required=True)
 
 parser.add_argument('-m', '--meta',
                     type=check_meta,
                     metavar='<metadata-file>',
                     nargs='?', #single file
-                    help='Path to metadata table file containing grouping information for '
-                         'input file (e.g. age, sex, disease). '
-                         'Accepted format: .csv',
+                    help='Path to metadata table file containing grouping '
+                         'information for input file (e.g. age, sex, '
+                         'disease). Accepted format: .csv',
                     required=False)
 
 parser.add_argument('-n', '--name',
                     type=check_name,
                     metavar='<run-name>',
                     nargs='?', #single file
-                    help='Name of your run/experiment. Will define output folder'
-                         'name',
+                    help='Name of your run/experiment. '
+                         'Will define output folder name',
                     required=False)
 
 parser.add_argument("--verbose", help="increase output verbosity",
@@ -96,7 +97,8 @@ elif os.path.isfile(csv_path):
                       e.endswith(tuple(ACCEPTED_FORMATS))]
 
 if not files_to_check:
-    print(f"--- No valid file(s), only {ACCEPTED_FORMATS} accepted: {csv_path}")
+    print(f"--- No valid file(s), only {ACCEPTED_FORMATS} accepted: "
+          f"{csv_path}")
     exit(1)
 
 #########################################################################
@@ -106,7 +108,7 @@ for file in files_to_check:
     if file.endswith(".csv"):
         epg_analysis(file, ladder_path, meta_path, run_id=args.name)
     else:
-        dna_file_from_image, error = analyze_gel(file)
+        dna_file_from_image, error = analyze_gel(file, run_id=args.name)
         if not error:
             error = epg_analysis(dna_file_from_image, ladder_path, meta_path
                                  , run_id=args.name)

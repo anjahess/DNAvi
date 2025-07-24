@@ -5,6 +5,7 @@ Add on functions for electropherogram generation from an annotated gel image
 @date: 2025-APR-15
 
 """
+import os
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
@@ -20,12 +21,25 @@ def range_intersect(r1, r2):
     return range(max(r1.start, r2.start), min(r1.stop, r2.stop)) or None
 
 
-def analyze_gel(image_file):
+def analyze_gel(image_file, run_id=None):
     """
 
     :param image_file:
     :return:
     """
+
+    print("------------------------------------------------------------")
+    print("        Loading image for signal table generation")
+    print("------------------------------------------------------------")
+
+    # Define output dir
+    if not run_id:
+        run_id = image_file.rsplit("/", 1)[1].rsplit(".", 1)[0]
+    save_dir = image_file.rsplit("/", 1)[0] + f"/{run_id}/"
+    gel_dir = f"{save_dir}images/"
+    os.makedirs(save_dir, exist_ok=True)
+    os.makedirs(gel_dir, exist_ok=True)
+
     ####################################################################################
     # 1. Load the image
     ####################################################################################
@@ -41,7 +55,7 @@ def analyze_gel(image_file):
     thresh_img = grey < threshold
     fig, ax = plt.subplots()
     ax.imshow(thresh_img, cmap="gray")
-    plt.savefig(input_image.rsplit('.',1)[0]+"_thresholded.png")
+    plt.savefig(f"{gel_dir}thresholded.png")
     plt.close()
 
     ####################################################################################
@@ -52,7 +66,7 @@ def analyze_gel(image_file):
     image_label_overlay = label2rgb(label_image, image=grey, bg_label=0)
     fig, ax = plt.subplots(figsize=(10, 6))
     ax.imshow(image_label_overlay)
-    plt.savefig(input_image.rsplit('.',1)[0]+"_lanes.png")
+    plt.savefig(f"{gel_dir}lanes.png")
     plt.close()
     height_max = label_image.shape[0]
 
@@ -90,7 +104,7 @@ def analyze_gel(image_file):
                 linewidth=2)
             ax.add_patch(rect)
     plt.tight_layout()
-    plt.savefig(input_image.rsplit('.',1)[0]+f"_{counter}_lanes_borders.png")
+    plt.savefig(f"{gel_dir}{counter}_lanes_borders.png")
     plt.close()
 
     ####################################################################################
@@ -117,7 +131,7 @@ def analyze_gel(image_file):
         ax[0].plot([start[1], end[1]], [start[0], end[0]], 'r')
         ax[1].set_title('Profile')
         ax[1].plot(profile)
-        plt.savefig(input_image.rsplit('.',1)[0]+f"{region}_profile.png")
+        plt.savefig(f"{gel_dir}{region}_profile.png")
         plt.close()
         profiles.append(profile)
 
