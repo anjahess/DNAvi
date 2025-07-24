@@ -1,0 +1,61 @@
+constants
+=========
+
+.. py:module:: constants
+
+.. autoapi-nested-parse::
+
+   Constants for electropherogram analysis.
+   @author: Anja Hess
+   @date: 2023-JUL-01
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   constants.YCOL
+   constants.XCOL
+   constants.YLABEL
+   constants.XLABEL
+   constants.ACCEPTED_FORMATS
+   constants.palettediff3
+   constants.palettediff2
+   constants.peak_dict
+
+
+Module Contents
+---------------
+
+.. py:data:: YCOL
+   :value: 'normalized_fluorescent_units'
+
+
+.. py:data:: XCOL
+   :value: 'bp_pos'
+
+
+.. py:data:: YLABEL
+   :value: 'Sample Intensity [Normalized FU]'
+
+
+.. py:data:: XLABEL
+   :value: 'Size [bp]'
+
+
+.. py:data:: ACCEPTED_FORMATS
+   :value: ['.csv', '.png', '.jpeg', '.jpg']
+
+
+.. py:data:: palettediff3
+   :value: ['darkgrey', 'black', 'grey', '#d56763', '#85ada3', '#2d435b', '#eacdcb', '#fcd2a1', '#d56763',...
+
+
+.. py:data:: palettediff2
+   :value: ['darkgrey', '#d56763', '#fcd2a1', '#85ada3', '#eacdcb', '#a7c6c9', '#2d435b', '#d56763',...
+
+
+.. py:data:: peak_dict
+

@@ -1,0 +1,288 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>analyze_electrophero &mdash; DNAvi 0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=2709fde1"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="prev" title="data_checks" href="../data_checks/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: white" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            DNAvi
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">1. Core modules (src)</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../plotting/index.html">plotting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../constants/index.html">constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analyze_gel/index.html">analyze_gel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data_checks/index.html">data_checks</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">analyze_electrophero</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#attributes">Attributes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-contents">Module Contents</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#analyze_electrophero.script_path"><code class="docutils literal notranslate"><span class="pre">script_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#analyze_electrophero.maindir"><code class="docutils literal notranslate"><span class="pre">maindir</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#analyze_electrophero.wide_to_long"><code class="docutils literal notranslate"><span class="pre">wide_to_long()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#analyze_electrophero.peak2basepairs"><code class="docutils literal notranslate"><span class="pre">peak2basepairs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#analyze_electrophero.split_and_long_by_ladder"><code class="docutils literal notranslate"><span class="pre">split_and_long_by_ladder()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#analyze_electrophero.parse_meta_to_long"><code class="docutils literal notranslate"><span class="pre">parse_meta_to_long()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#analyze_electrophero.normalize"><code class="docutils literal notranslate"><span class="pre">normalize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#analyze_electrophero.epg_stats"><code class="docutils literal notranslate"><span class="pre">epg_stats()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#analyze_electrophero.epg_analysis"><code class="docutils literal notranslate"><span class="pre">epg_analysis()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: white" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">DNAvi</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">API Reference</a></li>
+      <li class="breadcrumb-item active">analyze_electrophero</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/autoapi/analyze_electrophero/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-analyze_electrophero">
+<span id="analyze-electrophero"></span><h1>analyze_electrophero<a class="headerlink" href="#module-analyze_electrophero" title="Link to this heading"></a></h1>
+<p>Main functions for electropherogram analysis.
+&#64;author: Anja Hess
+&#64;date: 2023-JUL-01</p>
+<section id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#analyze_electrophero.script_path" title="analyze_electrophero.script_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">script_path</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#analyze_electrophero.maindir" title="analyze_electrophero.maindir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">maindir</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#analyze_electrophero.wide_to_long" title="analyze_electrophero.wide_to_long"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wide_to_long</span></code></a>(df[, id_var, var_name, value_name])</p></td>
+<td><p>Transfer pandas df to long format.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#analyze_electrophero.peak2basepairs" title="analyze_electrophero.peak2basepairs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">peak2basepairs</span></code></a>(df, qc_save_dir[, y_label, x_label, ...])</p></td>
+<td><p>Define the maxima in the ladder EPG.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#analyze_electrophero.split_and_long_by_ladder" title="analyze_electrophero.split_and_long_by_ladder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">split_and_long_by_ladder</span></code></a>(df, path_to_file)</p></td>
+<td><p>We transfer to long format giving each experiment the base pair</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#analyze_electrophero.parse_meta_to_long" title="analyze_electrophero.parse_meta_to_long"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_meta_to_long</span></code></a>(df, metafile[, sample_col, source_file])</p></td>
+<td><p>Parse metadata and transfer to long</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#analyze_electrophero.normalize" title="analyze_electrophero.normalize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normalize</span></code></a>(df[, ladder, peak_dict])</p></td>
+<td><p>Function to normalize the RFU to a value between 0,1</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#analyze_electrophero.epg_stats" title="analyze_electrophero.epg_stats"><code class="xref py py-obj docutils literal notranslate"><span class="pre">epg_stats</span></code></a>(df[, save_dir, unit, size_unit, ladder, ...])</p></td>
+<td><p>To compute basic statistics for DNA distr.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#analyze_electrophero.epg_analysis" title="analyze_electrophero.epg_analysis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">epg_analysis</span></code></a>(path_to_file, path_to_ladder, path_to_meta)</p></td>
+<td><p>To plot the Tape Station electropherogram</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<dl class="py data">
+<dt class="sig sig-object py" id="analyze_electrophero.script_path">
+<span class="sig-prename descclassname"><span class="pre">analyze_electrophero.</span></span><span class="sig-name descname"><span class="pre">script_path</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#analyze_electrophero.script_path" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="analyze_electrophero.maindir">
+<span class="sig-prename descclassname"><span class="pre">analyze_electrophero.</span></span><span class="sig-name descname"><span class="pre">maindir</span></span><a class="headerlink" href="#analyze_electrophero.maindir" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analyze_electrophero.wide_to_long">
+<span class="sig-prename descclassname"><span class="pre">analyze_electrophero.</span></span><span class="sig-name descname"><span class="pre">wide_to_long</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_var</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pos'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sample'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'value'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analyze_electrophero.wide_to_long" title="Link to this definition"></a></dt>
+<dd><p>Transfer pandas df to long format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>df</strong></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analyze_electrophero.peak2basepairs">
+<span class="sig-prename descclassname"><span class="pre">analyze_electrophero.</span></span><span class="sig-name descname"><span class="pre">peak2basepairs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qc_save_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">YLABEL</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">XLABEL</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ladder_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ladder_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'custom'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analyze_electrophero.peak2basepairs" title="Link to this definition"></a></dt>
+<dd><p>Define the maxima in the ladder EPG.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong></p></li>
+<li><p><strong>qc_save_dir</strong></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analyze_electrophero.split_and_long_by_ladder">
+<span class="sig-prename descclassname"><span class="pre">analyze_electrophero.</span></span><span class="sig-name descname"><span class="pre">split_and_long_by_ladder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_to_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analyze_electrophero.split_and_long_by_ladder" title="Link to this definition"></a></dt>
+<dd><p>We transfer to long format giving each experiment the base pair
+position assigned by previous marker interpolation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> – pandas df</p></li>
+<li><p><strong>path_to_file</strong> – str</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>pandas df (long)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analyze_electrophero.parse_meta_to_long">
+<span class="sig-prename descclassname"><span class="pre">analyze_electrophero.</span></span><span class="sig-name descname"><span class="pre">parse_meta_to_long</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metafile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sample'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analyze_electrophero.parse_meta_to_long" title="Link to this definition"></a></dt>
+<dd><p>Parse metadata and transfer to long</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong></p></li>
+<li><p><strong>metafile</strong></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analyze_electrophero.normalize">
+<span class="sig-prename descclassname"><span class="pre">analyze_electrophero.</span></span><span class="sig-name descname"><span class="pre">normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ladder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peak_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analyze_electrophero.normalize" title="Link to this definition"></a></dt>
+<dd><p>Function to normalize the RFU to a value between 0,1</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analyze_electrophero.epg_stats">
+<span class="sig-prename descclassname"><span class="pre">analyze_electrophero.</span></span><span class="sig-name descname"><span class="pre">epg_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'normalized_fluorescent_units'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size_unit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bp_pos'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ladder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peak_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analyze_electrophero.epg_stats" title="Link to this definition"></a></dt>
+<dd><p>To compute basic statistics for DNA distr.
+:return:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analyze_electrophero.epg_analysis">
+<span class="sig-prename descclassname"><span class="pre">analyze_electrophero.</span></span><span class="sig-name descname"><span class="pre">epg_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_to_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_to_ladder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_to_meta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analyze_electrophero.epg_analysis" title="Link to this definition"></a></dt>
+<dd><p>To plot the Tape Station electropherogram
+:param path_to_file: str
+:return:</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../data_checks/index.html" class="btn btn-neutral float-left" title="data_checks" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Anja Hess.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+    <!-- Theme Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXXXX-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-XXXXXXX-1', {
+          'anonymize_ip': false,
+      });
+    </script> 
+
+</body>
+</html>

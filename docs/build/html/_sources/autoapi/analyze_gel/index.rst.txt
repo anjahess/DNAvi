@@ -1,0 +1,33 @@
+analyze_gel
+===========
+
+.. py:module:: analyze_gel
+
+.. autoapi-nested-parse::
+
+   Add on functions for electropherogram generation from an annotated gel image
+   @author: Anja Hess
+   @date: 2025-APR-15
+
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   analyze_gel.range_intersect
+   analyze_gel.analyze_gel
+
+
+Module Contents
+---------------
+
+.. py:function:: range_intersect(r1, r2)
+
+.. py:function:: analyze_gel(image_file, run_id=None)
+
+   :param image_file:
+   :return:
+
+

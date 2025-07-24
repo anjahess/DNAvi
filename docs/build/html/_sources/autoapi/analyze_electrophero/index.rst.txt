@@ -1,0 +1,101 @@
+analyze_electrophero
+====================
+
+.. py:module:: analyze_electrophero
+
+.. autoapi-nested-parse::
+
+   Main functions for electropherogram analysis.
+   @author: Anja Hess
+   @date: 2023-JUL-01
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   analyze_electrophero.script_path
+   analyze_electrophero.maindir
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   analyze_electrophero.wide_to_long
+   analyze_electrophero.peak2basepairs
+   analyze_electrophero.split_and_long_by_ladder
+   analyze_electrophero.parse_meta_to_long
+   analyze_electrophero.normalize
+   analyze_electrophero.epg_stats
+   analyze_electrophero.epg_analysis
+
+
+Module Contents
+---------------
+
+.. py:data:: script_path
+   :value: ''
+
+
+.. py:data:: maindir
+
+.. py:function:: wide_to_long(df, id_var='pos', var_name='sample', value_name='value')
+
+   Transfer pandas df to long format.
+
+   :param df:
+   :return:
+
+
+
+.. py:function:: peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL, ladder_dir='', ladder_type='custom')
+
+   Define the maxima in the ladder EPG.
+
+   :param df:
+   :param qc_save_dir:
+   :return:
+
+
+.. py:function:: split_and_long_by_ladder(df, path_to_file)
+
+   We transfer to long format giving each experiment the base pair
+   position assigned by previous marker interpolation.
+
+   :param df: pandas df
+   :param path_to_file: str
+   :return: pandas df (long)
+
+
+.. py:function:: parse_meta_to_long(df, metafile, sample_col='sample', source_file='')
+
+   Parse metadata and transfer to long
+
+   :param df:
+   :param metafile:
+   :return:
+
+
+.. py:function:: normalize(df, ladder='', peak_dict='')
+
+   Function to normalize the RFU to a value between 0,1
+
+
+
+.. py:function:: epg_stats(df, save_dir='', unit='normalized_fluorescent_units', size_unit='bp_pos', ladder='', peak_dict=None)
+
+   To compute basic statistics for DNA distr.
+   :return:
+
+
+.. py:function:: epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None)
+
+   To plot the Tape Station electropherogram
+   :param path_to_file: str
+   :return:
+
+

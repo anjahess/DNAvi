@@ -1,0 +1,80 @@
+data_checks
+===========
+
+.. py:module:: data_checks
+
+.. autoapi-nested-parse::
+
+   Functions to assure input files to DNAvi are correctly formatted
+
+   @author: Anja Hess
+   @date: 2025-JUL-23
+
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   data_checks.detect_delim
+   data_checks.check_name
+   data_checks.check_input
+   data_checks.check_file
+   data_checks.check_ladder
+   data_checks.check_meta
+
+
+Module Contents
+---------------
+
+.. py:function:: detect_delim(file, num_rows=1)
+
+   In case not tab delim
+   #https://stackoverflow.com/questions/65909857/
+   may-i-use-either-tab-or-comma-as-delimiter-
+   when-reading-from-pandas-csv
+   :param file:
+   :param num_rows:
+   :return:
+
+
+.. py:function:: check_name(filename)
+
+   Function to check if a filename is okay
+   :param filename: str
+   :return: improved file name
+
+
+.. py:function:: check_input(filename)
+
+   Function to check if the input is either a directory with csvs or images
+   or a single file
+   :param filename: str
+   :return: raise error if file does not have correct format
+
+
+
+.. py:function:: check_file(filename)
+
+   Function to check if file is correctly formatted
+   :param filename:
+   :return:
+
+
+.. py:function:: check_ladder(filename)
+
+   Function to check if the ladder is formatted correctly
+   :param filename: str
+   :return: raise error if file does not have correct format
+
+
+
+.. py:function:: check_meta(filename)
+
+   Function to check if the ladder is formatted correctly
+   :param filename: str
+   :return: raise error if file does not have correct format
+
+
+

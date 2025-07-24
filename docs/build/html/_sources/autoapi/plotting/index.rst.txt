@@ -1,0 +1,72 @@
+plotting
+========
+
+.. py:module:: plotting
+
+.. autoapi-nested-parse::
+
+   Plotting functions for electropherogram analysis.
+   @author: Anja Hess
+   @date: 2023-JUL-01
+
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   plotting.set_style_for_paper
+   plotting.gridplot
+   plotting.peakplot
+   plotting.lineplot
+   plotting.ladderplot
+
+
+Module Contents
+---------------
+
+.. py:function:: set_style_for_paper()
+
+.. py:function:: gridplot(df, x, y, save_dir='', title='', y_label='', x_label='', hue=None, units=None, plot_lower=False, estimator='mean', style=None, window=False, ladder='', peak_dict='', ladder_dir='')
+
+   DNA size line plot with masking option for marker peaks
+
+
+.. py:function:: peakplot(array, peaks, ladder_id, ref, i, qc_save_dir, y_label='')
+
+   :param array:
+   :param peaks:
+   :param ladder_id:
+   :param ref:
+   :param i:
+   :param qc_save_dir:
+   :param y_label:
+   :return:
+
+
+.. py:function:: lineplot(df, x, y, save_dir='', title='', y_label='', x_label='', hue=None, units=None, plot_lower=False, estimator='mean', style=None, window=False)
+
+   DNA size line plot
+
+   :param df:
+   :param x:
+   :param y:
+   :param save_dir:
+   :param title:
+   :param y_label:
+   :param x_label:
+   :param window: x lims
+   :return:
+
+
+.. py:function:: ladderplot(df, ladder2type, qc_save_dir, y_label='', x_label='')
+
+   :param df:
+   :param ladder2type:
+   :param qc_save_dir:
+   :param y_label:
+   :param x_label:
+   :return:
+
+
