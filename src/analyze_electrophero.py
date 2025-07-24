@@ -17,7 +17,7 @@ sys.path.insert(0, script_path)
 sys.path.insert(0, maindir)
 sys.path.insert(0, f"{maindir}/src")
 sys.path.insert(0, f"{maindir}/src")
-from constants import YLABEL, YCOL, XCOL, XLABEL
+from constants import YLABEL, YCOL, XCOL, XLABEL, DISTANCE, CUSTOM_MIN_PEAK_HEIGHT
 from plotting import lineplot, ladderplot, peakplot, gridplot
 from data_checks import check_file, check_ladder
 import logging
@@ -43,10 +43,16 @@ def wide_to_long(df, id_var="pos", var_name="sample", value_name="value"):
 def peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL,
                    ladder_dir="", ladder_type="custom"):
     """
-    Define the maxima in the ladder EPG.
+    Function to infer ladder peaks from the signal table and
+    annotate those to base pair positions with the user-definded
+    ladder-file.
 
-    :param df:
-    :param qc_save_dir:
+    :param df: pandas dataframe
+    :param qc_save_dir: directory to save qc results
+    :param y_label: str
+    :param x_label: str
+    :param ladder_dir: str
+    :param ladder_type: str
     :return:
     """
     ladder2type = {}
@@ -55,9 +61,9 @@ def peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL,
     #####################################################################
     # 1. In the signal matrix: iterate through ladder columns
     #####################################################################
-
     for i, ladder in enumerate([e for e in df.columns if "Ladder" in e]):
         ladder_id = ladder.replace(' ', '').replace(':', '')
+
         #################################################################
         # 1.1 Get values and find maxima (require at least 50% of max)
         #################################################################
@@ -65,51 +71,48 @@ def peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL,
         max_peak = array.max()
         min_peak_height = max_peak*0.2
 
-        # Potential to customize the ladder specs manually (for developers)
+        # Potential to customize ladder peak calling (for developers)
         if "adjust" in ladder_type:
-            peaks, _ = find_peaks(array, distance=20,  # 10 pos apart
-                                  height=50)  # minimum height
+            peaks, _ = find_peaks(array, distance=DISTANCE,
+                                  height=CUSTOM_MIN_PEAK_HEIGHT)
         else:
-            peaks, _ = find_peaks(array, distance=20,  # 10 pos apart
-                                  height=min_peak_height)  # minimum height
+            peaks, _ = find_peaks(array, distance=DISTANCE,
+                                  height=min_peak_height)
         peak_list = peaks.tolist()
         print(f"{len(peak_list)} peaks detected.")
-        logging.info(f"{len(peak_list)} peaks detected.")
 
         ##################################################################
-        # 1.2 Detect ladder type
+        # 1.2 Render ladder from user-provided file
         ##################################################################
         check_ladder(ladder_dir)
         ladder_df = pd.read_csv(ladder_dir)
-        ref = "custom"
         ladder_df["Basepairs"].astype(int).values.tolist()[::-1]
         peak_annos = ladder_df["Basepairs"].astype(int).values.tolist()[::-1]
-        print(peak_annos)
-        exit()
-        try:
-            if "marker" in ladder_df["Peak"]:
-                print("--- MARKER DETECTED.")
-                exit()
-                logging.info("Markers detected")
-            if "Basepairs" in ladder_df.columns:
-                logging.info("Basepairs detected")
-        except:
-            print("Peak or Basepairs column in ladder file missing.")
-            exit()
-        peak_dict = {ref: peak_annos}
 
-        # Now redo (basic if no ladder info is given)
-        if len(peak_dict[ref]) != len(peak_list):
+        ##################################################################
+        # Find markers and store their bp values
+        ##################################################################
+        print("--- Checking for marker bands")
+        markers = ladder_df[ladder_df['Peak'].str.contains(
+            'marker')]["Basepairs"].tolist()
+        if markers:
+            print("--- Found markers: {}".format(markers), " (upper, lower)")
+
+        peak_dict = {i: [peak_annos, markers]}
+        ##################################################################
+        # ---- SANITY CHECK ----- equals nr of detected peaks?
+        ##################################################################
+        if len(peak_dict[i][0]) != len(peak_list):
             error = ("Inconstistent number of peaks between ladder file "
                      "and data input")
-            return None, error
-
-        ladder2type.update({ladder: ref})
+            print(error)
+            exit()
+        ladder2type.update({ladder: i})
 
         #################################################################
-        # 1.3 Plot
+        # 1.3 Plot intermed results
         #################################################################
-        peakplot(array, peaks, ladder_id, ref, i, qc_save_dir,
+        peakplot(array, peaks, ladder_id, i, i, qc_save_dir,
                  y_label=y_label)
 
         #################################################################
@@ -119,9 +122,8 @@ def peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL,
         peak_counter = 0
         for n, pos in enumerate(array):
             if n in peak_list:
-                peak_col.append(peak_dict[ref][peak_counter])
+                peak_col.append(peak_dict[i][0][peak_counter])
                 peak_counter += 1
-
             else:
                 peak_col.append(np.nan)
 
@@ -130,34 +132,31 @@ def peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL,
         #################################################################
         s = pd.Series(peak_col)
         df[ladder + "_interpol"] = s.interpolate()
-        # Just update the df tb returned
         return_df[ladder] = s.interpolate()
 
         #################################################################
-        # 1.3 Plot again with the inferred base pair scale
+        # 1.6 Plot again with the inferred base pair scale
         #################################################################
         lineplot(df, x=f"{ladder}_interpol", y=ladder,
-                 save_dir=qc_save_dir, title=f"{i}_{ref}_interpolated",
+                 save_dir=qc_save_dir, title=f"{i}_interpolated",
                  y_label=y_label,
                  x_label=x_label)
+        # END OF LADDER LOOP
 
     #####################################################################
-    # 2. Save the translation
+    # 2. Save the translation and ladder info
     #####################################################################
     df.to_csv(qc_save_dir + "interpolated.csv")
     return_df.to_csv(qc_save_dir + "bp_translation.csv")
+    d = pd.DataFrame.from_dict(ladder2type, orient="index")
+    d.to_csv(f"{qc_save_dir}info.csv")
 
     #####################################################################
-    # 3. Plot all ladders together
+    # 3. Plot all ladders together (if multiple)
     #####################################################################
     ladderplot(df, ladder2type, qc_save_dir, y_label=y_label,
                x_label=x_label)
 
-    #####################################################################
-    # 4. Save the ladder infos
-    #####################################################################
-    d = pd.DataFrame.from_dict(ladder2type, orient="index")
-    d.to_csv(f"{qc_save_dir}info.csv")
     return peak_dict, None
     # END OF FUNCTION
 
@@ -232,12 +231,16 @@ def parse_meta_to_long(df, metafile, sample_col="sample", source_file=""):
     # END OF FUNCTION
 
 
-def normalize(df, ladder="", peak_dict=""):
+def normalize(df, peak_dict="", include_marker=False):
     """
-
     Function to normalize the RFU to a value between 0,1
-
+    :param df:
+    :param ladder:
+    :param peak_dict:
+    :return:
     """
+
+    # Todo update to not have ladder and do sth w/marker
     ##https://stackoverflow.com/questions/26414913/normalize-columns-of-a-dataframe
 
     ################################################################################
@@ -344,10 +347,15 @@ def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="b
     # END OF FUNCTION
 
 
-def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None):
+def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
+                 include_marker=False):
     """
-    To plot the Tape Station electropherogram
+    Function to analyze DNA distribution from a signal table.
     :param path_to_file: str
+    :param path_to_ladder: str
+    :param path_to_meta: str
+    :param run_id: str
+    :param include_marker: bool
     :return:
     """
     print("")
@@ -357,7 +365,8 @@ def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None):
     print(f"""     
         DNA file: {path_to_file}      
         Ladder file: {path_to_ladder}
-        Meta file: {path_to_meta}""")
+        Meta file: {path_to_meta}
+        Include marker: {include_marker}""")
     print("")
 
     logging.info(f"DNA file: {path_to_file}, Ladder file: {path_to_ladder},"
@@ -406,7 +415,8 @@ def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None):
     print("------------------------------------------------------------")
     print("        Height-normalizing data")
     print("------------------------------------------------------------")
-    normalized_df = normalize(df, ladder=ladder, peak_dict=peak_dict)
+    normalized_df = normalize(df, peak_dict=peak_dict, include_marker=
+                              include_marker)
     df = normalized_df
 
     #####################################################################

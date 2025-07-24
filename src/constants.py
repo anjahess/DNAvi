@@ -6,11 +6,19 @@ Constants for electropherogram analysis.
 
 """
 
+
+ACCEPTED_FORMATS = ['.csv', '.png', '.jpeg', '.jpg']
+
+# Peak detection ladder
+DISTANCE = 20 # 20 pos apart min
+CUSTOM_MIN_PEAK_HEIGHT=50 # if not auto-calc, requires ladder type to be set to "adjust"
+
+
 YCOL = "normalized_fluorescent_units"
 XCOL = "bp_pos"
 YLABEL = "Sample Intensity [Normalized FU]"
 XLABEL = "Size [bp]"
-ACCEPTED_FORMATS = ['.csv', '.png', '.jpeg', '.jpg']
+
 
 palettediff3 = ["darkgrey", "black", "grey",
                 "#d56763", "#85ada3", "#2d435b", "#eacdcb", "#fcd2a1",

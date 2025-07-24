@@ -75,18 +75,23 @@ parser.add_argument('-n', '--name',
                          'Will define output folder name',
                     required=False)
 
+parser.add_argument('-incl', '--include',
+                    action="store_true",
+                    default=False,
+                    help='Include marker bands into analysis and plotting.',
+                    required=False)
+
 parser.add_argument("--verbose", help="increase output verbosity",
                     action="store_true")
-
-args = parser.parse_args()
 
 #########################################################################
 # Args to variables
 #########################################################################
+args = parser.parse_args()
 csv_path, ladder_path, meta_path = args.input, args.ladder, args.meta
 
 #########################################################################
-# Decide for folder or single file processing
+# Decide: folder or single file processing
 #########################################################################
 if os.path.isdir(csv_path):
     print(f"--- Checking folder {csv_path}")
@@ -95,7 +100,6 @@ if os.path.isdir(csv_path):
 elif os.path.isfile(csv_path):
     files_to_check = [e for e in [csv_path] if
                       e.endswith(tuple(ACCEPTED_FORMATS))]
-
 if not files_to_check:
     print(f"--- No valid file(s), only {ACCEPTED_FORMATS} accepted: "
           f"{csv_path}")
@@ -105,15 +109,20 @@ if not files_to_check:
 # Start the analysis
 #########################################################################
 for file in files_to_check:
-    if file.endswith(".csv"):
-        epg_analysis(file, ladder_path, meta_path, run_id=args.name)
-    else:
-        dna_file_from_image, error = analyze_gel(file, run_id=args.name)
-        if not error:
-            error = epg_analysis(dna_file_from_image, ladder_path, meta_path
-                                 , run_id=args.name)
-        else:
+    # Optional: transform from image
+    if not file.endswith(".csv"):
+        # IMAGES GO HERE
+        signal_table, error = analyze_gel(file, run_id=args.name)
+        if error:
             print(error)
+            exit(1)
+    else:
+        # FILE ALREADY IN SIGNAL TABLE FORMAT
+        signal_table = file
+    # Start analysis
+    epg_analysis(file, ladder_path, meta_path, run_id=args.name,
+                     include_marker=args.include)
+
 print("")
-print("--- DNA fragmentation analysis DONE. Results in same folder as your input file.")
+print("--- DONE. Results in same folder as input file.")
 # END OF SCRIPT
