@@ -17,7 +17,7 @@ sys.path.insert(0, script_path)
 sys.path.insert(0, maindir)
 sys.path.insert(0, f"{maindir}/src")
 sys.path.insert(0, f"{maindir}/src")
-from constants import YLABEL, YCOL, XCOL, XLABEL, DISTANCE, CUSTOM_MIN_PEAK_HEIGHT
+from constants import YLABEL, YCOL, XCOL, XLABEL, DISTANCE, CUSTOM_MIN_PEAK_HEIGHT, HALO_FACTOR
 from plotting import lineplot, ladderplot, peakplot, gridplot
 from data_checks import check_file, check_ladder
 import logging
@@ -86,7 +86,6 @@ def peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL,
         ##################################################################
         check_ladder(ladder_dir)
         ladder_df = pd.read_csv(ladder_dir)
-        ladder_df["Basepairs"].astype(int).values.tolist()[::-1]
         peak_annos = ladder_df["Basepairs"].astype(int).values.tolist()[::-1]
 
         ##################################################################
@@ -202,7 +201,8 @@ def split_and_long_by_ladder(df, path_to_file):
     # END OF FUNCTION
 
 
-def parse_meta_to_long(df, metafile, sample_col="sample", source_file=""):
+def parse_meta_to_long(df, metafile, sample_col="sample", source_file="",
+                       image_input=False):
     """
     Parse metadata and transfer to long
 
@@ -211,47 +211,100 @@ def parse_meta_to_long(df, metafile, sample_col="sample", source_file=""):
     :return:
     """
 
+    ################################################################################
+    # 1. SANITY CHECK - COMPARE SAMPLE NUMBER AND AVAILABLE LANES
+    ################################################################################
     meta = pd.read_csv(metafile, header=0)
     try:
         meta["ID"] = meta["SAMPLE"]
     except:
         error = "Metafile misformatted."
-        return error
+        print(error)
+        exit()
+
+    samples = df[sample_col].unique().tolist()
+    n_samples = len(samples)
+    n_meta = len(meta.ID)
+
+    if n_samples != n_meta:
+        # Comment: this doesn't have to be a problem as long as the IDs match.
+        print(f"--- WARNING: {n_samples} samples but {n_meta} metafile IDs.")
+
+    if image_input:
+        print(f"--- WARNING: Image - ONLY first {n_samples} entries "
+                    f"used (out of {n_meta})")
+    ################################################################################
+    # 2. Parse
+    ################################################################################
     cols_not_to_add = ["SAMPLE","ID"]
-    for col in meta.columns:
-        if meta[col].isnull().values.any():
-            error = ("Empty positions in meta file")
-            return error
-        if col not in cols_not_to_add:
-            print(f"Adding metatadata: ", col)
-            logging.info(f"Adding metatadata: ", col)
+    for col in [e for e in meta.columns if e not in cols_not_to_add]:
+
+        print(f"--- Adding metatadata for", col)
+        if image_input:
+            # CURRENT RULE FOR IMAGES (NO GROUND TRUTH - TAKE FIRST N ROWS of META !
+            conditions = meta[col].values.tolist()[:n_samples]
+            dict_meta = dict(zip(samples,conditions))
+            print(dict_meta)
+        else:
             dict_meta = dict(zip(meta.ID, meta[col]))
-            df[col] = df[sample_col].map(dict_meta)
+
+        # Finally map
+        df[col] = df[sample_col].map(dict_meta)
+        ############################################################################
+        # SANITY CHECK II -> Was there a successful mapping?
+        ############################################################################
+        if df[col].isna().all():
+            print(f"--- WARNING: No metadata could be matched for {col} - are you sure"
+                  f"SAMPLE names match signal table columns?")
     df.to_csv(source_file)
     # END OF FUNCTION
+
+
+def remove_marker_from_df(df, peak_dict="", on=""):
+    """
+    Function to remove marker from dataframe incl halo
+
+    :param df:
+    :param peak_dict:
+    :param on: str denoting column based on which dataframe will be cut
+    :return: pd.DataFrame
+
+    """
+
+    ################################################################################
+    # 1. Define the markers
+    ################################################################################
+    upper_marker = peak_dict[0][1][0]
+    lower_marker = peak_dict[0][1][1]
+
+    ################################################################################
+    # 2. Calculate the halo to crop left/right from the marker band
+    # (relative so this will work with different ladders)
+    # Max crop: you cannot crop too much above or beyond marker to not
+    # cause the df to be too small/empty
+    ################################################################################
+    # low bp higher multiplicator
+    lower_marker = lower_marker + (lower_marker * (HALO_FACTOR*3))
+    upper_marker = upper_marker - (upper_marker * HALO_FACTOR)
+    print(f"--- Excluding marker peaks from analysis (factor: {HALO_FACTOR})")
+    logging.info("_ Excluding marker peaks from analysis")
+    df = df[(df[on] > lower_marker) & (df[on] < upper_marker)]
+    return df
 
 
 def normalize(df, peak_dict="", include_marker=False):
     """
     Function to normalize the RFU to a value between 0,1
+    https://stackoverflow.com/questions/26414913/normalize-columns-of-a-dataframe
     :param df:
     :param ladder:
     :param peak_dict:
     :return:
     """
-
-    # Todo update to not have ladder and do sth w/marker
-    ##https://stackoverflow.com/questions/26414913/normalize-columns-of-a-dataframe
-
-    ################################################################################
-    # 1. Remove the marker bands (lowest / top band)
-    ################################################################################
-    lower_marker = peak_dict[ladder[0]][0]
-    upper_marker = peak_dict[ladder[0]][-1]
     ladder_field = [e for e in df.columns if "adder" in e][0]
 
-    df = df[(df[ladder_field] > lower_marker) &
-           (df[ladder_field] < upper_marker)]
+    if not include_marker:
+        df = remove_marker_from_df(df, peak_dict=peak_dict, on=ladder_field)
 
     ################################################################################
     # 2. Normalize to a value between 0-1 Remove the marker
@@ -264,36 +317,25 @@ def normalize(df, peak_dict="", include_marker=False):
         min_value = df[feature_name].min()
         result[feature_name] = (df[feature_name] - min_value) / (max_value - min_value)
     return result
+    # END OF FUNCTION
 
 def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="bp_pos",
-              ladder="", peak_dict=None):
+              peak_dict=None):
     """
-    To compute basic statistics for DNA distr.
+    To compute basic statistics for DNA size distritbutions
+    :param df:
+    :param save_dir:
+    :param unit:
+    :param size_unit:
+    :param peak_dict:
     :return:
     """
-
-    if peak_dict:
-        print(peak_dict)
-        #################################################################
-        # 1. Remove the marker bands (lowest / top band)
-        #################################################################
-        add_on = 0.1
-        lower_marker = peak_dict[ladder[0]][0]
-        lower_marker = lower_marker + (lower_marker*add_on)
-        upper_marker = peak_dict[ladder[0]][-1]
-        upper_marker = upper_marker - (upper_marker*add_on)
-        print("--- Excluding marker peaks from analysis")
-        logging.info("_ Excluding marker peaks from analysis")
-        df = df[(df[size_unit] > lower_marker) &
-                (df[size_unit] < upper_marker)]
-    logging.info("Samples: ", df["sample"].value_counts())
-
     #####################################################################
     # 1. Basic stats
     #####################################################################
     # Make sure all sample names are type obj
     df["sample"].astype(object)
-    basic_stats = df.describe(include='object')
+    basic_stats = df.describe() #include='object'
     basic_stats.to_csv(f"{save_dir}basic_statistics.csv")
 
     #####################################################################
@@ -307,12 +349,15 @@ def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="b
         # Add to array
         array = np.array(sub_df[unit].values.tolist())
         max_peak = array.max()
+
         # Define min peak height
         min_peak_height = max_peak * 0.2
-        peaks, _ = find_peaks(array, distance=20,  # 10 pos apart
+        peaks, _ = find_peaks(array, distance=DISTANCE,  # n pos apart
                                   height=min_peak_height)  # minimum height
+
         # Get the fluorescence val for each peak
         peak_list = [array[e] for e in peaks.tolist()]
+
         # Assign the basepair position
         for i, peak in enumerate(peak_list):
             bp = df.loc[df[unit] == peak, size_unit].iloc[0]
@@ -335,7 +380,7 @@ def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="b
         for cond in df[col].unique():
             # Estimate the mean bp from the histogram
             sub_df = df[df[col] == cond]
-                                # size = val   # frequency recaled 0-100
+            # size = val   # frequency recaled 0-100
             sub_df["counts"] = sub_df[unit]*100
             sub_df["product"] =  sub_df[size_unit]*sub_df["counts"]
             mean_bp = sub_df["product"].sum() / sub_df["counts"].sum()
@@ -348,7 +393,7 @@ def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="b
 
 
 def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
-                 include_marker=False):
+                 include_marker=False, image_input=False, save_dir=False):
     """
     Function to analyze DNA distribution from a signal table.
     :param path_to_file: str
@@ -363,6 +408,7 @@ def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
     print("""           DNA FRAGMENT SIZE ANALYSIS           """)
     print("------------------------------------------------------------")
     print(f"""     
+        Image input: {image_input}
         DNA file: {path_to_file}      
         Ladder file: {path_to_ladder}
         Meta file: {path_to_meta}
@@ -377,7 +423,8 @@ def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
     #####################################################################
     if not run_id:
         run_id = path_to_file.rsplit("/", 1)[1].rsplit(".", 1)[0]
-    save_dir = path_to_file.rsplit("/", 1)[0] + f"/{run_id}/"
+    if not save_dir:
+        save_dir = path_to_file.rsplit("/", 1)[0] + f"/{run_id}/"
     plot_dir = f"{save_dir}/plots/"
     qc_dir = f"{save_dir}/qc/"
     basepair_translation_file = f"{qc_dir}bp_translation.csv"
@@ -404,51 +451,39 @@ def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
     df = pd.read_csv(basepair_translation_file, header=0, index_col=0)
 
     #####################################################################
-    # 3. Get source data, ladder type, transfer to long format
-    #####################################################################
-    ladder = pd.read_csv(qc_dir + "info.csv", index_col=0,
-                         header=0).transpose().values[0]
-
-    #####################################################################
     # 4. Height-normalize the data (default)
     #####################################################################
     print("------------------------------------------------------------")
-    print("        Height-normalizing data")
+    print("        Height-normalizing data and removing markers        ")
     print("------------------------------------------------------------")
     normalized_df = normalize(df, peak_dict=peak_dict, include_marker=
                               include_marker)
+    # All downstream ana on height-norm data WITHOUT marker (unless
+    # --include argument was set
     df = normalized_df
 
     #####################################################################
     # 5. Add the metadata
     #####################################################################
-    if not os.path.isfile(source_file):
-        df = split_and_long_by_ladder(df, path_to_file)
-        if path_to_meta:
-            print("------------------------------------------------------------")
-            print("        Parsing metadata ")
-            print("------------------------------------------------------------")
-            error = parse_meta_to_long(df, path_to_meta,
-                                       source_file=source_file)
-            if error:
-                print(error)
-                exit()
-        else:
-            print(f"--- No meta file, using column names.")
-            df.to_csv(source_file)
+    df = split_and_long_by_ladder(df, path_to_file)
+    if path_to_meta:
+        print("------------------------------------------------------------")
+        print("        Parsing metadata ")
+        print("------------------------------------------------------------")
+        parse_meta_to_long(df, path_to_meta, source_file=source_file,
+                                   image_input=image_input)
+    else:
+        print(f"--- No meta file, using column names.")
+        df.to_csv(source_file)
 
-    if os.path.isfile(source_file):
-        df = pd.read_csv(source_file, header=0, index_col=0)
-        ladder = pd.read_csv(qc_dir + "info.csv", index_col=0,
-                             header=0).transpose().values[0]
-
+    df = pd.read_csv(source_file, header=0, index_col=0)
     ######################################################################
     # 6. Add statistics
     ######################################################################
     print("------------------------------------------------------------")
     print("        Performing statistical analysis")
     print("------------------------------------------------------------")
-    epg_stats(df, save_dir=plot_dir, ladder=ladder, peak_dict=peak_dict)
+    epg_stats(df, save_dir=plot_dir, peak_dict=peak_dict)
 
     #####################################################################
     # 5. Plot raw data (samples seperated)
@@ -457,9 +492,7 @@ def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
     print("        Plotting results")
     print("------------------------------------------------------------")
     gridplot(df, x=XCOL, y=YCOL, save_dir=plot_dir, title=f"all_samples",
-             hue="sample", y_label=YLABEL, x_label=XLABEL,
-             plot_lower=False, ladder=ladder, peak_dict=peak_dict,
-             ladder_dir=path_to_ladder)
+             y_label=YLABEL, x_label=XLABEL)
     return error
     # END OF FUNCTION
 # END OF SCRIPT

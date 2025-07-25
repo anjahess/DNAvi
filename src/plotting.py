@@ -5,14 +5,12 @@ Plotting functions for electropherogram analysis.
 @date: 2023-JUL-01
 
 """
-
-import matplotlib.pyplot as plt
+import os
 import numpy as np
 import seaborn as sns
-import os
-from src.constants import palettediff2, peak_dict
+import matplotlib.pyplot as plt
 from matplotlib.ticker import ScalarFormatter
-import pandas as pd
+from src.constants import palettediff2
 
 def set_style_for_paper():
     factor = 5
@@ -39,50 +37,31 @@ def set_style_for_paper():
     return rc
     # END OF FUNCTION
 
-def gridplot(df, x, y, save_dir="", title="", y_label="", x_label="",
-             hue=None, units=None, plot_lower=False, estimator="mean",
-             style=None, window=False, ladder="", peak_dict="",
-             ladder_dir=""):
+def gridplot(df, x, y, save_dir="", title="", y_label="", x_label=""):
     """
     DNA size line plot with masking option for marker peaks
+
+    :param df:
+    :param x:
+    :param y:
+    :param save_dir:
+    :param title:
+    :param y_label:
+    :param x_label:
+    :return:
     """
-    set_style_for_paper()
-
-
-    if len(ladder) == 1:
-        lower_marker = peak_dict[ladder[0]][0]
-        upper_marker = peak_dict[ladder[0]][-1]
 
     #####################################################################
-    # Determine in markers are present
-    #####################################################################
-    ladder_df = pd.read_csv(f"{ladder_dir}")
-    marker_out = True
-
-    if "marker" in ladder_df.columns:
-        marker_out = True
-    print(f"--- Markers: {lower_marker}, {upper_marker} \n"
-          f"--- Markers being cut out of plot: {marker_out}")
-
-    #####################################################################
-    # All in one
+    # All in one plot
     #####################################################################
     sns.lineplot(data=df, x=x, y=y, alpha=.7)
-
-    # Crop outside marker
-    if marker_out:
-        plt.xlim(lower_marker, upper_marker)
-
-    # Add labels
     plt.ylabel(y_label)
     plt.xlabel(x_label)
     plt.title(f"{title}")
 
     # Log scale
-    if upper_marker > 1000:
-        plt.xscale('log')
-    plt.savefig(f"{save_dir}{title}_nomarker_summary.pdf",
-                    bbox_inches='tight')
+    plt.xscale('log')
+    plt.savefig(f"{save_dir}{title}_nomarker_summary.pdf", bbox_inches='tight')
     plt.close()
 
     cols_not_to_plot = ["bp_pos", "sample", "normalized_fluorescent_units"]
@@ -95,8 +74,8 @@ def gridplot(df, x, y, save_dir="", title="", y_label="", x_label="",
                      palette=palettediff2[:len(df[hue].unique())],
                      hue=hue)
         # Crop outside marker an
-        if marker_out:
-            plt.xlim(lower_marker, upper_marker)
+        #if marker_out:
+         #   plt.xlim(lower_marker, upper_marker)
         # Add labels
         plt.ylabel(y_label)
         plt.xlabel(x_label)
@@ -118,18 +97,18 @@ def gridplot(df, x, y, save_dir="", title="", y_label="", x_label="",
     # flatten axes into a 1-d array
     axes = g.axes.flatten()
     # iterate through the axes
-    for i, ax in enumerate(axes):
-        ax.axvline(lower_marker, ls='--', c='black')
-        ax.axvline(upper_marker, ls='--', c='black')
+    #for i, ax in enumerate(axes):
+    #    ax.axvline(lower_marker, ls='--', c='black')
+    #    ax.axvline(upper_marker, ls='--', c='black')
     # Add marker line
-    plt.xlim(lower_marker, upper_marker)
+   # plt.xlim(lower_marker, upper_marker)
 
     # Add labels
     plt.ylabel(y_label)
     plt.xlabel(x_label)
     plt.suptitle(f"{title}")
-    if upper_marker > 1000:
-        plt.xscale('log')
+    #if upper_marker > 1000:
+    plt.xscale('log')
     plt.savefig(f"{save_dir}{title}.pdf")
     plt.close()
     # END OF FUNCTION

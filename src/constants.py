@@ -13,6 +13,8 @@ ACCEPTED_FORMATS = ['.csv', '.png', '.jpeg', '.jpg']
 DISTANCE = 20 # 20 pos apart min
 CUSTOM_MIN_PEAK_HEIGHT=50 # if not auto-calc, requires ladder type to be set to "adjust"
 
+# Marker band cropping
+HALO_FACTOR=0.3 # factor to calc bp to crop from markers
 
 YCOL = "normalized_fluorescent_units"
 XCOL = "bp_pos"

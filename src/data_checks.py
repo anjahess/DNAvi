@@ -70,6 +70,8 @@ def check_file(filename):
     :param filename:
     :return:
     """
+
+    print("--- Performing input check")
     ######################################################################
     # 2. Path vs File
     ######################################################################
@@ -124,6 +126,8 @@ def check_ladder(filename):
     :return: raise error if file does not have correct format
 
     """
+
+    print("--- Performing ladder check")
     ######################################################################
     # 1. Make sure all arguments exist
     ######################################################################
@@ -183,6 +187,29 @@ def check_ladder(filename):
         print(error)
         exit()
 
+    ######################################################################
+    # Find markers and check them
+    ######################################################################
+    markers = df[df['Peak'].str.contains('marker')]["Basepairs"].tolist()
+
+    if markers:
+        # Check that there are only 2 markers, and that they are
+        # not in the middle of the peaks
+        marker_pos = df.loc[df['Peak'].str.contains(
+            'marker')]["Basepairs"].index.tolist()
+        last_row_index = len(df.values) - 1  # 0-based
+        if len(markers) > 2:
+            print("--- Ladder Error: more than two markers. That's implausible,"
+                  " please correct the ladder file and retry.")
+            exit()
+        if len(markers) == 2 and ((0 not in marker_pos) or (last_row_index not in marker_pos)):
+            print("--- Ladder Error: DNA markers should be first and last entry")
+            exit()
+        if len(markers) == 1 and ((0 not in marker_pos) and (last_row_index not in marker_pos)):
+            print("--- Ladder Error: DNA marker should be either first or last entry")
+            exit()
+        print("--- Found markers: {}".format(markers), " (upper, lower)")
+
     return filename
 
 
@@ -195,13 +222,13 @@ def check_meta(filename):
     :return: raise error if file does not have correct format
 
     """
+    print("--- Performing metadata check")
     ######################################################################
     # 1. Make sure all arguments exist
     ######################################################################
     if not(os.path.exists(filename)):
         print(f"{filename} doesn't exist")
         exit()
-
 
     ######################################################################
     # 2. Make sure the extension is right
@@ -210,10 +237,23 @@ def check_meta(filename):
         raise argparse.ArgumentTypeError('File must have a csv extension')
 
     ######################################################################
-    # 3. Make sure it's really csv format
+    # 3. Check nomenclature, NANs and duplicates in the index
     ######################################################################
-    if not filename.endswith('.csv'):
-        raise argparse.ArgumentTypeError('File must have a csv extension')
+    df = pd.read_csv(filename, header=0)
+    try:
+        df["ID"] = df["SAMPLE"]
+    except:
+        print("Metafile misformatted. Make sure first column is 'SAMPLE'")
+        exit()
+    if df["SAMPLE"].isnull().values.any():
+        print("--- Meta table contains NaNs in SAMPLE column,"
+              "Make sure every sample has a name and try again.")
+        exit()
+
+    if df.duplicated(subset=["SAMPLE"]).any():
+        print("--- Duplicate sample names in metadata. Please give each "
+              "sample a unique ID and try again.")
+        exit()
 
     return filename
 

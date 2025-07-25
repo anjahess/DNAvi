@@ -88,7 +88,8 @@ parser.add_argument("--verbose", help="increase output verbosity",
 # Args to variables
 #########################################################################
 args = parser.parse_args()
-csv_path, ladder_path, meta_path = args.input, args.ladder, args.meta
+savedir = None
+csv_path, ladder_path, meta_path, run_id = args.input, args.ladder, args.meta, args.name
 
 #########################################################################
 # Decide: folder or single file processing
@@ -111,17 +112,21 @@ if not files_to_check:
 for file in files_to_check:
     # Optional: transform from image
     if not file.endswith(".csv"):
-        # IMAGES GO HERE
-        signal_table, error = analyze_gel(file, run_id=args.name)
+        # IMAGES GO HERE, then defines save_dir
+        signal_table, save_dir, error = analyze_gel(file, run_id=run_id)
+        image_input = True
         if error:
             print(error)
             exit(1)
     else:
         # FILE ALREADY IN SIGNAL TABLE FORMAT
         signal_table = file
+        image_input = False
+
     # Start analysis
-    epg_analysis(file, ladder_path, meta_path, run_id=args.name,
-                     include_marker=args.include)
+    epg_analysis(signal_table, ladder_path, meta_path, run_id=run_id,
+                 include_marker=args.include, image_input=image_input,
+                 save_dir=save_dir)
 
 print("")
 print("--- DONE. Results in same folder as input file.")

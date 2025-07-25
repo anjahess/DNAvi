@@ -12,6 +12,11 @@ documentation for details.
 
 
 .. toctree::
+   Installation
+   Quickstart
+   Multi-file input
+   Metadata for gel images
+   Excluding/Including marker peaks
    api
    :maxdepth: 2
    :caption: Contents:

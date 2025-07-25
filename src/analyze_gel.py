@@ -18,6 +18,14 @@ from skimage.color import label2rgb
 
 
 def range_intersect(r1, r2):
+    """
+    Function to find intersection of two ranges
+
+    :param r1: range
+    :param r2: range
+    :return: intersection
+
+    """
     return range(max(r1.start, r2.start), min(r1.stop, r2.stop)) or None
 
 
@@ -36,6 +44,7 @@ def analyze_gel(image_file, run_id=None):
     if not run_id:
         run_id = image_file.rsplit("/", 1)[1].rsplit(".", 1)[0]
     save_dir = image_file.rsplit("/", 1)[0] + f"/{run_id}/"
+    save_table = f"{save_dir}signal_table.csv"
     gel_dir = f"{save_dir}images/"
     os.makedirs(save_dir, exist_ok=True)
     os.makedirs(gel_dir, exist_ok=True)
@@ -148,8 +157,8 @@ def analyze_gel(image_file, run_id=None):
     ####################################################################################
     df = pd.DataFrame.from_records(profiles).transpose()
     df.rename(columns={0: "Ladder"}, inplace=True)
-    df.to_csv(input_image.rsplit('.',1)[0]+".csv", sep='\t', index=False)
+    df.to_csv(save_table, index=False)
 
-    return input_image.rsplit('.',1)[0]+".csv", None
+    return save_table, save_dir, None
 
 # END OF SCRIPT
