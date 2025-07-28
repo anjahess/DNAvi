@@ -2,8 +2,9 @@
 
 Functions to assure input files to DNAvi are correctly formatted
 
-@author: Anja Hess
-@date: 2025-JUL-23
+Author: Anja Hess
+Date: 2025-JUL-23
+
 
 """
 
@@ -11,9 +12,7 @@ import argparse
 import os
 from csv import Sniffer
 import pandas as pd
-import werkzeug
 from werkzeug.utils import secure_filename
-
 
 def detect_delim(file, num_rows=1):
     """
@@ -32,7 +31,6 @@ def detect_delim(file, num_rows=1):
             delim = sniffer.sniff(line)
     return delim.delimiter
     # END OF FUNCTION
-
 
 def check_name(filename):
     """
@@ -150,11 +148,10 @@ def check_ladder(filename):
         print("--- Error reading your ladder file,"
               "please check it and try again.")
         exit()
-
-    if "Peak" not in df.columns or "Basepairs" not in df.columns:
-        print("--- Ladder columns have to be named 'Peak' and 'Basepairs',"
-              "please check and try again.")
-
+    if "Peak" not in df.columns or "Basepairs" not in df.columns or "Name" not in df.columns:
+        print("--- Ladder columns have to be named 'Peak', 'Basepairs' and 'Name'."
+              " Please check and try again.")
+        exit()
     ######################################################################
     # 3. Make sure ladder content is plausible
     ######################################################################
@@ -178,37 +175,46 @@ def check_ladder(filename):
                  "That's not allowed...sorry")
         print(error)
         exit()
-    df["Basepairs"].astype(int).values.tolist()[::-1]
-    peak_annos = df["Basepairs"].astype(int).values.tolist()[::-1]
 
-    if not sorted(peak_annos) == peak_annos:
-        error = ("Your markers in ladder file are not sorted by "
-                 "basepair size. That's not allowed...sorry")
-        print(error)
-        exit()
 
     ######################################################################
-    # Find markers and check them
+    # Check individual ladders (in case of multiple ladders passed)
     ######################################################################
-    markers = df[df['Peak'].str.contains('marker')]["Basepairs"].tolist()
 
-    if markers:
-        # Check that there are only 2 markers, and that they are
-        # not in the middle of the peaks
-        marker_pos = df.loc[df['Peak'].str.contains(
-            'marker')]["Basepairs"].index.tolist()
-        last_row_index = len(df.values) - 1  # 0-based
-        if len(markers) > 2:
-            print("--- Ladder Error: more than two markers. That's implausible,"
-                  " please correct the ladder file and retry.")
+    for ladder in df["Name"].unique():
+        sub_df = df[df["Name"] == ladder].reset_index(drop=True)
+        sub_df["Basepairs"].astype(int).values.tolist()[::-1]
+        peak_annos = sub_df["Basepairs"].astype(int).values.tolist()[::-1]
+
+        if not sorted(peak_annos) == peak_annos:
+            error = ("Your markers in ladder file are not sorted by "
+                     "DESCENDING basepair size. That's not allowed...sorry."
+                     "Please order like so: 1000,500,300... and try again.")
+            print(error)
             exit()
-        if len(markers) == 2 and ((0 not in marker_pos) or (last_row_index not in marker_pos)):
-            print("--- Ladder Error: DNA markers should be first and last entry")
-            exit()
-        if len(markers) == 1 and ((0 not in marker_pos) and (last_row_index not in marker_pos)):
-            print("--- Ladder Error: DNA marker should be either first or last entry")
-            exit()
-        print("--- Found markers: {}".format(markers), " (upper, lower)")
+
+        ######################################################################
+        # Find markers and check them
+        ######################################################################
+        markers = sub_df[sub_df['Peak'].str.contains('marker')]["Basepairs"].tolist()
+
+        if markers:
+            # Check that there are only 2 markers, and that they are
+            # not in the middle of the peaks
+            marker_pos = sub_df.loc[sub_df['Peak'].str.contains(
+                'marker')]["Basepairs"].index.tolist()
+
+            last_row_index = len(sub_df.values) - 1  # 0-based
+            if len(markers) > 2:
+                print("--- Ladder Error: more than two markers. That's implausible,"
+                      " please correct the ladder file and retry.")
+                exit()
+            if len(markers) == 2 and ((0 not in marker_pos) or (last_row_index not in marker_pos)):
+                print("--- Ladder Error: DNA markers should be first and last entry")
+                exit()
+            if len(markers) == 1 and ((0 not in marker_pos) and (last_row_index not in marker_pos)):
+                print("--- Ladder Error: DNA marker should be either first or last entry")
+                exit()
 
     return filename
 

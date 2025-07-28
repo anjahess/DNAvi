@@ -17,6 +17,7 @@ documentation for details.
    Multi-file input
    Metadata for gel images
    Excluding/Including marker peaks
+   Handling different ladders (beta)
    api
    :maxdepth: 2
    :caption: Contents:

@@ -51,6 +51,8 @@ def gridplot(df, x, y, save_dir="", title="", y_label="", x_label=""):
     :return:
     """
 
+    df[x] = df[x].astype(int)
+
     #####################################################################
     # All in one plot
     #####################################################################
@@ -59,11 +61,11 @@ def gridplot(df, x, y, save_dir="", title="", y_label="", x_label=""):
     plt.xlabel(x_label)
     plt.title(f"{title}")
 
+
     # Log scale
     plt.xscale('log')
     plt.savefig(f"{save_dir}{title}_nomarker_summary.pdf", bbox_inches='tight')
     plt.close()
-
     cols_not_to_plot = ["bp_pos", "sample", "normalized_fluorescent_units"]
 
     for col in [c for c in df.columns if c not in cols_not_to_plot]:
@@ -73,9 +75,6 @@ def gridplot(df, x, y, save_dir="", title="", y_label="", x_label=""):
         sns.lineplot(data=df, x=x, y=y, alpha=.7,
                      palette=palettediff2[:len(df[hue].unique())],
                      hue=hue)
-        # Crop outside marker an
-        #if marker_out:
-         #   plt.xlim(lower_marker, upper_marker)
         # Add labels
         plt.ylabel(y_label)
         plt.xlabel(x_label)
@@ -198,13 +197,17 @@ def lineplot(df, x, y, save_dir="", title="", y_label="", x_label="",
 def ladderplot(df, ladder2type, qc_save_dir, y_label="", x_label=""):
     """
 
-    :param df:
-    :param ladder2type:
-    :param qc_save_dir:
-    :param y_label:
-    :param x_label:
-    :return:
+    Plot multiple ladders into one plot
+
+    :param df: panas DataFrame
+    :param ladder2type: dict
+    :param qc_save_dir: str
+    :param y_label: str
+    :param x_label: ste
+    :return: plot appears in QC directory
+
     """
+
     fig, ax = plt.subplots()
     for i, ladder in enumerate([e for e in df.columns if "Ladder" in e and
                                                          "interpol" not in e]):

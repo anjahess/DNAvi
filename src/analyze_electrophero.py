@@ -40,6 +40,40 @@ def wide_to_long(df, id_var="pos", var_name="sample", value_name="value"):
     return df_long
 
 
+def integrate(df, ladders_present=""):
+    """
+
+    :param df:
+    :return:
+    """
+
+    merged_df = []
+    #####################################################################
+    # 1. Slice dataframe by column, and unify the y-axis label
+    #####################################################################
+    for i, ladder in enumerate(ladders_present):
+        current = df.columns.get_loc(ladder)
+        try:
+            next = df.columns.get_loc(ladders_present[i + 1])
+        except IndexError:
+            next = None
+        #print(current, next)
+
+        if i == 0:
+            sub_df = df.iloc[:,:next]
+        else:
+            sub_df = df.iloc[:,current:next]
+        sub_df.rename(columns={ladder: "ladder"}, inplace=True)
+        #################################################################
+        # 2. Merge dataframes (on="ladder")
+        #################################################################
+        if type(merged_df) == list:
+            merged_df = sub_df
+        else:
+            merged_df = pd.merge(merged_df, sub_df, on="ladder", how="outer")
+
+    return merged_df
+
 def peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL,
                    ladder_dir="", ladder_type="custom"):
     """
@@ -56,11 +90,19 @@ def peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL,
     :return:
     """
     ladder2type = {}
+    peak_dict = {}
     return_df = df.copy()
 
     #####################################################################
     # 1. In the signal matrix: iterate through ladder columns
     #####################################################################
+    ladders_present = [e for e in df.columns if "Ladder" in e]
+    print(f"--- Ladder columns in data: {len(ladders_present)} ---")
+    ladder_df = pd.read_csv(ladder_dir)
+    parsed_ladders = ladder_df["Name"].unique()
+    print(f"--- Ladder translations found: {parsed_ladders} ---")
+
+
     for i, ladder in enumerate([e for e in df.columns if "Ladder" in e]):
         ladder_id = ladder.replace(' ', '').replace(':', '')
 
@@ -79,25 +121,30 @@ def peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL,
             peaks, _ = find_peaks(array, distance=DISTANCE,
                                   height=min_peak_height)
         peak_list = peaks.tolist()
-        print(f"{len(peak_list)} peaks detected.")
+        print(f"--- Ladder #{i}: {len(peak_list)} peaks detected.")
 
         ##################################################################
-        # 1.2 Render ladder from user-provided file
+        # 1.2 Render ladder from user-provided file &
+        #      Subset the dataframe (multi-ladder case)
         ##################################################################
-        check_ladder(ladder_dir)
-        ladder_df = pd.read_csv(ladder_dir)
-        peak_annos = ladder_df["Basepairs"].astype(int).values.tolist()[::-1]
+        print(f"... Selecting {parsed_ladders[i]}")
+        sub_df = (ladder_df[ladder_df["Name"] == parsed_ladders[i]]
+                     .reset_index(drop=True))
+
+        ############################## RULE: 1st Basepairs, rest "Basepairs_n"
+        peak_annos = sub_df["Basepairs"].astype(int).values.tolist()[::-1]
 
         ##################################################################
-        # Find markers and store their bp values
+        # Find markers and store their bp values in the dict
         ##################################################################
         print("--- Checking for marker bands")
-        markers = ladder_df[ladder_df['Peak'].str.contains(
+        markers = sub_df[sub_df['Peak'].str.contains(
             'marker')]["Basepairs"].tolist()
         if markers:
-            print("--- Found markers: {}".format(markers), " (upper, lower)")
+            print("--- Found markers: {}".format(markers))
 
-        peak_dict = {i: [peak_annos, markers]}
+        peak_dict[i] = [peak_annos, markers]
+
         ##################################################################
         # ---- SANITY CHECK ----- equals nr of detected peaks?
         ##################################################################
@@ -106,6 +153,7 @@ def peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL,
                      "and data input")
             print(error)
             exit()
+
         ladder2type.update({ladder: i})
 
         #################################################################
@@ -143,6 +191,14 @@ def peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL,
         # END OF LADDER LOOP
 
     #####################################################################
+    # If 2 or more ladders: integrate the two dataframes to
+    # have a single shared ladder column
+    #####################################################################
+    #if len(ladders_present) > 1:
+     #   print("... Integrating bp positions from multiple ladders")
+      #  return_df = integrate(return_df, ladders_present=ladders_present)
+    # Todo: Take care of resulting "gaps" when handling multiple ladders
+    #####################################################################
     # 2. Save the translation and ladder info
     #####################################################################
     df.to_csv(qc_save_dir + "interpolated.csv")
@@ -153,20 +209,18 @@ def peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL,
     #####################################################################
     # 3. Plot all ladders together (if multiple)
     #####################################################################
-    ladderplot(df, ladder2type, qc_save_dir, y_label=y_label,
-               x_label=x_label)
+    ladderplot(df, ladder2type, qc_save_dir, y_label=y_label, x_label=x_label)
 
     return peak_dict, None
     # END OF FUNCTION
 
 
-def split_and_long_by_ladder(df, path_to_file):
+def split_and_long_by_ladder(df):
     """
     We transfer to long format giving each experiment the base pair
     position assigned by previous marker interpolation.
 
     :param df: pandas df
-    :param path_to_file: str
     :return: pandas df (long)
     """
 
@@ -197,6 +251,7 @@ def split_and_long_by_ladder(df, path_to_file):
         else:
             final_df = pd.concat([df_sub_long, final_df],
                                  sort=False, ignore_index=True)
+
     return final_df
     # END OF FUNCTION
 
@@ -272,23 +327,40 @@ def remove_marker_from_df(df, peak_dict="", on=""):
     """
 
     ################################################################################
-    # 1. Define the markers
+    # 1. Define the markers (for now based on one ladder only)
     ################################################################################
-    upper_marker = peak_dict[0][1][0]
-    lower_marker = peak_dict[0][1][1]
+    first_ladder = list(peak_dict)[0]
 
-    ################################################################################
-    # 2. Calculate the halo to crop left/right from the marker band
-    # (relative so this will work with different ladders)
-    # Max crop: you cannot crop too much above or beyond marker to not
-    # cause the df to be too small/empty
-    ################################################################################
-    # low bp higher multiplicator
-    lower_marker = lower_marker + (lower_marker * (HALO_FACTOR*3))
-    upper_marker = upper_marker - (upper_marker * HALO_FACTOR)
-    print(f"--- Excluding marker peaks from analysis (factor: {HALO_FACTOR})")
-    logging.info("_ Excluding marker peaks from analysis")
-    df = df[(df[on] > lower_marker) & (df[on] < upper_marker)]
+    if len(peak_dict[first_ladder][1]) == 1:
+        if peak_dict[0][1][0] == peak_dict[0][0][0]: # if == lowest bp val
+            print(f"Only lower marker {peak_dict[0][1][0]} bp.")
+            lower_marker = peak_dict[0][1][0]
+            lower_marker = lower_marker + (lower_marker * (HALO_FACTOR * 3))
+            df = df[(df[on] > lower_marker)]
+            return df
+        else:
+            print(f"Only higher marker {peak_dict[0][1][0]} bp."
+                  f"(Not plausible but may be okay to crop view)")
+            upper_marker = peak_dict[0][1][0]
+            upper_marker = upper_marker - (upper_marker * HALO_FACTOR)
+            df = df[(df[on] < upper_marker)]
+            return df
+    else:
+        upper_marker = peak_dict[0][1][0]
+        lower_marker = peak_dict[0][1][1]
+
+        ################################################################################
+        # 2. Calculate the halo to crop left/right from the marker band
+        # (relative so this will work with different ladders)
+        # Max crop: you cannot crop too much above or beyond marker to not
+        # cause the df to be too small/empty
+        ################################################################################
+        # low bp higher multiplicator
+        lower_marker = lower_marker + (lower_marker * (HALO_FACTOR*3))
+        upper_marker = upper_marker - (upper_marker * HALO_FACTOR)
+        print(f"--- Excluding marker peaks from analysis (factor: {HALO_FACTOR})")
+        logging.info("_ Excluding marker peaks from analysis")
+        df = df[(df[on] > lower_marker) & (df[on] < upper_marker)]
     return df
 
 
@@ -316,6 +388,7 @@ def normalize(df, peak_dict="", include_marker=False):
         max_value = df[feature_name].max()
         min_value = df[feature_name].min()
         result[feature_name] = (df[feature_name] - min_value) / (max_value - min_value)
+
     return result
     # END OF FUNCTION
 
@@ -447,12 +520,13 @@ def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
     print("------------------------------------------------------------")
     print("        Calculating basepair positions based on ladder")
     print("------------------------------------------------------------")
-    peak_dict, error = peak2basepairs(df, qc_dir,ladder_dir=path_to_ladder)
+    peak_dict, error = peak2basepairs(df, qc_dir, ladder_dir=path_to_ladder)
     df = pd.read_csv(basepair_translation_file, header=0, index_col=0)
 
     #####################################################################
     # 4. Height-normalize the data (default)
     #####################################################################
+
     print("------------------------------------------------------------")
     print("        Height-normalizing data and removing markers        ")
     print("------------------------------------------------------------")
@@ -461,12 +535,13 @@ def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
     # All downstream ana on height-norm data WITHOUT marker (unless
     # --include argument was set
     df = normalized_df
-
     #####################################################################
     # 5. Add the metadata
     #####################################################################
-    df = split_and_long_by_ladder(df, path_to_file)
+    df = split_and_long_by_ladder(df)
+    print(df)
     if path_to_meta:
+
         print("------------------------------------------------------------")
         print("        Parsing metadata ")
         print("------------------------------------------------------------")

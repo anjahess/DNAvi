@@ -88,7 +88,7 @@ parser.add_argument("--verbose", help="increase output verbosity",
 # Args to variables
 #########################################################################
 args = parser.parse_args()
-savedir = None
+save_dir = None
 csv_path, ladder_path, meta_path, run_id = args.input, args.ladder, args.meta, args.name
 
 #########################################################################
