@@ -11,8 +11,8 @@ Sample_9,Control,2
 Sample_10,Control,2
 Sample_11,Control,2
 Sample_12,Control,2
+xy,Treat,1
 Sample_13,Treat,1
-Sample_14,Treat,1
 Sample_15,Treat,1
 Sample_16,Treat,1
 Sample_17,Treat,1
@@ -26,3 +26,7 @@ Sample_24,Treat,2
 Sample_25,Treat,1
 Sample_26,Treat,1
 Sample_27,Treat,1
+GDNA_1,Treat,2
+GDNA_2,Treat,1
+GDNA_3,Treat,1
+GDNA_4,Treat,1
