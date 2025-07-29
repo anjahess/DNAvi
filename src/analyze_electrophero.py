@@ -149,8 +149,8 @@ def peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL,
         # ---- SANITY CHECK ----- equals nr of detected peaks?
         ##################################################################
         if len(peak_dict[i][0]) != len(peak_list):
-            error = ("Inconstistent number of peaks between ladder file "
-                     "and data input")
+            error = (f"Inconstistent number of peaks between ladder file ({len(peak_dict[i][0])}) "
+                     f"and data input ({len(peak_list)})")
             print(error)
             exit()
 

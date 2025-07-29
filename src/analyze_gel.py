@@ -11,11 +11,11 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import imageio.v3 as iio
 import skimage as ski
-from skimage import data, measure, util
+from skimage import measure, util
 from skimage.filters import threshold_otsu
 from skimage.measure import label, regionprops
 from skimage.color import label2rgb
-
+from skimage.transform import resize
 
 def range_intersect(r1, r2):
     """
@@ -28,6 +28,23 @@ def range_intersect(r1, r2):
     """
     return range(max(r1.start, r2.start), min(r1.stop, r2.stop)) or None
 
+
+def resize_img(image):
+    """
+    Function to resize each image (helpful for data storage)
+
+    :param image_file:
+    :return:
+    """
+
+    height, width = image.shape[0], image.shape[1] #height, width
+
+    # To target height
+    TARGET_HEIGHT = 500
+    coefficient = width / 500
+    new_width = width / coefficient
+    image_resized = resize(image, (TARGET_HEIGHT, new_width), anti_aliasing=True)
+    return image_resized
 
 def analyze_gel(image_file, run_id=None):
     """
@@ -53,7 +70,11 @@ def analyze_gel(image_file, run_id=None):
     # 1. Load the image
     ####################################################################################
     input_image = image_file
+
+    # load and resize
     gel = iio.imread(uri=input_image)[:,:,:3]
+    gel = resize_img(gel)
+
     grey = ski.color.rgb2gray(gel)
     blurred_shapes = ski.filters.gaussian(grey, sigma=1.0)
 
@@ -124,7 +145,7 @@ def analyze_gel(image_file, run_id=None):
     for region in lane_coordinates:
         # 1. The image is cropped to the lane only
         minc, maxc = lane_coordinates[region] # X-coordinates of each lane
-        cropImg = image_copy[0:502, minc:maxc]   #Todo: Y- Coordinates for crop flexible!!
+        cropImg = image_copy[:, minc:maxc]   #Todo: Y- Coordinates for crop flexible!!
 
         # 2. Invert the colors (so black ergo DNA is the highest signal)
         cropImginvert = util.invert(cropImg, signed_float=False)
