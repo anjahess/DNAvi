@@ -43,7 +43,9 @@ def resize_img(image):
     TARGET_HEIGHT = 500
     coefficient = width / 500
     new_width = width / coefficient
-    image_resized = resize(image, (TARGET_HEIGHT, new_width), anti_aliasing=True)
+    image_resized = resize(image, (TARGET_HEIGHT, new_width),
+                           anti_aliasing=True)
+    
     return image_resized
 
 def analyze_gel(image_file, run_id=None):
@@ -113,7 +115,7 @@ def analyze_gel(image_file, run_id=None):
             minr, minc, maxr, maxc = region.bbox
 
             #############################################################################
-            # # GET X-COORDINATES (Y=Same)
+            # GET X-COORDINATES (Y=Same)
             # Exclude overlapping coordinates that are already in the dict
             #############################################################################
             if (minc, maxc) not in lane_coordinates.values():
@@ -129,13 +131,19 @@ def analyze_gel(image_file, run_id=None):
                 lane_coordinates[counter] = (minc, maxc)
             rect = mpatches.Rectangle(
                 (minc, 0), maxc - minc, height_max,
-                fill=False,
-                edgecolor='red',
-                linewidth=2)
+                fill=False, edgecolor='red', linewidth=2)
             ax.add_patch(rect)
     plt.tight_layout()
     plt.savefig(f"{gel_dir}{counter}_lanes_borders.png")
     plt.close()
+
+    ####################################################################################
+    # Critical - lane coordinates are not sorted yet, do this here:
+    ####################################################################################
+    sorted_lane_coordinates = sorted(lane_coordinates.items(), key=lambda x: x[1])
+    lane_coordinates = {}
+    for i, ele in enumerate(sorted_lane_coordinates):
+        lane_coordinates[i] = ele[1]
 
     ####################################################################################
     # 5. Retrieve intensity profile of each lane along Y-axis
@@ -145,8 +153,7 @@ def analyze_gel(image_file, run_id=None):
     for region in lane_coordinates:
         # 1. The image is cropped to the lane only
         minc, maxc = lane_coordinates[region] # X-coordinates of each lane
-        cropImg = image_copy[:, minc:maxc]   #Todo: Y- Coordinates for crop flexible!!
-
+        cropImg = image_copy[:, minc:maxc]
         # 2. Invert the colors (so black ergo DNA is the highest signal)
         cropImginvert = util.invert(cropImg, signed_float=False)
         start = (0,cropImg.shape[1]/2)  # Start of the profile line row=100, col=0
@@ -164,7 +171,6 @@ def analyze_gel(image_file, run_id=None):
         plt.savefig(f"{gel_dir}{region}_profile.png")
         plt.close()
         profiles.append(profile)
-
     ####################################################################################
     # 5. Checkpoint - do we have enough lanes?
     ####################################################################################
