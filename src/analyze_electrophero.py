@@ -11,13 +11,14 @@ import numpy as np
 import pandas as pd
 import sys
 from scipy.signal import find_peaks
+
 script_path = str(os.path.dirname(os.path.abspath(__file__)))
 maindir = script_path.split("/src")[0]
 sys.path.insert(0, script_path)
 sys.path.insert(0, maindir)
 sys.path.insert(0, f"{maindir}/src")
 sys.path.insert(0, f"{maindir}/src")
-from constants import YLABEL, YCOL, XCOL, XLABEL, DISTANCE, CUSTOM_MIN_PEAK_HEIGHT, HALO_FACTOR
+from constants import YLABEL, YCOL, XCOL, XLABEL, DISTANCE, CUSTOM_MIN_PEAK_HEIGHT, HALO_FACTOR, PEAK_PROMINANCE
 from plotting import lineplot, ladderplot, peakplot, gridplot
 from data_checks import check_file, check_ladder
 import logging
@@ -119,6 +120,7 @@ def peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL,
                                   height=CUSTOM_MIN_PEAK_HEIGHT)
         else:
             peaks, _ = find_peaks(array, distance=DISTANCE,
+                                  prominence=PEAK_PROMINANCE,
                                   height=min_peak_height)
         peak_list = peaks.tolist()
         print(f"--- Ladder #{i}: {len(peak_list)} peaks detected.")
@@ -145,15 +147,6 @@ def peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL,
 
         peak_dict[i] = [peak_annos, markers]
 
-        ##################################################################
-        # ---- SANITY CHECK ----- equals nr of detected peaks?
-        ##################################################################
-        if len(peak_dict[i][0]) != len(peak_list):
-            error = (f"Inconstistent number of peaks between ladder file ({len(peak_dict[i][0])}) "
-                     f"and data input ({len(peak_list)})")
-            print(error)
-            exit()
-
         ladder2type.update({ladder: i})
 
         #################################################################
@@ -162,6 +155,17 @@ def peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL,
         peakplot(array, peaks, ladder_id, i, i, qc_save_dir,
                  y_label=y_label)
 
+
+        ##################################################################
+        # ---- SANITY CHECK ----- equals nr of detected peaks?
+        ##################################################################
+        if len(peak_dict[i][0]) != len(peak_list):
+            error = (f"Inconstistent number of peaks between ladder file ({len(peak_dict[i][0])}) "
+                     f"and data input ({len(peak_list)})."
+                     f"Please check {qc_save_dir} to see what peaks are "
+                     f"missing.")
+            print(error)
+            exit()
         #################################################################
         # 1.4 Integrate bp information into the df
         #################################################################
@@ -426,7 +430,7 @@ def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="b
         # Define min peak height
         min_peak_height = max_peak * 0.2
         peaks, _ = find_peaks(array, distance=DISTANCE,  # n pos apart
-                                  height=min_peak_height)  # minimum height
+                              height=min_peak_height)  # minimum height
 
         # Get the fluorescence val for each peak
         peak_list = [array[e] for e in peaks.tolist()]
