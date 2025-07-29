@@ -21,11 +21,11 @@ Please make sure you have installed **python => 3.12**. Next, download the requi
 
 Python packages:
 
-    pip install argparse numpy pandas python-csv seaborn scipy matplotlib imageio skimage werkzeug
+    pip install argparse numpy pandas seaborn scipy matplotlib imageio scikit-image werkzeug
 
 Conda:
 
-    conda create --name dnavi argparse numpy pandas python-csv seaborn scipy matplotlib imageio skimage werkzeug
+    conda create --name dnavi argparse numpy pandas seaborn scipy matplotlib imageio werkzeug anaconda::scikit-image
 
 Next, download the repository.
 
