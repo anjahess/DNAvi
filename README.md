@@ -23,6 +23,10 @@ Python packages:
 
     pip install argparse numpy pandas python-csv seaborn scipy matplotlib imageio skimage werkzeug
 
+Conda:
+
+    conda create --name dnavi argparse numpy pandas python-csv seaborn scipy matplotlib imageio skimage werkzeug
+
 Next, download the repository.
 
 Through *github CLI*:
@@ -49,8 +53,7 @@ Windows: **Windows Symbol -> search cmd.exe -> Click cmd.exe**
 
 In this example we will run DNAvi on a test electropherogram signal table provided in this package:
 
-    python3 DNAvi.py -f electropherogram.csv -l ladder.csv
-
+    python3 DNAvi.py -i electropherogram.csv -l ladder.csv -m meta.csv
 
 If you need help, simply run
 
@@ -65,25 +68,31 @@ Which will result in a display of command line arguments with additional explana
      | |_| | |\  |/ ___ \ V /| |
      |____/|_| \_/_/   \_\_/ |_| 
      
-    usage: DNAvi.py [-h] [-i [<input-file-or-folder>]] -l [<ladder-file>] [-m [<metadata-file>]] [-n [<run-name>]] [--verbose]
+    usage: DNAvi.py [-h] [-i [<input-file-or-folder>]] -l [<ladder-file>]
+                    [-m [<metadata-file>]] [-n [<run-name>]] [-incl] [--verbose]
     
     Analyse Electropherogram data e.g. for cell-free DNA from liquid biopsies
     
     options:
       -h, --help            show this help message and exit
       -i [<input-file-or-folder>], --input [<input-file-or-folder>]
-                            Path to electropherogram table file or image file OR directory containing those files. Accepted formats: .csv/.png/.jpeg/.jpg or
-                            directory containing those.
+                            Path to electropherogram table file or image file OR
+                            directory containing those files. Accepted formats:
+                            .csv/.png/.jpeg/.jpg or directory containing those.
       -l [<ladder-file>], --ladder [<ladder-file>]
                             Path to ladder table file. Accepted format: .csv
       -m [<metadata-file>], --meta [<metadata-file>]
-                            Path to metadata table file containing grouping information for input file (e.g. age, sex, disease). Accepted format: .csv
+                            Path to metadata table file containing grouping
+                            information for input file (e.g. age, sex, disease).
+                            Accepted format: .csv
       -n [<run-name>], --name [<run-name>]
-                            Name of your run/experiment. Will define output foldername
+                            Name of your run/experiment. Will define output folder
+                            name
+      -incl, --include      Include marker bands into analysis and plotting.
       --verbose             increase output verbosity
     
-    Version: 0.1, created by Anja Hess <anja.hess@mail.de>, Max Planck Institute for Molecular Genetics, Berlin, GERMANY
-
+    Version: 0.1, created by Anja Hess <anja.hess@mail.de>, Max Planck Institute
+    for Molecular Genetics, Berlin, GERMANY
 
 ## 4. Example
 
