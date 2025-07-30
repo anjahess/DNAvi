@@ -100,7 +100,7 @@ Which will result in a display of command line arguments with additional explana
 In this example we will run DNAvi on a test electropherogram signal table provided in this package:
 
     cd DNAvi/
-    python3 DNAvi.py -f tests/electropherogram.csv -l tests/ladder.csv -m tests/metadata.csv
+    python3 DNAvi.py -i tests/electropherogram.csv -l tests/ladder.csv -m tests/metadata.csv
 
 This will result in the following output:
     
