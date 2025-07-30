@@ -13,20 +13,21 @@ liquid_bio/x_results/2_manuscript/nextcloud/v5/00_Electros/Electropherogram.csv
 
 """
 
-print(r"""Welcome to
+logo=r"""Welcome to
   ____  _   _    _        _
  |  _ |  \ | |  / \__   _(_)
  | | | |  \| | / _ \ \ / / |
  | |_| | |\  |/ ___ \ V /| |
  |____/|_| \_/_/   \_\_/ |_| 
- """)
-
+ """
+print(logo)
 import os
 import argparse
 from src.data_checks import check_input, check_ladder, check_meta, check_name
 from src.analyze_electrophero import epg_analysis
 from src.constants import ACCEPTED_FORMATS
 from src.analyze_gel import analyze_gel
+
 #########################################################################
 # Initiate Parser
 #########################################################################
@@ -83,6 +84,8 @@ parser.add_argument('-incl', '--include',
 
 parser.add_argument("--verbose", help="increase output verbosity",
                     action="store_true")
+
+parser.add_argument('-v', '--version', action='version', version="v0.1")
 
 #########################################################################
 # Args to variables

@@ -14,11 +14,12 @@ documentation for details.
 .. toctree::
    Installation
    Quickstart
-   Multi-file input
-   Metadata for gel images
-   Excluding/Including marker peaks
-   Handling different ladders (beta)
+   Inputs
+   Ladders
+   Metadata
+   Visualization
+   Statistics
    api
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Contents:
 

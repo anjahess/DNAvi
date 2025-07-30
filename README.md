@@ -25,7 +25,8 @@ Python packages:
 
 Conda:
 
-    conda create --name dnavi argparse numpy pandas seaborn scipy matplotlib imageio werkzeug anaconda::scikit-image
+    conda create --name dnavi argparse numpy pandas seaborn scipy matplotlib imageio werkzeug scikit-image
+    conda activate dnavi
 
 Next, download the repository.
 

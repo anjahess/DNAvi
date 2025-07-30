@@ -44,8 +44,16 @@ def wide_to_long(df, id_var="pos", var_name="sample", value_name="value"):
 def integrate(df, ladders_present=""):
     """
 
-    :param df:
-    :return:
+    Beta: a function that in the future will allow help
+    handling resulting "gaps" when using multiple ladders within the same
+    singal table.
+
+    NOTE: Not implemented yet.
+
+    :param df: pandas dataframe
+    :param ladders_present: str
+    :return: a new pandas dataframe that is the result of integrating
+    
     """
 
     merged_df = []
@@ -58,7 +66,6 @@ def integrate(df, ladders_present=""):
             next = df.columns.get_loc(ladders_present[i + 1])
         except IndexError:
             next = None
-        #print(current, next)
 
         if i == 0:
             sub_df = df.iloc[:,:next]
@@ -166,6 +173,7 @@ def peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL,
                      f"missing.")
             print(error)
             exit()
+
         #################################################################
         # 1.4 Integrate bp information into the df
         #################################################################
