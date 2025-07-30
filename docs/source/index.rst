@@ -6,9 +6,10 @@
 DNAvi documentation
 ===================
 
-Add your content using ``reStructuredText`` syntax. See the
-`reStructuredText <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_
-documentation for details.
+This is DNAvi's documentation page. Please cite us whenever you use DNAvi:
+
+Anja Hess, Alexander Meissner, Dominik Seelow, and Helene Kretzmer: **DNAvi: a python tool for integration, analysis, and visualization of cell-free DNA fragments in liquid biopsies (2025)**
+
 
 
 .. toctree::
@@ -17,9 +18,9 @@ documentation for details.
    Inputs
    Ladders
    Metadata
+   Outputs
    Visualization
    Statistics
-   api
    :maxdepth: 1
    :caption: Contents:
 

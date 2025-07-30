@@ -1,0 +1,9 @@
+SAMPLE,CONDITION,EXPERIMENT,SEX,AGE,INFECTION
+Sample_1,Control,1,M,10,Yes
+Sample_2,Control,1,F,24,Yes
+Sample_3,Control,1,M,7,Yes
+Sample_4,Control,1,M,87,Yes
+Sample_5,Treat,1,F,34,Yes
+Sample_6,Treat,2,F,56,No
+Sample_7,Treat,2,F,66,No
+Sample_8,Treat,2,F,25,No
