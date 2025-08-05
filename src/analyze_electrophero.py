@@ -512,6 +512,7 @@ def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
         save_dir = path_to_file.rsplit("/", 1)[0] + f"/{run_id}/"
     plot_dir = f"{save_dir}/plots/"
     qc_dir = f"{save_dir}/qc/"
+    stats_dir =  f"{save_dir}/stats/"
     basepair_translation_file = f"{qc_dir}bp_translation.csv"
     source_file = f"{plot_dir}sourcedata.csv"
     logging.info(f"Saving results to: {save_dir}")
@@ -526,7 +527,7 @@ def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
     df = check_file(path_to_file)
 
     # Only then make the effort to create folders
-    for directory in [save_dir, plot_dir, qc_dir]:
+    for directory in [save_dir, plot_dir, qc_dir, stats_dir]:
         os.makedirs(directory, exist_ok=True)
 
     print("------------------------------------------------------------")
@@ -570,7 +571,7 @@ def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
     print("------------------------------------------------------------")
     print("        Performing statistical analysis")
     print("------------------------------------------------------------")
-    epg_stats(df, save_dir=plot_dir, peak_dict=peak_dict)
+    epg_stats(df, save_dir=stats_dir, peak_dict=peak_dict)
 
     #####################################################################
     # 5. Plot raw data (samples seperated)
