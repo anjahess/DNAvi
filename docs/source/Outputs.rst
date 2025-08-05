@@ -1,97 +1,136 @@
 Outputs
 ===================
 
-After your analysis has been performed, your data will be automatically downloaded from your browser. 
+After your analysis has been performed, your data will be appear in the directory of the input file(s).
 
-1. Analysis folder
+1. Output folder
 ^^^^^^
 
+If you wish to specify your output folder's name you can do so with the **-n/--name** argument
 
-The ZIP archive contains your unique working ID (c2e675.. in the example). Unzip the archive by double-clicking or using a software of your choice.
+.. code-block::
 
+    python3 DNAvi.py -i /path/to/input/files -l ladder.csv -m meta.csv --name YOUR_NAME
 
-Once you have unzipped the folder, double click it to open it.
-You will see the inputs you have submitted to DNAvi prior to the analysis. In the example that’s the DNA intensity table file called electropherogram.csv and a electropherogram_ladder.csv file. Only if you submitted a metafile, then a third file, in this case called electropherogram_meta.csv will be visible. Finally there is the results folder which we will open now.
-
-For gel image inputs:
-In case you have uploaded a gel image instead of a table file, the folder will additionally contain some outputs from the image analysis:
-
-It is recommended to carefully check gel_lanes_border.png and gel_lanes.png to understand if all ladder and DNA bands have been sucessfully recongnized and in the lanes are correctly separated before proceeding. If that’s not the case, please carefully check the section on image inputs, because errors here may be likely caused by insufficient image quality. 
-4.1.1 Results folder
+The folder will contain the inputs you have submitted to DNAvi prior to the analysis.
 The results folder contains two sub-directories, called QC and plots.
-4.1.1.1 QC
+
+1.1 QC
+""""""""""""""""""""""""""
 The QC folder is all about the DNA marker and detecting its peaks. It makes sense to check it and make sure your DNA ladder has been recognized correctly, and that the base pairs assigned make sense. You will find the following files:
-    • info.csv – a simple table giving information on your ladder type
+    • **info.csv** – a simple table giving information on your ladder type
+    • **interpolated.csv** – your input data with missing intensity values interpolated
+    • **bp_translation.csv** – your input, but instead of ladder intensity values now with the assigned base pair position.
+    • **Peaks_***ladder-name***.pdf** – A line plot that will show you the detected peaks as yellow crosses. Make sure all peaks that you consider important are correctly detected. The x-axis will only give you positional values at that stage.
 
+        .. image:: _static/ladder_peaks.svg
+          :width: 400
+          :alt: Gel lanes
 
-    • interpolated.csv – your input data with missing intensity values interpolated 
+    • **Peaks_LADDER-NAME_interpolated.pdf** – Similar visualizations of ladder with base pairs already annotated.
 
+        .. image:: _static/ladder_interpol.png
+          :width: 400
+          :alt: Gel lanes
 
+    • **peaks_all_interpolated.pdf** – Similar visualization, **for multi-ladder input**
 
+        .. image:: _static/ladder_all.png
+          :width: 400
+          :alt: Gel lanes
 
-    • bp_translation.csv – your input, but instead of ladder intensity values now with the assigned base pair position.
-
-    • Peaks_N_ladder-name.pdf – A line plot that will show you the detected peaks as yellow crosses. Make sure all peaks that you consider important are correctly detected. The x-axis will only give you positional values at that stage.
-
-
-
-
-
-      
-      
-      
-      
-      
-      
-    • peaks_all_interpolated.pdf & N_ladder-name_interpolated.pdf – Similar visualizations of ladder with base pairs already annotated.
-
-If you have checked the QC outputs and found your ladder correctly annotated, you may proceed to the plots folder and check your samples.
-4.1.1.2 Plots
-
-In its simplest form, the output may consist of only three files, and expand with an additional plot yor each variable you specified in the metadata:
-    • all_samples.pdf – a grid plot showing each DNA sample as an individual line plot
+Once you have checked the QC outputs and found your ladder correctly annotated, you may proceed to the plots folder and check your samples.
 
 
 
+1.2 Plots
+""""""""""""""""""""""""""
+
+The directory contains results in a long table format and visualization. The visualization provides line profiles of individual samples,
+and additional plots if you specified categrories in the :doc:`/Metadata`.
+
+    • **all_samples.pdf** – a grid plot showing each DNA sample as an individual line plot
+    • **all_samples_summary.pdf** – a line plot summarizing all samples in a single plot (average)
+    • **all_samples_by_YOURVARIABLE.pdf** –  a plot colored by group variable for each variable specified in the :doc:`/Metadata`
+    • **sourcedata.csv** – underlying data table, helpful for loading into another program (R, pyhton, GraphPad) or source data sharing
+
+A single sample example is provided below:
+
+        .. image:: _static/example_sample.png
+          :width: 400
+          :alt: Single sample line plot
 
 
+Continue to :doc:`/Visualization` for a detailed overview on the generated plots.
 
 
+1.3 Stats
+""""""""""""""""""""""""""
+
+This folder contains the statistics including group metrics in case you provided :doc:`/Metadata`.
+    • **basic_statistics.csv**
+    • **peak_statistics.csv**
+    • **group_statistics.csv**
 
 
-
-
-
-
-
-The y-axis shows normalized fluoresence signals to fit a value between 0 and 1. This way fragment profiles become comparable irrespective of sample concentration. The x-axis shows the basepair position based on the values submitted for your ladder. This is displayed in log scale. Each subplot is titled by the sample name you specified either in the table or meta file.
-    • all_samples_nomarker_summary.pdf – a line plot summarizing all samples including the lower and upper marker signal
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    • all_samples_by_YOURVARIABLE.pdf – for each variable specificd in the metafile, the summary line plot will stratify the samples into your groups, each group highlighted in another color.
+Continue to :doc:`/Statistics` for a detailed overview on the statistics.
 
 
 
 
+2. Gel image outputs
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In case you have uploaded a gel image a third folder called **images** will provide outputs from the image analysis. This is particularly helpful for
+troubleshooting. It's recommended to carefully check these outputs to understand if all DNA lanes have been successfully recognized.
 
 
+2.1 Thresholding
+""""""""""""""""""""""""""
+
+**gel_thresholded.png** is the first intermediate output showing the result of DNAvi's thresholding. In white are all objects recognized on the image.
 
 
+.. image:: _static/gel_thresholded.png
+  :width: 400
+  :alt: Gel lanes
 
 
+2.2 Object detection
+""""""""""""""""""""""""""
 
-    • sourcedata.csv – this table provides the source data used for generating above plots and is very helpful in case you want to process / visualize the data later in another program (R, pyhton, GraphPad) or if you need to upload them for a publication.
+**gel_lanes.png** should look like below example. Every band that is recognized will be marked by a colored overlay.
+
+
+.. image:: _static/gel_lanes.png
+  :width: 400
+  :alt: Gel lanes
+
+
+2.3 Lane border inference
+""""""""""""""""""""""""""
+**gel_lanes_border.png** should look like below example. Every band that is recognized will be marked by a colored overlay.
+
+
+.. image:: _static/gel_lanes_borders.png
+  :width: 400
+  :alt: Gel lanes
+
+
+2.4 Individual DNA profiles
+""""""""""""""""""""""""""
+Each lane detected will be sliced and annotated. Below how this would look like for a ladder lane:
+
+.. image:: _static/ladder_profile.png
+  :width: 400
+  :alt: Gel lanes
+
+... or a normal sample lane:
+
+.. image:: _static/lane_profile.png
+  :width: 400
+  :alt: Gel lanes
+
+
+Please carefully check our :doc:`/Inputs` section on image inputs to assure your image is in compliance with the image quality requirements.
 

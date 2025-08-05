@@ -39,7 +39,18 @@ following requirements will ensure optimal results and reproducibility:
     • the ladder/marker is in the first lane only
     • lanes are straight and have the same width
     • no arrows, text, annotations, or objects are in the picture
-    • no whitespace/frame etc is surrounding the image (crop the image if needed)
+    • no frame is surrounding the image (crop the image if needed)
+    • keep a bit of whitespace around the upper/lower markers, so that they can be identified as individual peaks
     • the image has good contrast and is equally contrasted across all lanes (important to assure that bands are recognized)
 
 Note: Inputting an inverted standard DNA agarose gel image may work, but its on your own risk and you may want to carefully check in the output folder if the bands were properly segmented. We highly recommend using only virtual gels from capilarry electrophoresis machines for optimal performance.
+
+
+3. Multiple inputs
+^^^^^^^^^^^^^^^^^^
+
+If you wish to screen multiple files, put them into a single folder and use the path to this folder as input to DNAvi.
+
+.. code-block::
+
+    python3 DNAvi.py -i /path/to/input/files -l ladder.csv -m meta.csv

@@ -32,7 +32,7 @@ as input, the first *n* entries will be used, where *n* equals the number of lan
      - DISEASED
      - MALE
 
-:download:`Metadata file example <_static/metadata.csv>`
+:download:`Metadata example <_static/metadata.csv>`
 
 2. Adding more metadata
 ^^^^^^^^^^^^^^^^^^
@@ -46,7 +46,7 @@ To add more metadata, simply add **additional columns** into the metadata file.
    :header-rows: 1
 
 
-:download:`Extended metadata file example <_static/metadata_ext.csv>`
+:download:`Extended metadata example <_static/metadata_ext.csv>`
 
 3. Adding metadata for gel images
 ^^^^^^^^^^^^^^^^^^
