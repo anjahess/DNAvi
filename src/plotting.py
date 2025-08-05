@@ -64,7 +64,7 @@ def gridplot(df, x, y, save_dir="", title="", y_label="", x_label=""):
 
     # Log scale
     plt.xscale('log')
-    plt.savefig(f"{save_dir}{title}_nomarker_summary.pdf", bbox_inches='tight')
+    plt.savefig(f"{save_dir}{title}_summary.pdf", bbox_inches='tight')
     plt.close()
     cols_not_to_plot = ["bp_pos", "sample", "normalized_fluorescent_units"]
 
