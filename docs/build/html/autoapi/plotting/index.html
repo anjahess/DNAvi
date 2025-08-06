@@ -60,7 +60,6 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">plotting</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-contents">Module Contents</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#plotting.set_style_for_paper"><code class="docutils literal notranslate"><span class="pre">set_style_for_paper()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#plotting.gridplot"><code class="docutils literal notranslate"><span class="pre">gridplot()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#plotting.peakplot"><code class="docutils literal notranslate"><span class="pre">peakplot()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#plotting.lineplot"><code class="docutils literal notranslate"><span class="pre">lineplot()</span></code></a></li>
@@ -104,26 +103,23 @@
              
   <section id="module-plotting">
 <span id="plotting"></span><h1>plotting<a class="headerlink" href="#module-plotting" title="Link to this heading"></a></h1>
-<p>Plotting functions for electropherogram analysis.
-&#64;author: Anja Hess
-&#64;date: 2023-JUL-01</p>
+<p>Plotting functions for electropherogram analysis
+Author: Anja Hess
+Date: 2025-AUG-06</p>
 <section id="functions">
 <h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#plotting.set_style_for_paper" title="plotting.set_style_for_paper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_style_for_paper</span></code></a>()</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#plotting.gridplot" title="plotting.gridplot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gridplot</span></code></a>(df, x, y[, save_dir, title, y_label, x_label])</p></td>
+<td><p>Generate line plot for DNA fragment sizes with masking option for marker peaks</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#plotting.gridplot" title="plotting.gridplot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gridplot</span></code></a>(df, x, y[, save_dir, title, y_label, x_label])</p></td>
-<td><p>DNA size line plot with masking option for marker peaks</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#plotting.peakplot" title="plotting.peakplot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">peakplot</span></code></a>(array, peaks, ladder_id, ref, i, qc_save_dir)</p></td>
+<td><p>Plot the peaks detected in a DNA size profile</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#plotting.peakplot" title="plotting.peakplot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">peakplot</span></code></a>(array, peaks, ladder_id, ref, i, qc_save_dir)</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#plotting.lineplot" title="plotting.lineplot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lineplot</span></code></a>(df, x, y[, save_dir, title, y_label, ...])</p></td>
+<td><p>Core line plot function for DNA fragment sizes</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#plotting.lineplot" title="plotting.lineplot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lineplot</span></code></a>(df, x, y[, save_dir, title, y_label, ...])</p></td>
-<td><p>DNA size line plot</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#plotting.ladderplot" title="plotting.ladderplot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ladderplot</span></code></a>(df, ladder2type, qc_save_dir[, y_label, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#plotting.ladderplot" title="plotting.ladderplot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ladderplot</span></code></a>(df, ladder2type, qc_save_dir[, y_label, ...])</p></td>
 <td><p>Plot multiple ladders into one plot</p></td>
 </tr>
 </tbody>
@@ -132,28 +128,23 @@
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
 <dl class="py function">
-<dt class="sig sig-object py" id="plotting.set_style_for_paper">
-<span class="sig-prename descclassname"><span class="pre">plotting.</span></span><span class="sig-name descname"><span class="pre">set_style_for_paper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plotting.set_style_for_paper" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="plotting.gridplot">
 <span class="sig-prename descclassname"><span class="pre">plotting.</span></span><span class="sig-name descname"><span class="pre">gridplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotting.gridplot" title="Link to this definition"></a></dt>
-<dd><p>DNA size line plot with masking option for marker peaks</p>
+<dd><p>Generate line plot for DNA fragment sizes with masking option for marker peaks</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>df</strong></p></li>
-<li><p><strong>x</strong></p></li>
-<li><p><strong>y</strong></p></li>
-<li><p><strong>save_dir</strong></p></li>
-<li><p><strong>title</strong></p></li>
-<li><p><strong>y_label</strong></p></li>
-<li><p><strong>x_label</strong></p></li>
+<li><p><strong>df</strong> – pandas.DataFrame</p></li>
+<li><p><strong>x</strong> – str, the plot’s x variable</p></li>
+<li><p><strong>y</strong> – str, the plot’s y variable</p></li>
+<li><p><strong>save_dir</strong> – str, path to save the figure</p></li>
+<li><p><strong>title</strong> – str, title of the figure</p></li>
+<li><p><strong>y_label</strong> – str, y label of the figure</p></li>
+<li><p><strong>x_label</strong> – str, x label of the figure</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p></p>
+<dd class="field-even"><p>plot is generated and saved to disk.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -161,20 +152,21 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="plotting.peakplot">
 <span class="sig-prename descclassname"><span class="pre">plotting.</span></span><span class="sig-name descname"><span class="pre">peakplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ladder_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qc_save_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotting.peakplot" title="Link to this definition"></a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Plot the peaks detected in a DNA size profile</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>array</strong></p></li>
-<li><p><strong>peaks</strong></p></li>
-<li><p><strong>ladder_id</strong></p></li>
-<li><p><strong>ref</strong></p></li>
-<li><p><strong>i</strong></p></li>
-<li><p><strong>qc_save_dir</strong></p></li>
-<li><p><strong>y_label</strong></p></li>
+<li><p><strong>array</strong> – np.ndarray</p></li>
+<li><p><strong>peaks</strong> – list of int</p></li>
+<li><p><strong>ladder_id</strong> – str or int, name of the ladder</p></li>
+<li><p><strong>ref</strong> – dtr, type of reference</p></li>
+<li><p><strong>i</strong> – int, index of the ladder (potentially multiple)</p></li>
+<li><p><strong>qc_save_dir</strong> – str, path to folder to save the figure to</p></li>
+<li><p><strong>y_label</strong> – str, y label name</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p></p>
+<dd class="field-even"><p>plots are generated and saved to disk.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -182,22 +174,27 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="plotting.lineplot">
 <span class="sig-prename descclassname"><span class="pre">plotting.</span></span><span class="sig-name descname"><span class="pre">lineplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hue</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_lower</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotting.lineplot" title="Link to this definition"></a></dt>
-<dd><p>DNA size line plot</p>
+<dd><p>Core line plot function for DNA fragment sizes</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>df</strong></p></li>
-<li><p><strong>x</strong></p></li>
-<li><p><strong>y</strong></p></li>
-<li><p><strong>save_dir</strong></p></li>
-<li><p><strong>title</strong></p></li>
-<li><p><strong>y_label</strong></p></li>
-<li><p><strong>x_label</strong></p></li>
-<li><p><strong>window</strong> – x lims</p></li>
+<li><p><strong>df</strong> – pandas.DataFrame</p></li>
+<li><p><strong>x</strong> – x variable</p></li>
+<li><p><strong>y</strong> – y variable</p></li>
+<li><p><strong>save_dir</strong> – str, path to save the figure</p></li>
+<li><p><strong>title</strong> – str, title of the figure</p></li>
+<li><p><strong>y_label</strong> – str, y label of the figure</p></li>
+<li><p><strong>x_label</strong> – str, x label of the figure</p></li>
+<li><p><strong>hue</strong> – str, optional to set hue parameter</p></li>
+<li><p><strong>units</strong> – bool</p></li>
+<li><p><strong>plot_lower</strong> – bool</p></li>
+<li><p><strong>estimator</strong> – str, which estimator to use</p></li>
+<li><p><strong>style</strong> – str, style of line plot</p></li>
+<li><p><strong>window</strong> – bool or tuple for x axis limits</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p></p>
+<dd class="field-even"><p>plots are generated and saved to disk.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -209,15 +206,15 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>df</strong> – panas DataFrame</p></li>
+<li><p><strong>df</strong> – pandas.DataFrame</p></li>
 <li><p><strong>ladder2type</strong> – dict</p></li>
 <li><p><strong>qc_save_dir</strong> – str</p></li>
-<li><p><strong>y_label</strong> – str</p></li>
-<li><p><strong>x_label</strong> – ste</p></li>
+<li><p><strong>y_label</strong> – str, y label of the figure</p></li>
+<li><p><strong>x_label</strong> – str, x label of the figure</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>plot appears in QC directory</p>
+<dd class="field-even"><p>plot generated and saved to the QC directory</p>
 </dd>
 </dl>
 </dd></dl>

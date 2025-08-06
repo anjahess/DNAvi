@@ -5,9 +5,9 @@ plotting
 
 .. autoapi-nested-parse::
 
-   Plotting functions for electropherogram analysis.
-   @author: Anja Hess
-   @date: 2023-JUL-01
+   Plotting functions for electropherogram analysis 
+   Author: Anja Hess 
+   Date: 2025-AUG-06 
 
 
 
@@ -16,7 +16,6 @@ Functions
 
 .. autoapisummary::
 
-   plotting.set_style_for_paper
    plotting.gridplot
    plotting.peakplot
    plotting.lineplot
@@ -26,59 +25,65 @@ Functions
 Module Contents
 ---------------
 
-.. py:function:: set_style_for_paper()
-
 .. py:function:: gridplot(df, x, y, save_dir='', title='', y_label='', x_label='')
 
-   DNA size line plot with masking option for marker peaks
+   Generate line plot for DNA fragment sizes with masking option for marker peaks
 
-   :param df:
-   :param x:
-   :param y:
-   :param save_dir:
-   :param title:
-   :param y_label:
-   :param x_label:
-   :return:
+   :param df: pandas.DataFrame
+   :param x: str, the plot's x variable
+   :param y: str, the plot's y variable
+   :param save_dir: str, path to save the figure
+   :param title: str, title of the figure
+   :param y_label: str, y label of the figure
+   :param x_label: str, x label of the figure
+   :return: plot is generated and saved to disk.
 
 
 .. py:function:: peakplot(array, peaks, ladder_id, ref, i, qc_save_dir, y_label='')
 
-   :param array:
-   :param peaks:
-   :param ladder_id:
-   :param ref:
-   :param i:
-   :param qc_save_dir:
-   :param y_label:
-   :return:
+   Plot the peaks detected in a DNA size profile
+
+   :param array: np.ndarray
+   :param peaks: list of int
+   :param ladder_id: str or int, name of the ladder
+   :param ref: dtr, type of reference
+   :param i: int, index of the ladder (potentially multiple)
+   :param qc_save_dir: str, path to folder to save the figure to
+   :param y_label: str, y label name
+   :return: plots are generated and saved to disk.
+
 
 
 .. py:function:: lineplot(df, x, y, save_dir='', title='', y_label='', x_label='', hue=None, units=None, plot_lower=False, estimator='mean', style=None, window=False)
 
-   DNA size line plot
+   Core line plot function for DNA fragment sizes
 
-   :param df:
-   :param x:
-   :param y:
-   :param save_dir:
-   :param title:
-   :param y_label:
-   :param x_label:
-   :param window: x lims
-   :return:
+   :param df: pandas.DataFrame
+   :param x: x variable
+   :param y: y variable
+   :param save_dir: str, path to save the figure
+   :param title: str, title of the figure
+   :param y_label: str, y label of the figure
+   :param x_label: str, x label of the figure
+   :param hue: str, optional to set hue parameter
+   :param units: bool
+   :param plot_lower: bool
+   :param estimator: str, which estimator to use
+   :param style: str, style of line plot
+   :param window: bool or tuple for x axis limits
+   :return: plots are generated and saved to disk.
 
 
 .. py:function:: ladderplot(df, ladder2type, qc_save_dir, y_label='', x_label='')
 
    Plot multiple ladders into one plot
 
-   :param df: panas DataFrame
+   :param df: pandas.DataFrame
    :param ladder2type: dict
    :param qc_save_dir: str
-   :param y_label: str
-   :param x_label: ste
-   :return: plot appears in QC directory
+   :param y_label: str, y label of the figure
+   :param x_label: str, x label of the figure
+   :return: plot generated and saved to the QC directory
 
 
 

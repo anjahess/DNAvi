@@ -1,8 +1,10 @@
 """
 
-Plotting functions for electropherogram analysis.
-@author: Anja Hess
-@date: 2023-JUL-01
+Plotting functions for electropherogram analysis \
+
+Author: Anja Hess \
+
+Date: 2025-AUG-06 \
 
 """
 import os
@@ -12,43 +14,19 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import ScalarFormatter
 from src.constants import palettediff2
 
-def set_style_for_paper():
-    factor = 5
-    ticks = 2
-    lines = 0.5
-    font = 0.6
-
-    rc = {"boxplot.flierprops.markersize": 1,
-          "boxplot.flierprops.markeredgewidth": font,
-          "lines.linewidth": lines,
-          "axes.linewidth": lines,
-          "xtick.major.width": lines,
-          "xtick.major.size": ticks,
-          "xtick.minor.size": ticks,
-          "ytick.major.width": lines,
-          "ytick.major.size": ticks,
-          "legend.frameon": False,
-          "boxplot.meanprops.markersize": font,
-          "legend.fontsize": font,
-          "legend.title_fontsize": font,
-          "legend.markerscale": 0.1,
-          'figure.figsize': (11.7/factor, 8.27/factor)}
-    sns.set(style="ticks", font_scale=font, rc=rc)
-    return rc
-    # END OF FUNCTION
-
 def gridplot(df, x, y, save_dir="", title="", y_label="", x_label=""):
     """
-    DNA size line plot with masking option for marker peaks
 
-    :param df:
-    :param x:
-    :param y:
-    :param save_dir:
-    :param title:
-    :param y_label:
-    :param x_label:
-    :return:
+    Generate line plot for DNA fragment sizes with masking option for marker peaks
+
+    :param df: pandas.DataFrame
+    :param x: str, the plot's x variable
+    :param y: str, the plot's y variable
+    :param save_dir: str, path to save the figure
+    :param title: str, title of the figure
+    :param y_label: str, y label of the figure
+    :param x_label: str, x label of the figure
+    :return: plot is generated and saved to disk.
     """
 
     df[x] = df[x].astype(int)
@@ -93,36 +71,30 @@ def gridplot(df, x, y, save_dir="", title="", y_label="", x_label=""):
     g.map(sns.lineplot, x, y, alpha=.7)
     g.add_legend()
 
-    # flatten axes into a 1-d array
-    axes = g.axes.flatten()
-    # iterate through the axes
-    #for i, ax in enumerate(axes):
-    #    ax.axvline(lower_marker, ls='--', c='black')
-    #    ax.axvline(upper_marker, ls='--', c='black')
-    # Add marker line
-   # plt.xlim(lower_marker, upper_marker)
-
     # Add labels
     plt.ylabel(y_label)
     plt.xlabel(x_label)
     plt.suptitle(f"{title}")
-    #if upper_marker > 1000:
     plt.xscale('log')
     plt.savefig(f"{save_dir}{title}.pdf")
     plt.close()
+
     # END OF FUNCTION
 
 def peakplot(array, peaks, ladder_id, ref, i, qc_save_dir, y_label=""):
     """
 
-    :param array:
-    :param peaks:
-    :param ladder_id:
-    :param ref:
-    :param i:
-    :param qc_save_dir:
-    :param y_label:
-    :return:
+    Plot the peaks detected in a DNA size profile
+
+    :param array: np.ndarray
+    :param peaks: list of int
+    :param ladder_id: str or int, name of the ladder
+    :param ref: dtr, type of reference
+    :param i: int, index of the ladder (potentially multiple)
+    :param qc_save_dir: str, path to folder to save the figure to
+    :param y_label: str, y label name
+    :return: plots are generated and saved to disk.
+
     """
     plt.plot(array)
     plt.plot(peaks, array[peaks], "x")
@@ -139,17 +111,23 @@ def lineplot(df, x, y, save_dir="", title="", y_label="", x_label="",
              hue=None, units=None, plot_lower=False, estimator="mean",
              style=None, window=False):
     """
-    DNA size line plot
 
-    :param df:
-    :param x:
-    :param y:
-    :param save_dir:
-    :param title:
-    :param y_label:
-    :param x_label:
-    :param window: x lims
-    :return:
+    Core line plot function for DNA fragment sizes
+
+    :param df: pandas.DataFrame
+    :param x: x variable
+    :param y: y variable
+    :param save_dir: str, path to save the figure
+    :param title: str, title of the figure
+    :param y_label: str, y label of the figure
+    :param x_label: str, x label of the figure
+    :param hue: str, optional to set hue parameter
+    :param units: bool
+    :param plot_lower: bool
+    :param estimator: str, which estimator to use
+    :param style: str, style of line plot
+    :param window: bool or tuple for x axis limits
+    :return: plots are generated and saved to disk.
     """
 
     #####################################################################
@@ -199,12 +177,12 @@ def ladderplot(df, ladder2type, qc_save_dir, y_label="", x_label=""):
 
     Plot multiple ladders into one plot
 
-    :param df: panas DataFrame
+    :param df: pandas.DataFrame
     :param ladder2type: dict
     :param qc_save_dir: str
-    :param y_label: str
-    :param x_label: ste
-    :return: plot appears in QC directory
+    :param y_label: str, y label of the figure
+    :param x_label: str, x label of the figure
+    :return: plot generated and saved to the QC directory
 
     """
 
