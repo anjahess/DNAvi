@@ -17,13 +17,13 @@ Through pip:
 
 .. code-block::
 
-       pip install argparse numpy pandas seaborn scipy matplotlib imageio scikit-image werkzeug
+       pip install argparse numpy pandas seaborn scipy matplotlib imageio scikit-image werkzeug scikit_posthocs
 
 Through conda:
 
 .. code-block::
 
-    conda create --name dnavi argparse numpy pandas seaborn scipy matplotlib imageio werkzeug scikit-image
+    conda create --name dnavi argparse numpy pandas seaborn scipy matplotlib imageio werkzeug scikit-image scikit_posthocs
     conda activate dnavi
 
 
