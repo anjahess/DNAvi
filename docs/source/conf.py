@@ -18,7 +18,7 @@ print("--- SPHINX USING THIS START DIR:", os.path.abspath('../../'))
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'DNAvi'
-copyright = '2025, Anja Hess'
+copyright = '2025, the authors'
 author = 'Anja Hess'
 release = '0.1'
 
