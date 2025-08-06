@@ -11,7 +11,8 @@ import numpy as np
 import pandas as pd
 import sys
 from scipy.signal import find_peaks
-
+from scipy.stats import kruskal
+import scikit_posthocs as sp
 script_path = str(os.path.dirname(os.path.abspath(__file__)))
 maindir = script_path.split("/src")[0]
 sys.path.insert(0, script_path)
@@ -404,76 +405,180 @@ def normalize(df, peak_dict="", include_marker=False):
     return result
     # END OF FUNCTION
 
-def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="bp_pos",
-              peak_dict=None):
+
+def mean_from_histogram(df, unit="", size_unit=""):
     """
-    To compute basic statistics for DNA size distritbutions
-    :param df:
-    :param save_dir:
-    :param unit:
-    :param size_unit:
-    :param peak_dict:
-    :return:
+    Function to estimate the mean bp based on the fluorescence histogram
+
+    :param df: pandas dataframe
+    :param unit: str
+    :param size_unit: str
+    :return: float
+
+    """
+    # Estimate the mean bp from the histogram
+    # frequency rescaled 0-100
+    df["counts"] = df[unit] * 100
+    df["product"] = df[size_unit] * df["counts"]
+    mean_bp = df["product"].sum() / df["counts"].sum()
+
+    return mean_bp
+
+def run_kruskal(df, variable="", category=""):
+    """
+    Function for statistical test of bp sizes for samples from different groups
+    :param df: pandas dataframe
+    :param variable: continuuous variable
+    :param category: categorical variable
+    :return: statistics per group in a dataframe
+
+    """
+
+    test_performed = "Kruskal Wallis"
+    kruskal_data = []
+
+    #####################################################################
+    # 1. Collect numerical values for each identified peak (or av/max)
+    # for each group of the cond. variable
+    #####################################################################
+    for peak in df["peak_id"].unique():
+        sub_df = df[df["peak_id"] == peak]
+        kruskal_groups = []
+        kruskal_dict = {}
+        names = []
+        p_value = signi = results = None
+        unique_peak = False
+        for group in sub_df[category].unique():
+            group_data = sub_df[sub_df[category] == group][variable]
+            group_data = list(group_data)
+            if not group_data:
+                print(f"No data found for Kruskal group {group}.")
+                continue
+            kruskal_groups.append(group_data)
+            kruskal_dict.update({str(group): group_data})
+            names.append(str(group))
+        ##################################################################
+        # 2. Run Kruskal Wallis Test
+        ##################################################################
+        try:
+            stats, p_value = kruskal(*kruskal_groups)
+        except ValueError:
+            print("Warning, skipping Kruskal stats since "
+                  f"peak {peak} only shows in one group of the groups ({names})"
+                  f"with values:", kruskal_groups)
+            stats = p_value = 1
+            unique_peak = True
+            test_performed = "None (peak unique to group)"
+        # 2. If the Kruskal says groups are different do a posthoc
+        if p_value < 0.05:
+            signi = True
+            p_adjust_test = 'bonferroni'
+            if len(kruskal_groups) < 3:
+                results = sp.posthoc_conover([kruskal_groups[0],
+                                              kruskal_groups[1]],
+                                             p_adjust=p_adjust_test)
+            else:
+                kruskal_groups_for_posthoc = np.array(kruskal_groups)
+                results = sp.posthoc_conover(kruskal_groups_for_posthoc,
+                                             p_adjust=p_adjust_test)
+            results.columns = names
+            results["condition"] = names
+            results.set_index("condition", inplace=True)
+            test_performed = f"Kruskal Wallis with {p_adjust_test}"
+        else:
+            signi = False
+        # Add to data storage
+        kruskal_data.append([peak, unique_peak, test_performed, p_value, signi, results,
+                             kruskal_dict])
+
+    #####################################################################
+    # 2. Generate df from storage
+    #####################################################################
+    kruskal_df = pd.DataFrame(kruskal_data,
+                              columns=["peak_name", "unique_peak", "test_performed", "p_value",
+                                       "p<0.05", "posthoc_p_values", "groups"])
+    return kruskal_df
+
+def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="bp_pos"):
+    """
+    Function to compute and output basic statistics for DNA size distributions
+
+    :param df: pandas dataframe
+    :param save_dir: string
+    :param unit: string (y-variable)
+    :param size_unit: string (x-variable)
+    :param peak_dict: dictioary
+    :return: three pandas dataframes, will be saved as .csv files in stats
+    directory
+
     """
     #####################################################################
     # 1. Basic stats
     #####################################################################
-    # Make sure all sample names are type obj
-    df["sample"].astype(object)
-    basic_stats = df.describe() #include='object'
+    df["sample"].astype(object) # Make sure all sample names are type obj
+    basic_stats = df.describe()
     basic_stats.to_csv(f"{save_dir}basic_statistics.csv")
 
     #####################################################################
-    # 2. Peak positions per sample
+    # 2. Average bp size, peak positions, and peak size per sample
     #####################################################################
     peak_info = []
-
     for sample in df["sample"].unique():
-        # Select the fluorescence values from this sample
+        # 2.1 Select data for only this sample
         sub_df = df[df["sample"] == sample]
-        # Add to array
+        # 2.2 Get mean bp for the sample
+        mean_bp = mean_from_histogram(sub_df, unit=unit, size_unit=size_unit)
+        peak_info.append([sample, "average_size", np.nan, mean_bp])
+
+        # 2.3 Add to array and find peaks
         array = np.array(sub_df[unit].values.tolist())
         max_peak = array.max()
-
-        # Define min peak height
-        min_peak_height = max_peak * 0.2
+        min_peak_height = max_peak * 0.2 # Define min peak height
         peaks, _ = find_peaks(array, distance=DISTANCE,  # n pos apart
                               height=min_peak_height)  # minimum height
-
         # Get the fluorescence val for each peak
         peak_list = [array[e] for e in peaks.tolist()]
+        if not peak_list:
+            print(f"No peaks found for sample {sample}.")
+            print("Ignoring this sample.")
+            continue
+        max_peak = max(peak_list)
 
-        # Assign the basepair position
+        # 2.4 Assign the basepair position for each peak
         for i, peak in enumerate(peak_list):
-            bp = df.loc[df[unit] == peak, size_unit].iloc[0]
+            bp = sub_df.loc[sub_df[unit] == peak, size_unit].iloc[0]
             peak_info.append([sample, i, peak, bp])
+            if peak == max_peak:
+                peak_info.append([sample, "max_peak", peak, bp])
 
     peak_df = pd.DataFrame(peak_info, columns=["sample", "peak_id",
                                                "peak_fluorescence", "bp"])
-    peak_df.to_csv(f"{save_dir}peak_statistics.csv")
 
     ######################################################################
-    # 3. Optional: Grouped stats (Mean sizes per group)
+    # 3. Optional: Grouped stats (Mean sizes)
     ######################################################################
     cols_not_to_plot = [size_unit, "sample", unit]
     mean_info = []
 
-    for col in [c for c in df.columns if c not in cols_not_to_plot]:
-        print(f"--- Stats by {col}")
-        logging.info(f"--- Stats by {col}")
-        df["sample"].value_counts()
-        for cond in df[col].unique():
-            # Estimate the mean bp from the histogram
-            sub_df = df[df[col] == cond]
-            # size = val   # frequency recaled 0-100
-            sub_df["counts"] = sub_df[unit]*100
-            sub_df["product"] =  sub_df[size_unit]*sub_df["counts"]
-            mean_bp = sub_df["product"].sum() / sub_df["counts"].sum()
-            mean_info.append([col, cond, mean_bp])
+    for categorical_variable in [c for c in df.columns if c not in
+                                                          cols_not_to_plot]:
+        print(f"--- Stats by {categorical_variable}")
+        # Extract sample-to-condition info
+        sample2cat = df.set_index("sample").to_dict()[categorical_variable]
+        unannotated = {k:v for k,v in sample2cat.items() if v is np.nan}
+        if unannotated:
+            print("")
+            print(f"--- Warning. Sample without value in {categorical_variable}.\n"
+                  f"{unannotated}\n"
+                  f"Please add a category in metadata file and try again.")
+            exit()
+        peak_df[categorical_variable] = peak_df["sample"].map(sample2cat)
+        peak_df.to_csv(f"{save_dir}peak_statistics.csv")
+        kruskal_df = run_kruskal(peak_df, variable="bp", category=categorical_variable)
+        kruskal_df.to_csv(f"{save_dir}group_statistics_by_{categorical_variable}.csv")
+        # END LOOP
 
-    mean_df = pd.DataFrame(mean_info, columns=["variable", "condition",
-                                               "mean_size_bp"])
-    mean_df.to_csv(f"{save_dir}group_statistics.csv")
+    peak_df.to_csv(f"{save_dir}peak_statistics.csv")
     # END OF FUNCTION
 
 
@@ -571,7 +676,7 @@ def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
     print("------------------------------------------------------------")
     print("        Performing statistical analysis")
     print("------------------------------------------------------------")
-    epg_stats(df, save_dir=stats_dir, peak_dict=peak_dict)
+    epg_stats(df, save_dir=stats_dir) #, peak_dict=peak_dict)
 
     #####################################################################
     # 5. Plot raw data (samples seperated)

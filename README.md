@@ -21,11 +21,11 @@ Please make sure you have installed **python => 3.12**. Next, download the requi
 
 Python packages:
 
-    pip install argparse numpy pandas seaborn scipy matplotlib imageio scikit-image werkzeug
+    pip install argparse numpy pandas seaborn scipy matplotlib imageio scikit-image werkzeug scikit_posthocs
 
 Conda:
 
-    conda create --name dnavi argparse numpy pandas seaborn scipy matplotlib imageio werkzeug scikit-image
+    conda create --name dnavi argparse numpy pandas seaborn scipy matplotlib imageio werkzeug scikit-image scikit_posthocs
     conda activate dnavi
 
 Next, download the repository.
