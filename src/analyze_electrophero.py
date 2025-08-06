@@ -1,8 +1,8 @@
 """
 
-Main functions for electropherogram analysis.
-@author: Anja Hess
-@date: 2023-JUL-01
+Main functions for electropherogram analysis. \n
+Author: Anja Hess \n
+Date: 2025-AUG-06 \n
 
 """
 
@@ -13,23 +13,29 @@ import sys
 from scipy.signal import find_peaks
 from scipy.stats import kruskal
 import scikit_posthocs as sp
-script_path = str(os.path.dirname(os.path.abspath(__file__)))
+script_path = os.path.dirname(os.path.abspath(__file__))
+"""Local directory of DNAvi analyze_electrophero module"""
 maindir = script_path.split("/src")[0]
+"""Local directory of DNAvi (MAIN)"""
 sys.path.insert(0, script_path)
 sys.path.insert(0, maindir)
 sys.path.insert(0, f"{maindir}/src")
 sys.path.insert(0, f"{maindir}/src")
 from constants import YLABEL, YCOL, XCOL, XLABEL, DISTANCE, CUSTOM_MIN_PEAK_HEIGHT, HALO_FACTOR, PEAK_PROMINANCE
 from plotting import lineplot, ladderplot, peakplot, gridplot
-from data_checks import check_file, check_ladder
+from data_checks import check_file
 import logging
 
 def wide_to_long(df, id_var="pos", var_name="sample", value_name="value"):
     """
-    Transfer pandas df to long format.
 
-    :param df:
-    :return:
+    Function to transfer wide dataframe to long format
+
+    :param df: pandas.DataFrame in wide format
+    :param id_var: str,  the column of the wide dataframe containing the id variable
+    :param var_name: str, the new column in the long dataframe containing the variable name
+    :param value_name: str, the new column in the long dataframe containing the value
+    :return: pandas.DataFrame
 
     """
 
@@ -45,15 +51,14 @@ def wide_to_long(df, id_var="pos", var_name="sample", value_name="value"):
 def integrate(df, ladders_present=""):
     """
 
-    Beta: a function that in the future will allow help
-    handling resulting "gaps" when using multiple ladders within the same
-    singal table.
+    Beta: a function that in the future will allow help handling \
+    resulting "gaps" when using multiple ladders within the same signal table.
 
     NOTE: Not implemented yet.
 
     :param df: pandas dataframe
-    :param ladders_present: str
-    :return: a new pandas dataframe that is the result of integrating
+    :param ladders_present: list of strings
+    :return: a new pandas dataframe that does not have nan values despite multiple ladders
     
     """
 
@@ -86,17 +91,19 @@ def integrate(df, ladders_present=""):
 def peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL,
                    ladder_dir="", ladder_type="custom"):
     """
-    Function to infer ladder peaks from the signal table and
-    annotate those to base pair positions with the user-definded
-    ladder-file.
+
+    Function to infer ladder peaks from the signal table and annotate those to \
+    base pair positions with the user-provided ladder-file.
 
     :param df: pandas dataframe
     :param qc_save_dir: directory to save qc results
-    :param y_label: str
-    :param x_label: str
-    :param ladder_dir: str
-    :param ladder_type: str
-    :return:
+    :param y_label: str, new name for the signal intensity values
+    :param x_label: str, new name for the position values
+    :param ladder_dir: str, path to where the ladder is located
+    :param ladder_type: str, if changed to "custom" the minimum peak \
+    height can be adjusted with the constants module.
+    :return: a dictionary annotating each peak to a base pair position
+
     """
     ladder2type = {}
     peak_dict = {}
@@ -109,8 +116,12 @@ def peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL,
     print(f"--- Ladder columns in data: {len(ladders_present)} ---")
     ladder_df = pd.read_csv(ladder_dir)
     parsed_ladders = ladder_df["Name"].unique()
-    print(f"--- Ladder translations found: {parsed_ladders} ---")
-
+    print(f"--- Ladder translations found: {len(parsed_ladders)} : "
+          f"{parsed_ladders} ---")
+    if len(ladders_present) != len(parsed_ladders):
+        print(f"--- Error, {len(ladders_present)} Ladders detected in input"
+              f", but only {len(parsed_ladders)} defined in ladder file.")
+        exit()
 
     for i, ladder in enumerate([e for e in df.columns if "Ladder" in e]):
         ladder_id = ladder.replace(' ', '').replace(':', '')
@@ -163,13 +174,13 @@ def peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL,
         peakplot(array, peaks, ladder_id, i, i, qc_save_dir,
                  y_label=y_label)
 
-
         ##################################################################
         # ---- SANITY CHECK ----- equals nr of detected peaks?
         ##################################################################
         if len(peak_dict[i][0]) != len(peak_list):
-            error = (f"Inconstistent number of peaks between ladder file ({len(peak_dict[i][0])}) "
-                     f"and data input ({len(peak_list)})."
+            error = (f"Inconsistent number of peaks between ladder file "
+                     f"({len(peak_dict[i][0])}) and data input "
+                     f"({len(peak_list)})."
                      f"Please check {qc_save_dir} to see what peaks are "
                      f"missing.")
             print(error)
@@ -205,12 +216,13 @@ def peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL,
 
     #####################################################################
     # If 2 or more ladders: integrate the two dataframes to
-    # have a single shared ladder column
+    # have a single shared ladder column (beta)
     #####################################################################
     #if len(ladders_present) > 1:
      #   print("... Integrating bp positions from multiple ladders")
       #  return_df = integrate(return_df, ladders_present=ladders_present)
     # Todo: Take care of resulting "gaps" when handling multiple ladders
+
     #####################################################################
     # 2. Save the translation and ladder info
     #####################################################################
@@ -224,17 +236,21 @@ def peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL,
     #####################################################################
     ladderplot(df, ladder2type, qc_save_dir, y_label=y_label, x_label=x_label)
 
-    return peak_dict, None
+    return peak_dict
     # END OF FUNCTION
 
 
 def split_and_long_by_ladder(df):
     """
-    We transfer to long format giving each experiment the base pair
-    position assigned by previous marker interpolation.
 
-    :param df: pandas df
-    :return: pandas df (long)
+    This function allows to handle multiple ladder types in one \
+    input dataframe while transferring the data into a long format \
+    required for plotting. The base pair position for each set of \
+    DNA samples is assigned as defined by previous marker interpolation.
+
+    :param df: pandas.DataFrame (wide)
+    :return: pandas.DataFrame (long)
+
     """
 
     final_df = []
@@ -264,7 +280,6 @@ def split_and_long_by_ladder(df):
         else:
             final_df = pd.concat([df_sub_long, final_df],
                                  sort=False, ignore_index=True)
-
     return final_df
     # END OF FUNCTION
 
@@ -272,16 +287,21 @@ def split_and_long_by_ladder(df):
 def parse_meta_to_long(df, metafile, sample_col="sample", source_file="",
                        image_input=False):
     """
-    Parse metadata and transfer to long
 
-    :param df:
-    :param metafile:
-    :return:
+    Function to parse the user-provided metadata and transfer to long format
+
+    :param df: pandas.DataFrame (wide)
+    :param metafile: str, csv path
+    :param sample_col: str, column name
+    :param source_file: str, csv path to where the source file shall be located
+    :param image_input: bool, whether this dataframe was previously generated from an image file
+    :return: the source data file is written to disk (.csv)
+
     """
 
-    ################################################################################
+    #####################################################################
     # 1. SANITY CHECK - COMPARE SAMPLE NUMBER AND AVAILABLE LANES
-    ################################################################################
+    #####################################################################
     meta = pd.read_csv(metafile, header=0)
     try:
         meta["ID"] = meta["SAMPLE"]
@@ -301,15 +321,17 @@ def parse_meta_to_long(df, metafile, sample_col="sample", source_file="",
     if image_input:
         print(f"--- WARNING: Image - ONLY first {n_samples} entries "
                     f"used (out of {n_meta})")
-    ################################################################################
+
+    ######################################################################
     # 2. Parse
-    ################################################################################
+    ######################################################################
     cols_not_to_add = ["SAMPLE","ID"]
     for col in [e for e in meta.columns if e not in cols_not_to_add]:
 
         print(f"--- Adding metatadata for", col)
         if image_input:
-            # CURRENT RULE FOR IMAGES (NO GROUND TRUTH - TAKE FIRST N ROWS of META !
+            # CURRENT RULE FOR IMAGES (NO GROUND TRUTH
+            # - TAKE FIRST N ROWS of META !
             conditions = meta[col].values.tolist()[:n_samples]
             dict_meta = dict(zip(samples,conditions))
             print(dict_meta)
@@ -318,9 +340,9 @@ def parse_meta_to_long(df, metafile, sample_col="sample", source_file="",
 
         # Finally map
         df[col] = df[sample_col].map(dict_meta)
-        ############################################################################
+        ######################################################################
         # SANITY CHECK II -> Was there a successful mapping?
-        ############################################################################
+        ######################################################################
         if df[col].isna().all():
             print(f"--- WARNING: No metadata could be matched for {col} - are you sure"
                   f"SAMPLE names match signal table columns?")
@@ -330,18 +352,21 @@ def parse_meta_to_long(df, metafile, sample_col="sample", source_file="",
 
 def remove_marker_from_df(df, peak_dict="", on=""):
     """
-    Function to remove marker from dataframe incl halo
 
-    :param df:
-    :param peak_dict:
+    Function to remove marker from dataframe including a halo, meaning \
+    a defined number of base pairs around the marker band specified in the \
+    constants module
+
+    :param df: pandas.DataFrame
+    :param peak_dict: dict, previously generated with peak2basepairs
     :param on: str denoting column based on which dataframe will be cut
-    :return: pd.DataFrame
+    :return: pd.DataFrame, cleared from marker-associated data points
 
     """
 
-    ################################################################################
+    ######################################################################
     # 1. Define the markers (for now based on one ladder only)
-    ################################################################################
+    ######################################################################
     first_ladder = list(peak_dict)[0]
 
     if len(peak_dict[first_ladder][1]) == 1:
@@ -362,13 +387,12 @@ def remove_marker_from_df(df, peak_dict="", on=""):
         upper_marker = peak_dict[0][1][0]
         lower_marker = peak_dict[0][1][1]
 
-        ################################################################################
+        ###################################################################
         # 2. Calculate the halo to crop left/right from the marker band
         # (relative so this will work with different ladders)
         # Max crop: you cannot crop too much above or beyond marker to not
         # cause the df to be too small/empty
-        ################################################################################
-        # low bp higher multiplicator
+        ###################################################################
         lower_marker = lower_marker + (lower_marker * (HALO_FACTOR*3))
         upper_marker = upper_marker - (upper_marker * HALO_FACTOR)
         print(f"--- Excluding marker peaks from analysis (factor: {HALO_FACTOR})")
@@ -379,28 +403,35 @@ def remove_marker_from_df(df, peak_dict="", on=""):
 
 def normalize(df, peak_dict="", include_marker=False):
     """
-    Function to normalize the RFU to a value between 0,1
-    https://stackoverflow.com/questions/26414913/normalize-columns-of-a-dataframe
-    :param df:
-    :param ladder:
-    :param peak_dict:
-    :return:
-    """
-    ladder_field = [e for e in df.columns if "adder" in e][0]
 
+    Function to normalize the raw DNA fluorescence intensity \
+    to a value between 0 abd 1.
+
+    :param df: pandas.DataFrame
+    :param peak_dict: dict, previously generated with peak2basepairs
+    :param include_marker: bool, whether to include markers
+    :return: pd.DataFrame, now with normalized DNA fluorescence intensity
+
+    """
+
+    ######################################################################
+    # 1. Define ladder and remove markers
+    ######################################################################
+    ladder_field = [e for e in df.columns if "adder" in e][0]
     if not include_marker:
         df = remove_marker_from_df(df, peak_dict=peak_dict, on=ladder_field)
 
-    ################################################################################
+    ######################################################################
     # 2. Normalize to a value between 0-1 Remove the marker
-    ################################################################################
+    ######################################################################
     result = df.copy()
     for feature_name in df.columns:
         if "Ladder" in feature_name:
             continue
         max_value = df[feature_name].max()
         min_value = df[feature_name].min()
-        result[feature_name] = (df[feature_name] - min_value) / (max_value - min_value)
+        result[feature_name] = ((df[feature_name] - min_value) /
+                                (max_value - min_value))
 
     return result
     # END OF FUNCTION
@@ -408,27 +439,36 @@ def normalize(df, peak_dict="", include_marker=False):
 
 def mean_from_histogram(df, unit="", size_unit=""):
     """
-    Function to estimate the mean bp based on the fluorescence histogram
 
-    :param df: pandas dataframe
-    :param unit: str
-    :param size_unit: str
-    :return: float
+    Function to estimate the mean size of a patient/samples' DNA
+    fragments (in base pairs) based on the fluorescence signal table.
+    Strategy is to create a histogram and next infer the metrics.
+
+    :param df: pandas.DataFrame
+    :param unit: str, usually normalized fluorescence unit
+    :param size_unit: str, fragment size unit (base pairs)
+    :return: float, average fragment size
 
     """
-    # Estimate the mean bp from the histogram
-    # frequency rescaled 0-100
+
+
+    # Estimate the mean bp from the histogram (frequency rescaled 0-100)
     df["counts"] = df[unit] * 100
     df["product"] = df[size_unit] * df["counts"]
     mean_bp = df["product"].sum() / df["counts"].sum()
 
     return mean_bp
+    # END OF FUNCTION
 
 def run_kruskal(df, variable="", category=""):
     """
-    Function for statistical test of bp sizes for samples from different groups
-    :param df: pandas dataframe
-    :param variable: continuuous variable
+
+    Function to perform scipy.stats' the non-parametric \
+    Kruskal Wallis Test to infer statistical significance for the difference \
+    in mean base pair fragment size for patients/samples from different groups
+
+    :param df: pandas.DataFrame
+    :param variable: continuous variable
     :param category: categorical variable
     :return: statistics per group in a dataframe
 
@@ -463,8 +503,8 @@ def run_kruskal(df, variable="", category=""):
         try:
             stats, p_value = kruskal(*kruskal_groups)
         except ValueError:
-            print("Warning, skipping Kruskal stats since "
-                  f"peak {peak} only shows in one group of the groups ({names})"
+            print("Skipping Kruskal stats since "
+                  f"peak {peak} only shows in one group of groups ({names})"
                   f"with values:", kruskal_groups)
             stats = p_value = 1
             unique_peak = True
@@ -487,29 +527,33 @@ def run_kruskal(df, variable="", category=""):
             test_performed = f"Kruskal Wallis with {p_adjust_test}"
         else:
             signi = False
+
         # Add to data storage
-        kruskal_data.append([peak, unique_peak, test_performed, p_value, signi, results,
-                             kruskal_dict])
+        kruskal_data.append([peak, unique_peak, test_performed,
+                             p_value, signi, results, kruskal_dict])
 
     #####################################################################
     # 2. Generate df from storage
     #####################################################################
     kruskal_df = pd.DataFrame(kruskal_data,
-                              columns=["peak_name", "unique_peak", "test_performed", "p_value",
-                                       "p<0.05", "posthoc_p_values", "groups"])
+                              columns=["peak_name", "unique_peak",
+                                       "test_performed", "p_value",
+                                       "p<0.05", "posthoc_p_values",
+                                       "groups"])
     return kruskal_df
 
 def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="bp_pos"):
     """
-    Function to compute and output basic statistics for DNA size distributions
 
-    :param df: pandas dataframe
-    :param save_dir: string
+    Compute and output basic statistics for DNA size distributions
+
+    :param df: pandas.DataFrame
+    :param save_dir: string, where to save the statistics to
     :param unit: string (y-variable)
     :param size_unit: string (x-variable)
-    :param peak_dict: dictioary
-    :return: three pandas dataframes, will be saved as .csv files in stats
-    directory
+    :return: will save three dataframes as .csv files in stats \
+    directory: basic_statistics.csv, peak_statistics.csv, \
+    group_statistics_by_CATEGORICAL-VAR.csv)
 
     """
     #####################################################################
@@ -585,13 +629,18 @@ def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="b
 def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
                  include_marker=False, image_input=False, save_dir=False):
     """
-    Function to analyze DNA distribution from a signal table.
-    :param path_to_file: str
-    :param path_to_ladder: str
-    :param path_to_meta: str
-    :param run_id: str
-    :param include_marker: bool
-    :return:
+    Core function to analyze DNA distribution from a signal table.
+
+    :param path_to_file: str, path where the signal table is stored
+    :param path_to_ladder: str, path to where the ladder file is stored
+    :param path_to_meta: str, path to metadata file
+    :param run_id: str, name for the analysis, based on user input or name of \
+    the signal table file
+    :param include_marker: bool, whether to include the marker in the analysis
+    :param image_input: bool, whether to the signal table was generated based on an image
+    :param save_dir: bool or str, where to save the statistics to. Default: False
+    :return: run analysis and plotting functions, create multiple outputs in the result folder
+
     """
     print("")
     print("------------------------------------------------------------")
@@ -638,7 +687,7 @@ def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
     print("------------------------------------------------------------")
     print("        Calculating basepair positions based on ladder")
     print("------------------------------------------------------------")
-    peak_dict, error = peak2basepairs(df, qc_dir, ladder_dir=path_to_ladder)
+    peak_dict = peak2basepairs(df, qc_dir, ladder_dir=path_to_ladder)
     df = pd.read_csv(basepair_translation_file, header=0, index_col=0)
 
     #####################################################################
@@ -651,7 +700,7 @@ def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
     normalized_df = normalize(df, peak_dict=peak_dict, include_marker=
                               include_marker)
     # All downstream ana on height-norm data WITHOUT marker (unless
-    # --include argument was set
+    # --include argument was set)
     df = normalized_df
     #####################################################################
     # 5. Add the metadata
@@ -686,6 +735,5 @@ def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
     print("------------------------------------------------------------")
     gridplot(df, x=XCOL, y=YCOL, save_dir=plot_dir, title=f"all_samples",
              y_label=YLABEL, x_label=XLABEL)
-    return error
     # END OF FUNCTION
 # END OF SCRIPT
