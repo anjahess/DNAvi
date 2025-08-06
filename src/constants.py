@@ -12,9 +12,10 @@ ACCEPTED_FORMATS = ['.csv', '.png', '.jpeg', '.jpg']
 # Peak detection ladder
 DISTANCE = 20 # 20 pos apart min
 CUSTOM_MIN_PEAK_HEIGHT=50 # if not auto-calc, requires ladder type to be set to "adjust"
-PEAK_PROMINANCE=(0.2,None)
+PEAK_PROMINANCE=(0.2, None)
+
 # Marker band cropping
-HALO_FACTOR=0.3 # factor to calc bp to crop from markers
+HALO_FACTOR=0.4 # factor to calc bp to crop from markers
 
 YCOL = "normalized_fluorescent_units"
 XCOL = "bp_pos"
