@@ -26,10 +26,14 @@ Functions
 .. autoapisummary::
 
    analyze_electrophero.wide_to_long
+   analyze_electrophero.integrate
    analyze_electrophero.peak2basepairs
    analyze_electrophero.split_and_long_by_ladder
    analyze_electrophero.parse_meta_to_long
+   analyze_electrophero.remove_marker_from_df
    analyze_electrophero.normalize
+   analyze_electrophero.mean_from_histogram
+   analyze_electrophero.run_kruskal
    analyze_electrophero.epg_stats
    analyze_electrophero.epg_analysis
 
@@ -52,26 +56,45 @@ Module Contents
 
 
 
+.. py:function:: integrate(df, ladders_present='')
+
+   Beta: a function that in the future will allow help
+   handling resulting "gaps" when using multiple ladders within the same
+   singal table.
+
+   NOTE: Not implemented yet.
+
+   :param df: pandas dataframe
+   :param ladders_present: str
+   :return: a new pandas dataframe that is the result of integrating
+
+
+
 .. py:function:: peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL, ladder_dir='', ladder_type='custom')
 
-   Define the maxima in the ladder EPG.
+   Function to infer ladder peaks from the signal table and
+   annotate those to base pair positions with the user-definded
+   ladder-file.
 
-   :param df:
-   :param qc_save_dir:
+   :param df: pandas dataframe
+   :param qc_save_dir: directory to save qc results
+   :param y_label: str
+   :param x_label: str
+   :param ladder_dir: str
+   :param ladder_type: str
    :return:
 
 
-.. py:function:: split_and_long_by_ladder(df, path_to_file)
+.. py:function:: split_and_long_by_ladder(df)
 
    We transfer to long format giving each experiment the base pair
    position assigned by previous marker interpolation.
 
    :param df: pandas df
-   :param path_to_file: str
    :return: pandas df (long)
 
 
-.. py:function:: parse_meta_to_long(df, metafile, sample_col='sample', source_file='')
+.. py:function:: parse_meta_to_long(df, metafile, sample_col='sample', source_file='', image_input=False)
 
    Parse metadata and transfer to long
 
@@ -80,22 +103,70 @@ Module Contents
    :return:
 
 
-.. py:function:: normalize(df, ladder='', peak_dict='')
+.. py:function:: remove_marker_from_df(df, peak_dict='', on='')
+
+   Function to remove marker from dataframe incl halo
+
+   :param df:
+   :param peak_dict:
+   :param on: str denoting column based on which dataframe will be cut
+   :return: pd.DataFrame
+
+
+
+.. py:function:: normalize(df, peak_dict='', include_marker=False)
 
    Function to normalize the RFU to a value between 0,1
-
-
-
-.. py:function:: epg_stats(df, save_dir='', unit='normalized_fluorescent_units', size_unit='bp_pos', ladder='', peak_dict=None)
-
-   To compute basic statistics for DNA distr.
+   https://stackoverflow.com/questions/26414913/normalize-columns-of-a-dataframe
+   :param df:
+   :param ladder:
+   :param peak_dict:
    :return:
 
 
-.. py:function:: epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None)
+.. py:function:: mean_from_histogram(df, unit='', size_unit='')
 
-   To plot the Tape Station electropherogram
+   Function to estimate the mean bp based on the fluorescence histogram
+
+   :param df: pandas dataframe
+   :param unit: str
+   :param size_unit: str
+   :return: float
+
+
+
+.. py:function:: run_kruskal(df, variable='', category='')
+
+   Function for statistical test of bp sizes for samples from different groups
+   :param df: pandas dataframe
+   :param variable: continuuous variable
+   :param category: categorical variable
+   :return: statistics per group in a dataframe
+
+
+
+.. py:function:: epg_stats(df, save_dir='', unit='normalized_fluorescent_units', size_unit='bp_pos')
+
+   Function to compute and output basic statistics for DNA size distributions
+
+   :param df: pandas dataframe
+   :param save_dir: string
+   :param unit: string (y-variable)
+   :param size_unit: string (x-variable)
+   :param peak_dict: dictioary
+   :return: three pandas dataframes, will be saved as .csv files in stats
+   directory
+
+
+
+.. py:function:: epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None, include_marker=False, image_input=False, save_dir=False)
+
+   Function to analyze DNA distribution from a signal table.
    :param path_to_file: str
+   :param path_to_ladder: str
+   :param path_to_meta: str
+   :param run_id: str
+   :param include_marker: bool
    :return:
 
 

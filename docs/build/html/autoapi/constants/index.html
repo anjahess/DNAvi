@@ -10,6 +10,7 @@
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
@@ -17,6 +18,8 @@
       <script src="../../_static/documentation_options.js?v=2709fde1"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -45,17 +48,28 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../api.html">1. Core modules (src)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Inputs.html">Inputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Ladders.html">Ladders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Metadata.html">Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Outputs.html">Outputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Visualization.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Statistics.html">Statistics</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../plotting/index.html">plotting</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">constants</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#attributes">Attributes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-contents">Module Contents</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#constants.ACCEPTED_FORMATS"><code class="docutils literal notranslate"><span class="pre">ACCEPTED_FORMATS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#constants.DISTANCE"><code class="docutils literal notranslate"><span class="pre">DISTANCE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#constants.CUSTOM_MIN_PEAK_HEIGHT"><code class="docutils literal notranslate"><span class="pre">CUSTOM_MIN_PEAK_HEIGHT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#constants.PEAK_PROMINANCE"><code class="docutils literal notranslate"><span class="pre">PEAK_PROMINANCE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#constants.HALO_FACTOR"><code class="docutils literal notranslate"><span class="pre">HALO_FACTOR</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#constants.YCOL"><code class="docutils literal notranslate"><span class="pre">YCOL</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#constants.XCOL"><code class="docutils literal notranslate"><span class="pre">XCOL</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#constants.YLABEL"><code class="docutils literal notranslate"><span class="pre">YLABEL</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#constants.XLABEL"><code class="docutils literal notranslate"><span class="pre">XLABEL</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#constants.ACCEPTED_FORMATS"><code class="docutils literal notranslate"><span class="pre">ACCEPTED_FORMATS</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#constants.palettediff3"><code class="docutils literal notranslate"><span class="pre">palettediff3</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#constants.palettediff2"><code class="docutils literal notranslate"><span class="pre">palettediff2</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#constants.peak_dict"><code class="docutils literal notranslate"><span class="pre">peak_dict</span></code></a></li>
@@ -104,19 +118,31 @@
 <h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#constants.YCOL" title="constants.YCOL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">YCOL</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#constants.XCOL" title="constants.XCOL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">XCOL</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#constants.YLABEL" title="constants.YLABEL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">YLABEL</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#constants.XLABEL" title="constants.XLABEL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">XLABEL</span></code></a></p></td>
-<td><p></p></td>
-</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#constants.ACCEPTED_FORMATS" title="constants.ACCEPTED_FORMATS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ACCEPTED_FORMATS</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#constants.DISTANCE" title="constants.DISTANCE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DISTANCE</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#constants.CUSTOM_MIN_PEAK_HEIGHT" title="constants.CUSTOM_MIN_PEAK_HEIGHT"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CUSTOM_MIN_PEAK_HEIGHT</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#constants.PEAK_PROMINANCE" title="constants.PEAK_PROMINANCE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PEAK_PROMINANCE</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#constants.HALO_FACTOR" title="constants.HALO_FACTOR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HALO_FACTOR</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#constants.YCOL" title="constants.YCOL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">YCOL</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#constants.XCOL" title="constants.XCOL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">XCOL</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#constants.YLABEL" title="constants.YLABEL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">YLABEL</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#constants.XLABEL" title="constants.XLABEL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">XLABEL</span></code></a></p></td>
 <td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#constants.palettediff3" title="constants.palettediff3"><code class="xref py py-obj docutils literal notranslate"><span class="pre">palettediff3</span></code></a></p></td>
@@ -133,6 +159,31 @@
 </section>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<dl class="py data">
+<dt class="sig sig-object py" id="constants.ACCEPTED_FORMATS">
+<span class="sig-prename descclassname"><span class="pre">constants.</span></span><span class="sig-name descname"><span class="pre">ACCEPTED_FORMATS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['.csv',</span> <span class="pre">'.png',</span> <span class="pre">'.jpeg',</span> <span class="pre">'.jpg']</span></em><a class="headerlink" href="#constants.ACCEPTED_FORMATS" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="constants.DISTANCE">
+<span class="sig-prename descclassname"><span class="pre">constants.</span></span><span class="sig-name descname"><span class="pre">DISTANCE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">20</span></em><a class="headerlink" href="#constants.DISTANCE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="constants.CUSTOM_MIN_PEAK_HEIGHT">
+<span class="sig-prename descclassname"><span class="pre">constants.</span></span><span class="sig-name descname"><span class="pre">CUSTOM_MIN_PEAK_HEIGHT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">50</span></em><a class="headerlink" href="#constants.CUSTOM_MIN_PEAK_HEIGHT" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="constants.PEAK_PROMINANCE">
+<span class="sig-prename descclassname"><span class="pre">constants.</span></span><span class="sig-name descname"><span class="pre">PEAK_PROMINANCE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">(0.2,</span> <span class="pre">None)</span></em><a class="headerlink" href="#constants.PEAK_PROMINANCE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="constants.HALO_FACTOR">
+<span class="sig-prename descclassname"><span class="pre">constants.</span></span><span class="sig-name descname"><span class="pre">HALO_FACTOR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.4</span></em><a class="headerlink" href="#constants.HALO_FACTOR" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py data">
 <dt class="sig sig-object py" id="constants.YCOL">
 <span class="sig-prename descclassname"><span class="pre">constants.</span></span><span class="sig-name descname"><span class="pre">YCOL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'normalized_fluorescent_units'</span></em><a class="headerlink" href="#constants.YCOL" title="Link to this definition"></a></dt>
@@ -151,11 +202,6 @@
 <dl class="py data">
 <dt class="sig sig-object py" id="constants.XLABEL">
 <span class="sig-prename descclassname"><span class="pre">constants.</span></span><span class="sig-name descname"><span class="pre">XLABEL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Size</span> <span class="pre">[bp]'</span></em><a class="headerlink" href="#constants.XLABEL" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py data">
-<dt class="sig sig-object py" id="constants.ACCEPTED_FORMATS">
-<span class="sig-prename descclassname"><span class="pre">constants.</span></span><span class="sig-name descname"><span class="pre">ACCEPTED_FORMATS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['.csv',</span> <span class="pre">'.png',</span> <span class="pre">'.jpeg',</span> <span class="pre">'.jpg']</span></em><a class="headerlink" href="#constants.ACCEPTED_FORMATS" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py data">

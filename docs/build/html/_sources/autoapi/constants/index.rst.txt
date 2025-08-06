@@ -16,11 +16,15 @@ Attributes
 
 .. autoapisummary::
 
+   constants.ACCEPTED_FORMATS
+   constants.DISTANCE
+   constants.CUSTOM_MIN_PEAK_HEIGHT
+   constants.PEAK_PROMINANCE
+   constants.HALO_FACTOR
    constants.YCOL
    constants.XCOL
    constants.YLABEL
    constants.XLABEL
-   constants.ACCEPTED_FORMATS
    constants.palettediff3
    constants.palettediff2
    constants.peak_dict
@@ -28,6 +32,26 @@ Attributes
 
 Module Contents
 ---------------
+
+.. py:data:: ACCEPTED_FORMATS
+   :value: ['.csv', '.png', '.jpeg', '.jpg']
+
+
+.. py:data:: DISTANCE
+   :value: 20
+
+
+.. py:data:: CUSTOM_MIN_PEAK_HEIGHT
+   :value: 50
+
+
+.. py:data:: PEAK_PROMINANCE
+   :value: (0.2, None)
+
+
+.. py:data:: HALO_FACTOR
+   :value: 0.4
+
 
 .. py:data:: YCOL
    :value: 'normalized_fluorescent_units'
@@ -43,10 +67,6 @@ Module Contents
 
 .. py:data:: XLABEL
    :value: 'Size [bp]'
-
-
-.. py:data:: ACCEPTED_FORMATS
-   :value: ['.csv', '.png', '.jpeg', '.jpg']
 
 
 .. py:data:: palettediff3

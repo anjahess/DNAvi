@@ -10,6 +10,7 @@
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
@@ -17,6 +18,8 @@
       <script src="../../_static/documentation_options.js?v=2709fde1"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -44,7 +47,14 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../api.html">1. Core modules (src)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Inputs.html">Inputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Ladders.html">Ladders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Metadata.html">Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Outputs.html">Outputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Visualization.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Statistics.html">Statistics</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../plotting/index.html">plotting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../constants/index.html">constants</a></li>
@@ -57,10 +67,14 @@
 <li class="toctree-l4"><a class="reference internal" href="#analyze_electrophero.script_path"><code class="docutils literal notranslate"><span class="pre">script_path</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#analyze_electrophero.maindir"><code class="docutils literal notranslate"><span class="pre">maindir</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#analyze_electrophero.wide_to_long"><code class="docutils literal notranslate"><span class="pre">wide_to_long()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#analyze_electrophero.integrate"><code class="docutils literal notranslate"><span class="pre">integrate()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#analyze_electrophero.peak2basepairs"><code class="docutils literal notranslate"><span class="pre">peak2basepairs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#analyze_electrophero.split_and_long_by_ladder"><code class="docutils literal notranslate"><span class="pre">split_and_long_by_ladder()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#analyze_electrophero.parse_meta_to_long"><code class="docutils literal notranslate"><span class="pre">parse_meta_to_long()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#analyze_electrophero.remove_marker_from_df"><code class="docutils literal notranslate"><span class="pre">remove_marker_from_df()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#analyze_electrophero.normalize"><code class="docutils literal notranslate"><span class="pre">normalize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#analyze_electrophero.mean_from_histogram"><code class="docutils literal notranslate"><span class="pre">mean_from_histogram()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#analyze_electrophero.run_kruskal"><code class="docutils literal notranslate"><span class="pre">run_kruskal()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#analyze_electrophero.epg_stats"><code class="docutils literal notranslate"><span class="pre">epg_stats()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#analyze_electrophero.epg_analysis"><code class="docutils literal notranslate"><span class="pre">epg_analysis()</span></code></a></li>
 </ul>
@@ -121,23 +135,35 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#analyze_electrophero.wide_to_long" title="analyze_electrophero.wide_to_long"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wide_to_long</span></code></a>(df[, id_var, var_name, value_name])</p></td>
 <td><p>Transfer pandas df to long format.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#analyze_electrophero.peak2basepairs" title="analyze_electrophero.peak2basepairs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">peak2basepairs</span></code></a>(df, qc_save_dir[, y_label, x_label, ...])</p></td>
-<td><p>Define the maxima in the ladder EPG.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#analyze_electrophero.integrate" title="analyze_electrophero.integrate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">integrate</span></code></a>(df[, ladders_present])</p></td>
+<td><p>Beta: a function that in the future will allow help</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#analyze_electrophero.split_and_long_by_ladder" title="analyze_electrophero.split_and_long_by_ladder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">split_and_long_by_ladder</span></code></a>(df, path_to_file)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#analyze_electrophero.peak2basepairs" title="analyze_electrophero.peak2basepairs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">peak2basepairs</span></code></a>(df, qc_save_dir[, y_label, x_label, ...])</p></td>
+<td><p>Function to infer ladder peaks from the signal table and</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#analyze_electrophero.split_and_long_by_ladder" title="analyze_electrophero.split_and_long_by_ladder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">split_and_long_by_ladder</span></code></a>(df)</p></td>
 <td><p>We transfer to long format giving each experiment the base pair</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#analyze_electrophero.parse_meta_to_long" title="analyze_electrophero.parse_meta_to_long"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_meta_to_long</span></code></a>(df, metafile[, sample_col, source_file])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#analyze_electrophero.parse_meta_to_long" title="analyze_electrophero.parse_meta_to_long"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_meta_to_long</span></code></a>(df, metafile[, sample_col, ...])</p></td>
 <td><p>Parse metadata and transfer to long</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#analyze_electrophero.normalize" title="analyze_electrophero.normalize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normalize</span></code></a>(df[, ladder, peak_dict])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#analyze_electrophero.remove_marker_from_df" title="analyze_electrophero.remove_marker_from_df"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_marker_from_df</span></code></a>(df[, peak_dict, on])</p></td>
+<td><p>Function to remove marker from dataframe incl halo</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#analyze_electrophero.normalize" title="analyze_electrophero.normalize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normalize</span></code></a>(df[, peak_dict, include_marker])</p></td>
 <td><p>Function to normalize the RFU to a value between 0,1</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#analyze_electrophero.epg_stats" title="analyze_electrophero.epg_stats"><code class="xref py py-obj docutils literal notranslate"><span class="pre">epg_stats</span></code></a>(df[, save_dir, unit, size_unit, ladder, ...])</p></td>
-<td><p>To compute basic statistics for DNA distr.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#analyze_electrophero.mean_from_histogram" title="analyze_electrophero.mean_from_histogram"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mean_from_histogram</span></code></a>(df[, unit, size_unit])</p></td>
+<td><p>Function to estimate the mean bp based on the fluorescence histogram</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#analyze_electrophero.run_kruskal" title="analyze_electrophero.run_kruskal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_kruskal</span></code></a>(df[, variable, category])</p></td>
+<td><p>Function for statistical test of bp sizes for samples from different groups</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#analyze_electrophero.epg_stats" title="analyze_electrophero.epg_stats"><code class="xref py py-obj docutils literal notranslate"><span class="pre">epg_stats</span></code></a>(df[, save_dir, unit, size_unit])</p></td>
+<td><p>Function to compute and output basic statistics for DNA size distributions</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#analyze_electrophero.epg_analysis" title="analyze_electrophero.epg_analysis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">epg_analysis</span></code></a>(path_to_file, path_to_ladder, path_to_meta)</p></td>
-<td><p>To plot the Tape Station electropherogram</p></td>
+<td><p>Function to analyze DNA distribution from a signal table.</p></td>
 </tr>
 </tbody>
 </table>
@@ -169,14 +195,40 @@
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="analyze_electrophero.peak2basepairs">
-<span class="sig-prename descclassname"><span class="pre">analyze_electrophero.</span></span><span class="sig-name descname"><span class="pre">peak2basepairs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qc_save_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">YLABEL</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">XLABEL</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ladder_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ladder_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'custom'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analyze_electrophero.peak2basepairs" title="Link to this definition"></a></dt>
-<dd><p>Define the maxima in the ladder EPG.</p>
+<dt class="sig sig-object py" id="analyze_electrophero.integrate">
+<span class="sig-prename descclassname"><span class="pre">analyze_electrophero.</span></span><span class="sig-name descname"><span class="pre">integrate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ladders_present</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analyze_electrophero.integrate" title="Link to this definition"></a></dt>
+<dd><p>Beta: a function that in the future will allow help
+handling resulting “gaps” when using multiple ladders within the same
+singal table.</p>
+<p>NOTE: Not implemented yet.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>df</strong></p></li>
-<li><p><strong>qc_save_dir</strong></p></li>
+<li><p><strong>df</strong> – pandas dataframe</p></li>
+<li><p><strong>ladders_present</strong> – str</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a new pandas dataframe that is the result of integrating</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analyze_electrophero.peak2basepairs">
+<span class="sig-prename descclassname"><span class="pre">analyze_electrophero.</span></span><span class="sig-name descname"><span class="pre">peak2basepairs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qc_save_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">YLABEL</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">XLABEL</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ladder_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ladder_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'custom'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analyze_electrophero.peak2basepairs" title="Link to this definition"></a></dt>
+<dd><p>Function to infer ladder peaks from the signal table and
+annotate those to base pair positions with the user-definded
+ladder-file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> – pandas dataframe</p></li>
+<li><p><strong>qc_save_dir</strong> – directory to save qc results</p></li>
+<li><p><strong>y_label</strong> – str</p></li>
+<li><p><strong>x_label</strong> – str</p></li>
+<li><p><strong>ladder_dir</strong> – str</p></li>
+<li><p><strong>ladder_type</strong> – str</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -187,15 +239,12 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="analyze_electrophero.split_and_long_by_ladder">
-<span class="sig-prename descclassname"><span class="pre">analyze_electrophero.</span></span><span class="sig-name descname"><span class="pre">split_and_long_by_ladder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_to_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analyze_electrophero.split_and_long_by_ladder" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">analyze_electrophero.</span></span><span class="sig-name descname"><span class="pre">split_and_long_by_ladder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analyze_electrophero.split_and_long_by_ladder" title="Link to this definition"></a></dt>
 <dd><p>We transfer to long format giving each experiment the base pair
 position assigned by previous marker interpolation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>df</strong> – pandas df</p></li>
-<li><p><strong>path_to_file</strong> – str</p></li>
-</ul>
+<dd class="field-odd"><p><strong>df</strong> – pandas df</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>pandas df (long)</p>
@@ -205,7 +254,7 @@ position assigned by previous marker interpolation.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="analyze_electrophero.parse_meta_to_long">
-<span class="sig-prename descclassname"><span class="pre">analyze_electrophero.</span></span><span class="sig-name descname"><span class="pre">parse_meta_to_long</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metafile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sample'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analyze_electrophero.parse_meta_to_long" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">analyze_electrophero.</span></span><span class="sig-name descname"><span class="pre">parse_meta_to_long</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metafile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sample'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analyze_electrophero.parse_meta_to_long" title="Link to this definition"></a></dt>
 <dd><p>Parse metadata and transfer to long</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -221,23 +270,92 @@ position assigned by previous marker interpolation.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="analyze_electrophero.normalize">
-<span class="sig-prename descclassname"><span class="pre">analyze_electrophero.</span></span><span class="sig-name descname"><span class="pre">normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ladder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peak_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analyze_electrophero.normalize" title="Link to this definition"></a></dt>
-<dd><p>Function to normalize the RFU to a value between 0,1</p>
+<dt class="sig sig-object py" id="analyze_electrophero.remove_marker_from_df">
+<span class="sig-prename descclassname"><span class="pre">analyze_electrophero.</span></span><span class="sig-name descname"><span class="pre">remove_marker_from_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peak_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analyze_electrophero.remove_marker_from_df" title="Link to this definition"></a></dt>
+<dd><p>Function to remove marker from dataframe incl halo</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong></p></li>
+<li><p><strong>peak_dict</strong></p></li>
+<li><p><strong>on</strong> – str denoting column based on which dataframe will be cut</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="analyze_electrophero.epg_stats">
-<span class="sig-prename descclassname"><span class="pre">analyze_electrophero.</span></span><span class="sig-name descname"><span class="pre">epg_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'normalized_fluorescent_units'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size_unit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bp_pos'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ladder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peak_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analyze_electrophero.epg_stats" title="Link to this definition"></a></dt>
-<dd><p>To compute basic statistics for DNA distr.
+<dt class="sig sig-object py" id="analyze_electrophero.normalize">
+<span class="sig-prename descclassname"><span class="pre">analyze_electrophero.</span></span><span class="sig-name descname"><span class="pre">normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peak_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_marker</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analyze_electrophero.normalize" title="Link to this definition"></a></dt>
+<dd><p>Function to normalize the RFU to a value between 0,1
+<a class="reference external" href="https://stackoverflow.com/questions/26414913/normalize-columns-of-a-dataframe">https://stackoverflow.com/questions/26414913/normalize-columns-of-a-dataframe</a>
+:param df:
+:param ladder:
+:param peak_dict:
 :return:</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="analyze_electrophero.mean_from_histogram">
+<span class="sig-prename descclassname"><span class="pre">analyze_electrophero.</span></span><span class="sig-name descname"><span class="pre">mean_from_histogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size_unit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analyze_electrophero.mean_from_histogram" title="Link to this definition"></a></dt>
+<dd><p>Function to estimate the mean bp based on the fluorescence histogram</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> – pandas dataframe</p></li>
+<li><p><strong>unit</strong> – str</p></li>
+<li><p><strong>size_unit</strong> – str</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analyze_electrophero.run_kruskal">
+<span class="sig-prename descclassname"><span class="pre">analyze_electrophero.</span></span><span class="sig-name descname"><span class="pre">run_kruskal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analyze_electrophero.run_kruskal" title="Link to this definition"></a></dt>
+<dd><p>Function for statistical test of bp sizes for samples from different groups
+:param df: pandas dataframe
+:param variable: continuuous variable
+:param category: categorical variable
+:return: statistics per group in a dataframe</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="analyze_electrophero.epg_stats">
+<span class="sig-prename descclassname"><span class="pre">analyze_electrophero.</span></span><span class="sig-name descname"><span class="pre">epg_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'normalized_fluorescent_units'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size_unit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bp_pos'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analyze_electrophero.epg_stats" title="Link to this definition"></a></dt>
+<dd><p>Function to compute and output basic statistics for DNA size distributions</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> – pandas dataframe</p></li>
+<li><p><strong>save_dir</strong> – string</p></li>
+<li><p><strong>unit</strong> – string (y-variable)</p></li>
+<li><p><strong>size_unit</strong> – string (x-variable)</p></li>
+<li><p><strong>peak_dict</strong> – dictioary</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>three pandas dataframes, will be saved as .csv files in stats</p>
+</dd>
+</dl>
+<p>directory</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="analyze_electrophero.epg_analysis">
-<span class="sig-prename descclassname"><span class="pre">analyze_electrophero.</span></span><span class="sig-name descname"><span class="pre">epg_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_to_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_to_ladder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_to_meta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analyze_electrophero.epg_analysis" title="Link to this definition"></a></dt>
-<dd><p>To plot the Tape Station electropherogram
+<span class="sig-prename descclassname"><span class="pre">analyze_electrophero.</span></span><span class="sig-name descname"><span class="pre">epg_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_to_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_to_ladder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_to_meta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_marker</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analyze_electrophero.epg_analysis" title="Link to this definition"></a></dt>
+<dd><p>Function to analyze DNA distribution from a signal table.
 :param path_to_file: str
+:param path_to_ladder: str
+:param path_to_meta: str
+:param run_id: str
+:param include_marker: bool
 :return:</p>
 </dd></dl>
 

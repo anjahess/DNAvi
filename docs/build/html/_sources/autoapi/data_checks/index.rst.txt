@@ -7,8 +7,9 @@ data_checks
 
    Functions to assure input files to DNAvi are correctly formatted
 
-   @author: Anja Hess
-   @date: 2025-JUL-23
+   Author: Anja Hess
+   Date: 2025-JUL-23
+
 
 
 

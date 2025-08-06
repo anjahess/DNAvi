@@ -28,9 +28,18 @@ Module Contents
 
 .. py:function:: set_style_for_paper()
 
-.. py:function:: gridplot(df, x, y, save_dir='', title='', y_label='', x_label='', hue=None, units=None, plot_lower=False, estimator='mean', style=None, window=False, ladder='', peak_dict='', ladder_dir='')
+.. py:function:: gridplot(df, x, y, save_dir='', title='', y_label='', x_label='')
 
    DNA size line plot with masking option for marker peaks
+
+   :param df:
+   :param x:
+   :param y:
+   :param save_dir:
+   :param title:
+   :param y_label:
+   :param x_label:
+   :return:
 
 
 .. py:function:: peakplot(array, peaks, ladder_id, ref, i, qc_save_dir, y_label='')
@@ -62,11 +71,14 @@ Module Contents
 
 .. py:function:: ladderplot(df, ladder2type, qc_save_dir, y_label='', x_label='')
 
-   :param df:
-   :param ladder2type:
-   :param qc_save_dir:
-   :param y_label:
-   :param x_label:
-   :return:
+   Plot multiple ladders into one plot
+
+   :param df: panas DataFrame
+   :param ladder2type: dict
+   :param qc_save_dir: str
+   :param y_label: str
+   :param x_label: ste
+   :return: plot appears in QC directory
+
 
 

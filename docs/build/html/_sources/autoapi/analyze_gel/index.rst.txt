@@ -17,6 +17,7 @@ Functions
 .. autoapisummary::
 
    analyze_gel.range_intersect
+   analyze_gel.resize_img
    analyze_gel.analyze_gel
 
 
@@ -24,6 +25,22 @@ Module Contents
 ---------------
 
 .. py:function:: range_intersect(r1, r2)
+
+   Function to find intersection of two ranges
+
+   :param r1: range
+   :param r2: range
+   :return: intersection
+
+
+
+.. py:function:: resize_img(image)
+
+   Function to resize each image (helpful for data storage)
+
+   :param image_file:
+   :return:
+
 
 .. py:function:: analyze_gel(image_file, run_id=None)
 
