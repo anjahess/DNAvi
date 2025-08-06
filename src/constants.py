@@ -1,26 +1,40 @@
 """
 
-Constants for electropherogram analysis.
-@author: Anja Hess
-@date: 2023-JUL-01
+Constants for electropherogram analysis
+
+Author: Anja Hess
+
+Date: 2023-AUG-06
 
 """
 
 
 ACCEPTED_FORMATS = ['.csv', '.png', '.jpeg', '.jpg']
+"""Possible input formats"""
 
 # Peak detection ladder
 DISTANCE = 20 # 20 pos apart min
+"""Minimum required distance of two peaks to be discriminated."""
+
 CUSTOM_MIN_PEAK_HEIGHT=50 # if not auto-calc, requires ladder type to be set to "adjust"
+"""Minimum required height for a peak to be detected. """
+
 PEAK_PROMINANCE=(0.2, None)
+"""Tuple, minimum peak prominence """
+
 
 # Marker band cropping
 HALO_FACTOR=0.4 # factor to calc bp to crop from markers
+"""Float [0-1] factor by which the marker will be multiplied to define cropping range when removing marker peaks"""
 
 YCOL = "normalized_fluorescent_units"
+"""Standardized y axis name"""
 XCOL = "bp_pos"
+"""Standardized x axis name"""
 YLABEL = "Sample Intensity [Normalized FU]"
+"""Standardized y labe name"""
 XLABEL = "Size [bp]"
+"""Standardized x label name"""
 
 
 palettediff3 = ["darkgrey", "black", "grey",
@@ -32,6 +46,8 @@ palettediff3 = ["darkgrey", "black", "grey",
                 "#2d435b", "#477b80", "#2d435b", "#986960", "#f1e8d7", "#d56763", "#fcd2a1", "#477b80", 'lightgrey',
                 "lightblue", "#fbc27b", "cadetblue", "#fbc27b", 'lightslategrey', "#85ada3", "#d56763", "#fcd2a1",
                 "#477b80", "#eacdcb", "#bfcfcd", "#2d435b", "#986960", "#f1e8d7", "#d56763", "#fcd2a1", "#477b80", ]
+"""Standardized color palette"""
+
 
 palettediff2 = ["darkgrey", "#d56763", "#fcd2a1",
                 "#85ada3", "#eacdcb", "#a7c6c9", "#2d435b",
@@ -47,6 +63,7 @@ palettediff2 = ["darkgrey", "#d56763", "#fcd2a1",
                 "lightblue", "#fbc27b", "cadetblue", "#fbc27b", 'lightslategrey', "#85ada3", "#d56763", "#fcd2a1",
                 "#477b80", "#eacdcb", "#bfcfcd", "#2d435b", "#986960", "#f1e8d7", "#d56763", "#fcd2a1", "#477b80",
                 ]
+"""Standardized color palette"""
 
 peak_dict = {"HSD5000": [15, 100, 250, 400, 600,
                          1000, 1500, 2500, 3500, 5000,
@@ -57,3 +74,4 @@ peak_dict = {"HSD5000": [15, 100, 250, 400, 600,
              "cfDNA": [35, 50, 75, 100, 150,
                        200, 300, 400, 500, 600,
                        700, 1000]}
+"""Dictionary with standardized peak size options (beta)"""

@@ -5,9 +5,11 @@ constants
 
 .. autoapi-nested-parse::
 
-   Constants for electropherogram analysis.
-   @author: Anja Hess
-   @date: 2023-JUL-01
+   Constants for electropherogram analysis
+
+   Author: Anja Hess
+
+   Date: 2023-AUG-06
 
 
 
@@ -37,45 +39,81 @@ Module Contents
    :value: ['.csv', '.png', '.jpeg', '.jpg']
 
 
+   Possible input formats
+
+
 .. py:data:: DISTANCE
    :value: 20
+
+
+   Minimum required distance of two peaks to be discriminated.
 
 
 .. py:data:: CUSTOM_MIN_PEAK_HEIGHT
    :value: 50
 
 
+   Minimum required height for a peak to be detected. 
+
+
 .. py:data:: PEAK_PROMINANCE
    :value: (0.2, None)
+
+
+   Tuple, minimum peak prominence 
 
 
 .. py:data:: HALO_FACTOR
    :value: 0.4
 
 
+   Float [0-1] factor by which the marker will be multiplied to define cropping range when removing marker peaks
+
+
 .. py:data:: YCOL
    :value: 'normalized_fluorescent_units'
+
+
+   Standardized y axis name
 
 
 .. py:data:: XCOL
    :value: 'bp_pos'
 
 
+   Standardized x axis name
+
+
 .. py:data:: YLABEL
    :value: 'Sample Intensity [Normalized FU]'
+
+
+   Standardized y labe name
 
 
 .. py:data:: XLABEL
    :value: 'Size [bp]'
 
 
+   Standardized x label name
+
+
 .. py:data:: palettediff3
    :value: ['darkgrey', 'black', 'grey', '#d56763', '#85ada3', '#2d435b', '#eacdcb', '#fcd2a1', '#d56763',...
+
+
+   Standardized color palette
 
 
 .. py:data:: palettediff2
    :value: ['darkgrey', '#d56763', '#fcd2a1', '#85ada3', '#eacdcb', '#a7c6c9', '#2d435b', '#d56763',...
 
 
+   Standardized color palette
+
+
 .. py:data:: peak_dict
+
+   Dictionary with standardized peak size options (beta)
+
 

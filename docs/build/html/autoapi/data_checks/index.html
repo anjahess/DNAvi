@@ -105,21 +105,21 @@
              
   <section id="module-data_checks">
 <span id="data-checks"></span><h1>data_checks<a class="headerlink" href="#module-data_checks" title="Link to this heading"></a></h1>
-<p>Functions to assure input files to DNAvi are correctly formatted</p>
-<p>Author: Anja Hess
-Date: 2025-JUL-23</p>
+<p>Functions to assure input files for DNAvi are correctly formatted</p>
+<p>Author: Anja Hess</p>
+<p>Date: 2025-JUL-23</p>
 <section id="functions">
 <h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#data_checks.detect_delim" title="data_checks.detect_delim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">detect_delim</span></code></a>(file[, num_rows])</p></td>
-<td><p>In case not tab delim</p></td>
+<td><p>Detect delimiter from input table with Sniffer</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#data_checks.check_name" title="data_checks.check_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_name</span></code></a>(filename)</p></td>
-<td><p>Function to check if a filename is okay</p></td>
+<td><p>Function to generate secure filename from filename</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#data_checks.check_input" title="data_checks.check_input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_input</span></code></a>(filename)</p></td>
-<td><p>Function to check if the input is either a directory with csvs or images</p></td>
+<td><p>Function to check if the input exists</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#data_checks.check_file" title="data_checks.check_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_file</span></code></a>(filename)</p></td>
 <td><p>Function to check if file is correctly formatted</p></td>
@@ -128,7 +128,7 @@ Date: 2025-JUL-23</p>
 <td><p>Function to check if the ladder is formatted correctly</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#data_checks.check_meta" title="data_checks.check_meta"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_meta</span></code></a>(filename)</p></td>
-<td><p>Function to check if the ladder is formatted correctly</p></td>
+<td><p>Check if the metadata file is formatted correctly</p></td>
 </tr>
 </tbody>
 </table>
@@ -138,54 +138,88 @@ Date: 2025-JUL-23</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="data_checks.detect_delim">
 <span class="sig-prename descclassname"><span class="pre">data_checks.</span></span><span class="sig-name descname"><span class="pre">detect_delim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_checks.detect_delim" title="Link to this definition"></a></dt>
-<dd><p>In case not tab delim
-#https://stackoverflow.com/questions/65909857/
-may-i-use-either-tab-or-comma-as-delimiter-
-when-reading-from-pandas-csv
-:param file:
-:param num_rows:
-:return:</p>
+<dd><p>Detect delimiter from input table with Sniffer</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file</strong> – str, path to input file</p></li>
+<li><p><strong>num_rows</strong> – int, number of rows in file</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>str, detected delimiter</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="data_checks.check_name">
 <span class="sig-prename descclassname"><span class="pre">data_checks.</span></span><span class="sig-name descname"><span class="pre">check_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_checks.check_name" title="Link to this definition"></a></dt>
-<dd><p>Function to check if a filename is okay
-:param filename: str
-:return: improved file name</p>
+<dd><p>Function to generate secure filename from filename</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> – str</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>improved file name</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="data_checks.check_input">
 <span class="sig-prename descclassname"><span class="pre">data_checks.</span></span><span class="sig-name descname"><span class="pre">check_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_checks.check_input" title="Link to this definition"></a></dt>
-<dd><p>Function to check if the input is either a directory with csvs or images
-or a single file
-:param filename: str
-:return: raise error if file does not have correct format</p>
+<dd><p>Function to check if the input exists</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> – str</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>raise error if file does not exist</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="data_checks.check_file">
 <span class="sig-prename descclassname"><span class="pre">data_checks.</span></span><span class="sig-name descname"><span class="pre">check_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_checks.check_file" title="Link to this definition"></a></dt>
-<dd><p>Function to check if file is correctly formatted
-:param filename:
-:return:</p>
+<dd><p>Function to check if file is correctly formatted</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> – str</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>raise error if file is incorrectly formatted</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="data_checks.check_ladder">
 <span class="sig-prename descclassname"><span class="pre">data_checks.</span></span><span class="sig-name descname"><span class="pre">check_ladder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_checks.check_ladder" title="Link to this definition"></a></dt>
-<dd><p>Function to check if the ladder is formatted correctly
-:param filename: str
-:return: raise error if file does not have correct format</p>
+<dd><p>Function to check if the ladder is formatted correctly</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> – str</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>raise error if file does not have correct format</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="data_checks.check_meta">
 <span class="sig-prename descclassname"><span class="pre">data_checks.</span></span><span class="sig-name descname"><span class="pre">check_meta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_checks.check_meta" title="Link to this definition"></a></dt>
-<dd><p>Function to check if the ladder is formatted correctly
-:param filename: str
-:return: raise error if file does not have correct format</p>
+<dd><p>Check if the metadata file is formatted correctly</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> – str, path to metadata file</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>raise error if file does not have correct format</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>

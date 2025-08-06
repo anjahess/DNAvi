@@ -3,13 +3,20 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-DNAvi documentation
+DNAvi
 ===================
 
-This is DNAvi's documentation page. Please cite us whenever you use DNAvi:
+.. image:: _static/logo.jpg
+    :width: 80
+    :alt: logo
 
-Anja Hess, Alexander Meissner, Dominik Seelow, and Helene Kretzmer: **DNAvi: a python tool for integration, analysis, and visualization of cell-free DNA fragments in liquid biopsies (2025)**
 
+DNAvi is a Python-based tool for rapid analysis and visualization of cell-free DNA (cfDNA) fragment size profiles directly from electrophoresis data, without the need for sequencing. It enables normalization, statistical comparison, and publication-ready plotting of multiple samples, supporting quality control and exploratory fragmentomics in clinical and research workflows.
+
+
+Citation
+^^^^^^^^^^^^^^^^^^
+**Anja Hess, Alexander Meissner, Dominik Seelow, and Helene Kretzmer: DNAvi: a python tool for integration, analysis, and visualization of cell-free DNA fragments in liquid biopsies (2025)**
 
 
 .. toctree::

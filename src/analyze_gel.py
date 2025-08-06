@@ -1,8 +1,11 @@
 """
 
-Add on functions for electropherogram generation from an annotated gel image
-@author: Anja Hess
-@date: 2025-APR-15
+Add-on functions for electropherogram generation from an annotated gel image
+
+Author: Anja Hess
+
+Date: 2025-APR-15
+
 
 """
 import os
@@ -19,7 +22,8 @@ from skimage.transform import resize
 
 def range_intersect(r1, r2):
     """
-    Function to find intersection of two ranges
+
+    Find intersection of two ranges
 
     :param r1: range
     :param r2: range
@@ -31,10 +35,12 @@ def range_intersect(r1, r2):
 
 def resize_img(image):
     """
-    Function to resize each image (helpful for data storage)
 
-    :param image_file:
-    :return:
+    Resize each image (helpful for data storage)
+
+    :param image_file: image array
+    :return: resized image
+
     """
 
     height, width = image.shape[0], image.shape[1] #height, width
@@ -51,8 +57,12 @@ def resize_img(image):
 def analyze_gel(image_file, run_id=None):
     """
 
-    :param image_file:
-    :return:
+    Core function to generate a signal table from a DNA gel image.
+
+    :param image_file: str, path to DNA gel image
+    :return: multiple intermediate images to visualize the gel band detection are \
+    generated and saved, finally the signal table is saved to disk and returned \
+    along with the save_dir (str) and the error.
     """
 
     print("------------------------------------------------------------")

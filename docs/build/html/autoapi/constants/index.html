@@ -111,48 +111,48 @@
              
   <section id="module-constants">
 <span id="constants"></span><h1>constants<a class="headerlink" href="#module-constants" title="Link to this heading"></a></h1>
-<p>Constants for electropherogram analysis.
-&#64;author: Anja Hess
-&#64;date: 2023-JUL-01</p>
+<p>Constants for electropherogram analysis</p>
+<p>Author: Anja Hess</p>
+<p>Date: 2023-AUG-06</p>
 <section id="attributes">
 <h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#constants.ACCEPTED_FORMATS" title="constants.ACCEPTED_FORMATS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ACCEPTED_FORMATS</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Possible input formats</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#constants.DISTANCE" title="constants.DISTANCE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DISTANCE</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Minimum required distance of two peaks to be discriminated.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#constants.CUSTOM_MIN_PEAK_HEIGHT" title="constants.CUSTOM_MIN_PEAK_HEIGHT"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CUSTOM_MIN_PEAK_HEIGHT</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Minimum required height for a peak to be detected.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#constants.PEAK_PROMINANCE" title="constants.PEAK_PROMINANCE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PEAK_PROMINANCE</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Tuple, minimum peak prominence</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#constants.HALO_FACTOR" title="constants.HALO_FACTOR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HALO_FACTOR</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Float [0-1] factor by which the marker will be multiplied to define cropping range when removing marker peaks</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#constants.YCOL" title="constants.YCOL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">YCOL</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Standardized y axis name</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#constants.XCOL" title="constants.XCOL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">XCOL</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Standardized x axis name</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#constants.YLABEL" title="constants.YLABEL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">YLABEL</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Standardized y labe name</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#constants.XLABEL" title="constants.XLABEL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">XLABEL</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Standardized x label name</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#constants.palettediff3" title="constants.palettediff3"><code class="xref py py-obj docutils literal notranslate"><span class="pre">palettediff3</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Standardized color palette</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#constants.palettediff2" title="constants.palettediff2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">palettediff2</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Standardized color palette</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#constants.peak_dict" title="constants.peak_dict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">peak_dict</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Dictionary with standardized peak size options (beta)</p></td>
 </tr>
 </tbody>
 </table>
@@ -162,62 +162,74 @@
 <dl class="py data">
 <dt class="sig sig-object py" id="constants.ACCEPTED_FORMATS">
 <span class="sig-prename descclassname"><span class="pre">constants.</span></span><span class="sig-name descname"><span class="pre">ACCEPTED_FORMATS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['.csv',</span> <span class="pre">'.png',</span> <span class="pre">'.jpeg',</span> <span class="pre">'.jpg']</span></em><a class="headerlink" href="#constants.ACCEPTED_FORMATS" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Possible input formats</p>
+</dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="constants.DISTANCE">
 <span class="sig-prename descclassname"><span class="pre">constants.</span></span><span class="sig-name descname"><span class="pre">DISTANCE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">20</span></em><a class="headerlink" href="#constants.DISTANCE" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Minimum required distance of two peaks to be discriminated.</p>
+</dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="constants.CUSTOM_MIN_PEAK_HEIGHT">
 <span class="sig-prename descclassname"><span class="pre">constants.</span></span><span class="sig-name descname"><span class="pre">CUSTOM_MIN_PEAK_HEIGHT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">50</span></em><a class="headerlink" href="#constants.CUSTOM_MIN_PEAK_HEIGHT" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Minimum required height for a peak to be detected.</p>
+</dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="constants.PEAK_PROMINANCE">
 <span class="sig-prename descclassname"><span class="pre">constants.</span></span><span class="sig-name descname"><span class="pre">PEAK_PROMINANCE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">(0.2,</span> <span class="pre">None)</span></em><a class="headerlink" href="#constants.PEAK_PROMINANCE" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Tuple, minimum peak prominence</p>
+</dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="constants.HALO_FACTOR">
 <span class="sig-prename descclassname"><span class="pre">constants.</span></span><span class="sig-name descname"><span class="pre">HALO_FACTOR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.4</span></em><a class="headerlink" href="#constants.HALO_FACTOR" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Float [0-1] factor by which the marker will be multiplied to define cropping range when removing marker peaks</p>
+</dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="constants.YCOL">
 <span class="sig-prename descclassname"><span class="pre">constants.</span></span><span class="sig-name descname"><span class="pre">YCOL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'normalized_fluorescent_units'</span></em><a class="headerlink" href="#constants.YCOL" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Standardized y axis name</p>
+</dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="constants.XCOL">
 <span class="sig-prename descclassname"><span class="pre">constants.</span></span><span class="sig-name descname"><span class="pre">XCOL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'bp_pos'</span></em><a class="headerlink" href="#constants.XCOL" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Standardized x axis name</p>
+</dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="constants.YLABEL">
 <span class="sig-prename descclassname"><span class="pre">constants.</span></span><span class="sig-name descname"><span class="pre">YLABEL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Sample</span> <span class="pre">Intensity</span> <span class="pre">[Normalized</span> <span class="pre">FU]'</span></em><a class="headerlink" href="#constants.YLABEL" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Standardized y labe name</p>
+</dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="constants.XLABEL">
 <span class="sig-prename descclassname"><span class="pre">constants.</span></span><span class="sig-name descname"><span class="pre">XLABEL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Size</span> <span class="pre">[bp]'</span></em><a class="headerlink" href="#constants.XLABEL" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Standardized x label name</p>
+</dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="constants.palettediff3">
 <span class="sig-prename descclassname"><span class="pre">constants.</span></span><span class="sig-name descname"><span class="pre">palettediff3</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['darkgrey',</span> <span class="pre">'black',</span> <span class="pre">'grey',</span> <span class="pre">'#d56763',</span> <span class="pre">'#85ada3',</span> <span class="pre">'#2d435b',</span> <span class="pre">'#eacdcb',</span> <span class="pre">'#fcd2a1',</span> <span class="pre">'#d56763',...</span></em><a class="headerlink" href="#constants.palettediff3" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Standardized color palette</p>
+</dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="constants.palettediff2">
 <span class="sig-prename descclassname"><span class="pre">constants.</span></span><span class="sig-name descname"><span class="pre">palettediff2</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['darkgrey',</span> <span class="pre">'#d56763',</span> <span class="pre">'#fcd2a1',</span> <span class="pre">'#85ada3',</span> <span class="pre">'#eacdcb',</span> <span class="pre">'#a7c6c9',</span> <span class="pre">'#2d435b',</span> <span class="pre">'#d56763',...</span></em><a class="headerlink" href="#constants.palettediff2" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Standardized color palette</p>
+</dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="constants.peak_dict">
 <span class="sig-prename descclassname"><span class="pre">constants.</span></span><span class="sig-name descname"><span class="pre">peak_dict</span></span><a class="headerlink" href="#constants.peak_dict" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Dictionary with standardized peak size options (beta)</p>
+</dd></dl>
 
 </section>
 </section>

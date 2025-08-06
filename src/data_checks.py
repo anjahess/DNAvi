@@ -1,10 +1,10 @@
 """
 
-Functions to assure input files to DNAvi are correctly formatted
+Functions to assure input files for DNAvi are correctly formatted
 
 Author: Anja Hess
-Date: 2025-JUL-23
 
+Date: 2025-JUL-23
 
 """
 
@@ -16,13 +16,13 @@ from werkzeug.utils import secure_filename
 
 def detect_delim(file, num_rows=1):
     """
-    In case not tab delim
-    #https://stackoverflow.com/questions/65909857/
-    may-i-use-either-tab-or-comma-as-delimiter-
-    when-reading-from-pandas-csv
-    :param file:
-    :param num_rows:
-    :return:
+
+    Detect delimiter from input table with Sniffer
+
+    :param file: str, path to input file
+    :param num_rows: int, number of rows in file
+    :return: str, detected delimiter
+
     """
     sniffer = Sniffer()
     with open(file, 'r') as f:
@@ -34,9 +34,12 @@ def detect_delim(file, num_rows=1):
 
 def check_name(filename):
     """
-    Function to check if a filename is okay
+
+    Function to generate secure filename from filename
+
     :param filename: str
     :return: improved file name
+
     """
 
     filename = secure_filename(filename)
@@ -45,10 +48,11 @@ def check_name(filename):
 def check_input(filename):
     """
 
-    Function to check if the input is either a directory with csvs or images
-    or a single file
+    Function to check if the input exists
+
     :param filename: str
-    :return: raise error if file does not have correct format
+
+    :return: raise error if file does not exist
 
     """
 
@@ -64,9 +68,12 @@ def check_input(filename):
 
 def check_file(filename):
     """
+
     Function to check if file is correctly formatted
-    :param filename:
-    :return:
+
+    :param filename: str
+    :return: raise error if file is incorrectly formatted
+
     """
 
     print("--- Performing input check")
@@ -120,6 +127,7 @@ def check_ladder(filename):
     """
 
     Function to check if the ladder is formatted correctly
+
     :param filename: str
     :return: raise error if file does not have correct format
 
@@ -180,7 +188,6 @@ def check_ladder(filename):
     ######################################################################
     # Check individual ladders (in case of multiple ladders passed)
     ######################################################################
-
     for ladder in df["Name"].unique():
         sub_df = df[df["Name"] == ladder].reset_index(drop=True)
         sub_df["Basepairs"].astype(int).values.tolist()[::-1]
@@ -215,7 +222,6 @@ def check_ladder(filename):
             if len(markers) == 1 and ((0 not in marker_pos) and (last_row_index not in marker_pos)):
                 print("--- Ladder Error: DNA marker should be either first or last entry")
                 exit()
-
     return filename
 
 
@@ -223,8 +229,10 @@ def check_ladder(filename):
 def check_meta(filename):
     """
 
-    Function to check if the ladder is formatted correctly
-    :param filename: str
+    Check if the metadata file is formatted correctly
+
+    :param filename: str, path to metadata file
+
     :return: raise error if file does not have correct format
 
     """
@@ -262,6 +270,4 @@ def check_meta(filename):
         exit()
 
     return filename
-
-
 # END OF SCRIPT

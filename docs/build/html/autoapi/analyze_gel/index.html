@@ -102,21 +102,21 @@
              
   <section id="module-analyze_gel">
 <span id="analyze-gel"></span><h1>analyze_gel<a class="headerlink" href="#module-analyze_gel" title="Link to this heading"></a></h1>
-<p>Add on functions for electropherogram generation from an annotated gel image
-&#64;author: Anja Hess
-&#64;date: 2025-APR-15</p>
+<p>Add-on functions for electropherogram generation from an annotated gel image</p>
+<p>Author: Anja Hess</p>
+<p>Date: 2025-APR-15</p>
 <section id="functions">
 <h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#analyze_gel.range_intersect" title="analyze_gel.range_intersect"><code class="xref py py-obj docutils literal notranslate"><span class="pre">range_intersect</span></code></a>(r1, r2)</p></td>
-<td><p>Function to find intersection of two ranges</p></td>
+<td><p>Find intersection of two ranges</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#analyze_gel.resize_img" title="analyze_gel.resize_img"><code class="xref py py-obj docutils literal notranslate"><span class="pre">resize_img</span></code></a>(image)</p></td>
-<td><p>Function to resize each image (helpful for data storage)</p></td>
+<td><p>Resize each image (helpful for data storage)</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#analyze_gel.analyze_gel" title="analyze_gel.analyze_gel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">analyze_gel</span></code></a>(image_file[, run_id])</p></td>
-<td><p></p></td>
+<td><p>Core function to generate a signal table from a DNA gel image.</p></td>
 </tr>
 </tbody>
 </table>
@@ -126,7 +126,7 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="analyze_gel.range_intersect">
 <span class="sig-prename descclassname"><span class="pre">analyze_gel.</span></span><span class="sig-name descname"><span class="pre">range_intersect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analyze_gel.range_intersect" title="Link to this definition"></a></dt>
-<dd><p>Function to find intersection of two ranges</p>
+<dd><p>Find intersection of two ranges</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -143,13 +143,13 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="analyze_gel.resize_img">
 <span class="sig-prename descclassname"><span class="pre">analyze_gel.</span></span><span class="sig-name descname"><span class="pre">resize_img</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analyze_gel.resize_img" title="Link to this definition"></a></dt>
-<dd><p>Function to resize each image (helpful for data storage)</p>
+<dd><p>Resize each image (helpful for data storage)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>image_file</strong></p>
+<dd class="field-odd"><p><strong>image_file</strong> – image array</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p></p>
+<dd class="field-even"><p>resized image</p>
 </dd>
 </dl>
 </dd></dl>
@@ -157,12 +157,13 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="analyze_gel.analyze_gel">
 <span class="sig-prename descclassname"><span class="pre">analyze_gel.</span></span><span class="sig-name descname"><span class="pre">analyze_gel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analyze_gel.analyze_gel" title="Link to this definition"></a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Core function to generate a signal table from a DNA gel image.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>image_file</strong></p>
+<dd class="field-odd"><p><strong>image_file</strong> – str, path to DNA gel image</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p></p>
+<dd class="field-even"><p>multiple intermediate images to visualize the gel band detection are     generated and saved, finally the signal table is saved to disk and returned     along with the save_dir (str) and the error.</p>
 </dd>
 </dl>
 </dd></dl>

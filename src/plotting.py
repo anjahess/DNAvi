@@ -1,10 +1,12 @@
 """
 
-Plotting functions for electropherogram analysis \
+Plotting functions for electropherogram analysis
 
-Author: Anja Hess \
 
-Date: 2025-AUG-06 \
+Author: Anja Hess
+
+
+Date: 2025-AUG-06
 
 """
 import os

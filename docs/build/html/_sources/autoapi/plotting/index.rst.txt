@@ -5,9 +5,13 @@ plotting
 
 .. autoapi-nested-parse::
 
-   Plotting functions for electropherogram analysis 
-   Author: Anja Hess 
-   Date: 2025-AUG-06 
+   Plotting functions for electropherogram analysis
+
+
+   Author: Anja Hess
+
+
+   Date: 2025-AUG-06
 
 
 
