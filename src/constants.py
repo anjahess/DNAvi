@@ -24,7 +24,7 @@ PEAK_PROMINANCE=(0.2, None)
 
 
 # Marker band cropping
-HALO_FACTOR=0.4 # factor to calc bp to crop from markers
+HALO_FACTOR=0.3 # factor to calc bp to crop from markers
 """Float [0-1] factor by which the marker will be multiplied to define cropping range when removing marker peaks"""
 
 YCOL = "normalized_fluorescent_units"

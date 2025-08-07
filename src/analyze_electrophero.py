@@ -10,8 +10,9 @@ import os
 import numpy as np
 import pandas as pd
 import sys
+import statistics
 from scipy.signal import find_peaks
-from scipy.stats import kruskal
+from scipy.stats import kruskal, ttest_ind
 import scikit_posthocs as sp
 script_path = os.path.dirname(os.path.abspath(__file__))
 """Local directory of DNAvi analyze_electrophero module"""
@@ -488,6 +489,9 @@ def run_kruskal(df, variable="", category=""):
         names = []
         p_value = signi = results = None
         unique_peak = False
+        average_dict = {}
+        mode_dict = {}
+        median_dict = {}
         for group in sub_df[category].unique():
             group_data = sub_df[sub_df[category] == group][variable]
             group_data = list(group_data)
@@ -496,47 +500,61 @@ def run_kruskal(df, variable="", category=""):
                 continue
             kruskal_groups.append(group_data)
             kruskal_dict.update({str(group): group_data})
+            average_dict.update({str(group): float(statistics.mode(group_data))})
+            mode_dict.update({str(group): float(statistics.mode(group_data))})
+            median_dict.update({str(group): float(statistics.median(group_data))})
             names.append(str(group))
+
         ##################################################################
-        # 2. Run Kruskal Wallis Test
+        # 2. Run Kruskal Wallis Test or ttest dep on sample size
         ##################################################################
-        try:
-            stats, p_value = kruskal(*kruskal_groups)
-        except ValueError:
-            print("Skipping Kruskal stats since "
-                  f"peak {peak} only shows in one group of groups ({names})"
-                  f"with values:", kruskal_groups)
-            stats = p_value = 1
-            unique_peak = True
-            test_performed = "None (peak unique to group)"
-        # 2. If the Kruskal says groups are different do a posthoc
-        if p_value < 0.05:
-            signi = True
-            p_adjust_test = 'bonferroni'
-            if len(kruskal_groups) < 3:
-                results = sp.posthoc_conover([kruskal_groups[0],
-                                              kruskal_groups[1]],
-                                             p_adjust=p_adjust_test)
+        if len(kruskal_groups) == 2:
+            test_performed = "Student's t - test (independent)"
+            stats, p_value = ttest_ind(kruskal_groups[0], kruskal_groups[1])
+            if p_value < 0.05:
+                signi = True
             else:
-                kruskal_groups_for_posthoc = np.array(kruskal_groups)
-                results = sp.posthoc_conover(kruskal_groups_for_posthoc,
-                                             p_adjust=p_adjust_test)
-            results.columns = names
-            results["condition"] = names
-            results.set_index("condition", inplace=True)
-            test_performed = f"Kruskal Wallis with {p_adjust_test}"
+                signi = False
         else:
-            signi = False
+            try:
+                stats, p_value = kruskal(*kruskal_groups)
+            except ValueError:
+                print("Skipping Kruskal stats since "
+                      f"peak {peak} only shows in one group of groups ({names})"
+                      f"with values:", kruskal_groups)
+                stats = p_value = 1
+                unique_peak = True
+                test_performed = "None (peak unique to group)"
+
+            # 2. If the Kruskal says groups are different do a posthoc
+            if p_value < 0.05:
+                signi = True
+                p_adjust_test = 'bonferroni'
+                if len(kruskal_groups) < 3:
+                    results = sp.posthoc_conover([kruskal_groups[0],
+                                                  kruskal_groups[1]],
+                                                 p_adjust=p_adjust_test)
+                else:
+                    kruskal_groups_for_posthoc = np.array(kruskal_groups)
+                    results = sp.posthoc_conover(kruskal_groups_for_posthoc,
+                                                 p_adjust=p_adjust_test)
+                results.columns = names
+                results["condition"] = names
+                results.set_index("condition", inplace=True)
+                test_performed = f"Kruskal Wallis with {p_adjust_test}"
+            else:
+                signi = False
 
         # Add to data storage
-        kruskal_data.append([peak, unique_peak, test_performed,
-                             p_value, signi, results, kruskal_dict])
+        kruskal_data.append([peak, unique_peak, average_dict,mode_dict, median_dict,
+                             test_performed,p_value, signi, results, kruskal_dict])
 
     #####################################################################
     # 2. Generate df from storage
     #####################################################################
     kruskal_df = pd.DataFrame(kruskal_data,
                               columns=["peak_name", "unique_peak",
+                                       "average", "modal", "median",
                                        "test_performed", "p_value",
                                        "p<0.05", "posthoc_p_values",
                                        "groups"])
