@@ -10,14 +10,11 @@ Date: 2025-AUG-06
 
 """
 import os
-import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 from matplotlib.ticker import ScalarFormatter
 from src.constants import palettediff2
-import plotly.express as px
-from sklearn.decomposition import PCA
 from matplotlib.patches import Patch
 
 def gridplot(df, x, y, save_dir="", title="", y_label="", x_label="",
