@@ -10,13 +10,19 @@ Date: 2025-AUG-06
 
 """
 import os
+import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 from matplotlib.ticker import ScalarFormatter
 from src.constants import palettediff2
+import plotly.express as px
+from sklearn.decomposition import PCA
+from matplotlib.patches import Patch
 
-def gridplot(df, x, y, save_dir="", title="", y_label="", x_label=""):
+def gridplot(df, x, y, save_dir="", title="", y_label="", x_label="",
+             cols_not_to_plot=["bp_pos", "sample", "normalized_fluorescent_units"],
+             ):
     """
 
     Generate line plot for DNA fragment sizes with masking option for marker peaks
@@ -28,10 +34,9 @@ def gridplot(df, x, y, save_dir="", title="", y_label="", x_label=""):
     :param title: str, title of the figure
     :param y_label: str, y label of the figure
     :param x_label: str, x label of the figure
+    :param cols_not_to_plot: list of columns to exclude from plot to get categorical vars
     :return: plot is generated and saved to disk.
     """
-
-    df[x] = df[x].astype(int)
 
     #####################################################################
     # All in one plot
@@ -41,15 +46,39 @@ def gridplot(df, x, y, save_dir="", title="", y_label="", x_label=""):
     plt.xlabel(x_label)
     plt.title(f"{title}")
 
-
     # Log scale
     plt.xscale('log')
     plt.savefig(f"{save_dir}{title}_summary.pdf", bbox_inches='tight')
     plt.close()
-    cols_not_to_plot = ["bp_pos", "sample", "normalized_fluorescent_units"]
 
-    for col in [c for c in df.columns if c not in cols_not_to_plot]:
+
+    #####################################################################
+    # By category
+    #####################################################################
+    cat_vars = [c for c in df.columns if c not in cols_not_to_plot]
+    for col in cat_vars:
+        #################################################################
+        # Clustermap
+        #################################################################
+        wide_df = df.pivot(index=["sample", col], columns=x,
+                           values=y).reset_index()
+        lut = dict(zip(wide_df[col].unique(), sns.color_palette(
+            palette='colorblind')))
+        row_colors = wide_df[col].map(lut)
+        sns.clustermap(wide_df.drop(columns=["sample", col]),
+                       rasterized=True, row_cluster=True,
+                       cmap="YlGnBu",yticklabels=False,xticklabels=False,
+                       col_cluster=False, row_colors=row_colors)
+        handles = [Patch(facecolor=lut[name]) for name in lut]
+        plt.legend(handles, lut, title=col,
+                   bbox_to_anchor=(1, 1),
+                   bbox_transform=plt.gcf().transFigure, loc='upper right')
+        plt.savefig(f"{save_dir}cluster_by_{col}.pdf", bbox_inches="tight")
+        plt.close()
+
+        #################################################################
         # Overview by condition
+        #################################################################
         print(f"--- Plotting by {col}")
         hue = col
         sns.lineplot(data=df, x=x, y=y, alpha=.7,
@@ -63,6 +92,7 @@ def gridplot(df, x, y, save_dir="", title="", y_label="", x_label=""):
         plt.savefig(f"{save_dir}{title}_by_{col}.pdf",
                     bbox_inches='tight')
         plt.close()
+
 
     #####################################################################
     # 2. Plot

@@ -110,7 +110,7 @@
 <h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#plotting.gridplot" title="plotting.gridplot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gridplot</span></code></a>(df, x, y[, save_dir, title, y_label, x_label])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#plotting.gridplot" title="plotting.gridplot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gridplot</span></code></a>(df, x, y[, save_dir, title, y_label, ...])</p></td>
 <td><p>Generate line plot for DNA fragment sizes with masking option for marker peaks</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#plotting.peakplot" title="plotting.peakplot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">peakplot</span></code></a>(array, peaks, ladder_id, ref, i, qc_save_dir)</p></td>
@@ -129,7 +129,7 @@
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="plotting.gridplot">
-<span class="sig-prename descclassname"><span class="pre">plotting.</span></span><span class="sig-name descname"><span class="pre">gridplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotting.gridplot" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">plotting.</span></span><span class="sig-name descname"><span class="pre">gridplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cols_not_to_plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['bp_pos',</span> <span class="pre">'sample',</span> <span class="pre">'normalized_fluorescent_units']</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotting.gridplot" title="Link to this definition"></a></dt>
 <dd><p>Generate line plot for DNA fragment sizes with masking option for marker peaks</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -141,6 +141,7 @@
 <li><p><strong>title</strong> – str, title of the figure</p></li>
 <li><p><strong>y_label</strong> – str, y label of the figure</p></li>
 <li><p><strong>x_label</strong> – str, x label of the figure</p></li>
+<li><p><strong>cols_not_to_plot</strong> – list of columns to exclude from plot to get categorical vars</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>

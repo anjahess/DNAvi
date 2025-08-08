@@ -29,6 +29,7 @@ If multiple samples are present, a grid plot showing each DNA sample as an indiv
     :alt: Single sample line plot
 
 
+
 1.3 Sample average plot
 """"""""""""""""""""""""""
 
@@ -48,4 +49,15 @@ Each groups' sample line profiles will be averaged and displayed in an individua
             .. image:: _static/example_nomarker.png
                 :width: 400
                 :alt: Single sample line plot
+
+
+1.5 Clustermap
+^^^^^^^^^^^^^^^^^^
+
+Clustering of samples by similarity, an additional column for each variable specified in the :doc:`/Metadata`.
+
+.. image:: _static/example_cluster_condition.jpg
+    :width: 600
+    :alt: workflow
+
 
