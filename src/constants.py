@@ -75,3 +75,18 @@ peak_dict = {"HSD5000": [15, 100, 250, 400, 600,
                        200, 300, 400, 500, 600,
                        700, 1000]}
 """Dictionary with standardized peak size options (beta)"""
+
+# Step size = 250 bp
+nuc_dict = {"Mononucleosomal (1)": (100,250),
+            "Dinucleosomal (2)":(251,500),
+            "Trinucleosomal (3)": (501,750),
+            "Quatronucleosomal (4)": (751,1000),
+            "Pentanucleosomal (5)": (1001,1250),
+            "Hexanucleosomal (6)": (1251, 1500),
+            "Heptanucleosomal (7)": (1501, 1750),
+            "Octanucleosomal (8)": (1751, 2000),
+            "Nonanucleosomal (9)": (2001, 2250),
+            "=> Hexanucleosomal (10)": (2250, None),
+            "Polynucleosomal (=> 3)": (751, None),
+            }
+"""Dictionary with standardized peak size options (beta)"""
