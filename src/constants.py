@@ -22,9 +22,12 @@ CUSTOM_MIN_PEAK_HEIGHT=50 # if not auto-calc, requires ladder type to be set to 
 PEAK_PROMINANCE=(0.2, None)
 """Tuple, minimum peak prominence """
 
+BACKGROUND_SUBSTRACTION_STATS=0.1
+"""Int, fraction of max peak to be removed from fataset for statistical testing \
+higher -> lower sens but pot better discrimination, lower -> sens up, more noise """
 
 # Marker band cropping
-HALO_FACTOR=0.3 # factor to calc bp to crop from markers
+HALO_FACTOR=0.35 # factor to calc bp to crop from markers
 """Float [0-1] factor by which the marker will be multiplied to define cropping range when removing marker peaks"""
 
 YCOL = "normalized_fluorescent_units"
@@ -64,16 +67,18 @@ LADDER_DICT = {"HSD5000": [15, 100, 250, 400, 600,
 """Dictionary with standardized peak size options (beta)"""
 
 # Step size = 250 bp
-NUC_DICT = {"Mononucleosomal (1)": (100,250),
-            "Dinucleosomal (2)":(251,500),
-            "Trinucleosomal (3)": (501,750),
-            "Quatronucleosomal (4)": (751,1000),
-            "Pentanucleosomal (5)": (1001,1250),
-            "Hexanucleosomal (6)": (1251, 1500),
-            "Heptanucleosomal (7)": (1501, 1750),
-            "Octanucleosomal (8)": (1751, 2000),
-            "Nonanucleosomal (9)": (2001, 2250),
-            "=> Hexanucleosomal (10)": (2250, None),
-            "Polynucleosomal (=> 3)": (751, None),
+NUC_DICT = {"Mononucleosomal (100-250)": (100,250),
+            "Dinucleosomal (251-500)":(251,500),
+            "Trinucleosomal (501-750)": (501,750),
+            "Quatronucleosomal (751-1000)": (751,1000),
+            "Pentanucleosomal (1000-1250)": (1001,1250),
+            "Hexanucleosomal (1251-1500)": (1251, 1500),
+            "Heptanucleosomal (1501-1750)": (1501, 1750),
+            "Octanucleosomal (1751-2000)": (1751, 2000),
+            "Nonanucleosomal (2001-2250)": (2001, 2250),
+            "Hexanucleosomal (=> 2250)": (2250, None),
+            "Polynucleosomal (=> 750)": (751, None),
+            "Non-mono (> 250)": (251, None),
+            "Oligo (> 1250)": (1250, None),
             }
 """Dictionary with standardized peak size options (beta)"""

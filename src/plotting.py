@@ -48,16 +48,23 @@ def gridplot(df, x, y, save_dir="", title="", y_label="", x_label="",
     plt.savefig(f"{save_dir}{title}_summary.pdf", bbox_inches='tight')
     plt.close()
 
-
     #####################################################################
     # By category
     #####################################################################
     cat_vars = [c for c in df.columns if c not in cols_not_to_plot]
     for col in cat_vars:
+
         #################################################################
         # Clustermap
         #################################################################
-        wide_df = df.pivot(index=["sample", col], columns=x,
+
+        # In case marker is in reduce to one entry per sample
+        df["sample-bp"] = df[x].astype(str) + "_" + df["sample"].astype(str)
+        prep_df = df.drop_duplicates(subset=["sample-bp"])
+        del prep_df["sample-bp"]
+
+        # Now ready to be transformed to wide
+        wide_df = prep_df.pivot(index=["sample", col], columns=x,
                            values=y).reset_index()
         lut = dict(zip(wide_df[col].unique(), sns.color_palette(
             palette='colorblind')))

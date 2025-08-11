@@ -12,7 +12,7 @@ import pandas as pd
 import sys
 import statistics
 from scipy.signal import find_peaks
-from scipy.stats import kruskal, ttest_ind
+from scipy.stats import kruskal, ttest_ind, mannwhitneyu
 import scikit_posthocs as sp
 script_path = os.path.dirname(os.path.abspath(__file__))
 """Local directory of DNAvi analyze_electrophero module"""
@@ -22,7 +22,7 @@ sys.path.insert(0, script_path)
 sys.path.insert(0, maindir)
 sys.path.insert(0, f"{maindir}/src")
 sys.path.insert(0, f"{maindir}/src")
-from constants import YLABEL, YCOL, XCOL, XLABEL, DISTANCE, CUSTOM_MIN_PEAK_HEIGHT, HALO_FACTOR, PEAK_PROMINANCE, NUC_DICT
+from constants import YLABEL, YCOL, XCOL, XLABEL, DISTANCE, CUSTOM_MIN_PEAK_HEIGHT, HALO_FACTOR, PEAK_PROMINANCE, NUC_DICT, BACKGROUND_SUBSTRACTION_STATS
 from plotting import lineplot, ladderplot, peakplot, gridplot
 from data_checks import check_file
 import logging
@@ -474,24 +474,38 @@ def nuc_fractions(df, unit="", size_unit=""):
 
     """
 
+    fraction_df = []
 
     ######################################################################
-    # 1. Make the histogram
+    # 0. Perform background substraction (
     ######################################################################
+    df = df[df[unit] > (df[unit].max()*BACKGROUND_SUBSTRACTION_STATS)]
 
+    ######################################################################
+    # 1.  Sum of all intensities
+    ######################################################################
+    sum_all = df[unit].sum()
 
     ######################################################################
     # 2. Define the fraction inside each basepair range (~nucleosomal
     # fraction)
     ######################################################################
+    for range in NUC_DICT:
+        start = NUC_DICT[range][0]
+        end = NUC_DICT[range][1]
+        if not end:
+            sub_df = df[df[size_unit] >= start]
+        # Crop df to nuc range
+        else:
+            sub_df = df[(df[size_unit] > start) & (df[size_unit] <= end)]
+        fraction_signal_range = sub_df[unit].sum() / sum_all
+        fraction_df.append([range, start, end, fraction_signal_range,
+                            round(fraction_signal_range * 100,1)])
 
-
-    # Estimate the mean bp from the histogram (frequency rescaled 0-100)
-    df["counts"] = df[unit] * 100
-    df["product"] = df[size_unit] * df["counts"]
-    mean_bp = df["product"].sum() / df["counts"].sum()
-
-    return mean_bp
+    fraction_df = pd.DataFrame(fraction_df, columns=["name", "start",
+                                                     "end", "fraction_dna",
+                                                     "percent"]).set_index("name")
+    return fraction_df
     # END OF FUNCTION
 
 def run_kruskal(df, variable="", category=""):
@@ -579,18 +593,20 @@ def run_kruskal(df, variable="", category=""):
                 signi = False
 
         # Add to data storage
-        kruskal_data.append([peak, unique_peak, average_dict,mode_dict, median_dict,
-                             test_performed,p_value, signi, results, kruskal_dict])
+        kruskal_data.append([peak, test_performed,p_value, signi, results,
+                             unique_peak, average_dict, mode_dict, median_dict, kruskal_dict])
 
     #####################################################################
     # 2. Generate df from storage
     #####################################################################
     kruskal_df = pd.DataFrame(kruskal_data,
-                              columns=["peak_name", "unique_peak",
-                                       "average", "modal", "median",
+                              columns=["peak_name",
                                        "test_performed", "p_value",
                                        "p<0.05", "posthoc_p_values",
+                                       "unique_peak",
+                                       "average", "modal", "median",
                                        "groups"])
+    kruskal_df.replace({'{': ' '}, inplace=True)
     return kruskal_df
 
 def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="bp_pos"):
@@ -622,8 +638,11 @@ def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="b
         # 2.1 Select data for only this sample
         sub_df = df[df["sample"] == sample]
         # 2.2 Get mean bp for the sample
+        nuc_df = nuc_fractions(sub_df, unit=unit, size_unit=size_unit)
+        for nuc_feature in nuc_df.index:
+            percentage = nuc_df.loc[nuc_feature,"percent"]
+            peak_info.append([sample, nuc_feature, "", percentage,])
         mean_bp = mean_from_histogram(sub_df, unit=unit, size_unit=size_unit)
-        nuc_perc_df = nuc_fractions(sub_df, unit=unit, size_unit=size_unit)
         peak_info.append([sample, "average_size", np.nan, mean_bp])
 
         # 2.3 Add to array and find peaks
@@ -654,8 +673,6 @@ def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="b
     # 3. Optional: Grouped stats (Mean sizes)
     ######################################################################
     cols_not_to_plot = [size_unit, "sample", unit]
-    mean_info = []
-
     for categorical_variable in [c for c in df.columns if c not in
                                                           cols_not_to_plot]:
         print(f"--- Stats by {categorical_variable}")
