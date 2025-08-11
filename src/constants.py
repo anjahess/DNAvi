@@ -36,20 +36,7 @@ YLABEL = "Sample Intensity [Normalized FU]"
 XLABEL = "Size [bp]"
 """Standardized x label name"""
 
-
-palettediff3 = ["darkgrey", "black", "grey",
-                "#d56763", "#85ada3", "#2d435b", "#eacdcb", "#fcd2a1",
-                "#d56763", "darkred", "#477b80", 'grey', "#d56763", "#bfcfcd",
-                "#fbc27b", "cadetblue", "#fbc27b","#477b80", "#2d435b",
-                'lightslategrey',  "#eacdcb", "#bfcfcd", "#2d435b",
-                "#986960", "#f1e8d7", "#d56763", "#fcd2a1", "#477b80", "#bfcfcd", "#d56763", "#fcd2a1", "#477b80",
-                "#2d435b", "#477b80", "#2d435b", "#986960", "#f1e8d7", "#d56763", "#fcd2a1", "#477b80", 'lightgrey',
-                "lightblue", "#fbc27b", "cadetblue", "#fbc27b", 'lightslategrey', "#85ada3", "#d56763", "#fcd2a1",
-                "#477b80", "#eacdcb", "#bfcfcd", "#2d435b", "#986960", "#f1e8d7", "#d56763", "#fcd2a1", "#477b80", ]
-"""Standardized color palette"""
-
-
-palettediff2 = ["darkgrey", "#d56763", "#fcd2a1",
+PALETTE = ["darkgrey", "#d56763", "#fcd2a1",
                 "#85ada3", "#eacdcb", "#a7c6c9", "#2d435b",
                 "#d56763", "darkred", "#477b80", 'grey', "#d56763", "#bfcfcd",
                 "#fbc27b", "cadetblue", "#fbc27b","#477b80", "#2d435b",
@@ -65,7 +52,7 @@ palettediff2 = ["darkgrey", "#d56763", "#fcd2a1",
                 ]
 """Standardized color palette"""
 
-peak_dict = {"HSD5000": [15, 100, 250, 400, 600,
+LADDER_DICT = {"HSD5000": [15, 100, 250, 400, 600,
                          1000, 1500, 2500, 3500, 5000,
                          10000],
              "gDNA": [100, 250, 400, 600, 900,
@@ -77,7 +64,7 @@ peak_dict = {"HSD5000": [15, 100, 250, 400, 600,
 """Dictionary with standardized peak size options (beta)"""
 
 # Step size = 250 bp
-nuc_dict = {"Mononucleosomal (1)": (100,250),
+NUC_DICT = {"Mononucleosomal (1)": (100,250),
             "Dinucleosomal (2)":(251,500),
             "Trinucleosomal (3)": (501,750),
             "Quatronucleosomal (4)": (751,1000),

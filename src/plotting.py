@@ -14,7 +14,7 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 from matplotlib.ticker import ScalarFormatter
-from src.constants import palettediff2
+from src.constants import PALETTE
 from matplotlib.patches import Patch
 
 def gridplot(df, x, y, save_dir="", title="", y_label="", x_label="",
@@ -79,7 +79,7 @@ def gridplot(df, x, y, save_dir="", title="", y_label="", x_label="",
         print(f"--- Plotting by {col}")
         hue = col
         sns.lineplot(data=df, x=x, y=y, alpha=.7,
-                     palette=palettediff2[:len(df[hue].unique())],
+                     palette=PALETTE[:len(df[hue].unique())],
                      hue=hue)
         # Add labels
         plt.ylabel(y_label)
@@ -96,7 +96,7 @@ def gridplot(df, x, y, save_dir="", title="", y_label="", x_label="",
     #####################################################################
     print("--- Sample grid plot")
     hue="sample"
-    g = sns.FacetGrid(df, col=hue, hue=hue, col_wrap=3, palette=palettediff2)
+    g = sns.FacetGrid(df, col=hue, hue=hue, col_wrap=3, palette=PALETTE)
     g.map(sns.lineplot, x, y, alpha=.7)
     g.add_legend()
 
@@ -180,7 +180,7 @@ def lineplot(df, x, y, save_dir="", title="", y_label="", x_label="",
     if hue is not None:
         n_cats = len(df[hue].unique())
         sns.lineplot(data=df, x=x, y=y, hue=hue,
-                     palette=palettediff2[:n_cats], units=units,
+                     palette=PALETTE[:n_cats], units=units,
                      estimator=estimator,
                      style=style)
     else:
@@ -219,7 +219,7 @@ def ladderplot(df, ladder2type, qc_save_dir, y_label="", x_label=""):
     for i, ladder in enumerate([e for e in df.columns if "Ladder" in e and
                                                          "interpol" not in e]):
         sns.lineplot(data=df, x=f"{ladder}_interpol", y=ladder,
-                     color=palettediff2[i], label=ladder2type[ladder])
+                     color=PALETTE[i], label=ladder2type[ladder])
         plt.title(f"All ladders, interpolated")
         plt.xscale('log')
         for axis in [ax.xaxis, ax.yaxis]:

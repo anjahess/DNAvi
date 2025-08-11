@@ -22,7 +22,7 @@ sys.path.insert(0, script_path)
 sys.path.insert(0, maindir)
 sys.path.insert(0, f"{maindir}/src")
 sys.path.insert(0, f"{maindir}/src")
-from constants import YLABEL, YCOL, XCOL, XLABEL, DISTANCE, CUSTOM_MIN_PEAK_HEIGHT, HALO_FACTOR, PEAK_PROMINANCE
+from constants import YLABEL, YCOL, XCOL, XLABEL, DISTANCE, CUSTOM_MIN_PEAK_HEIGHT, HALO_FACTOR, PEAK_PROMINANCE, NUC_DICT
 from plotting import lineplot, ladderplot, peakplot, gridplot
 from data_checks import check_file
 import logging
@@ -461,6 +461,39 @@ def mean_from_histogram(df, unit="", size_unit=""):
     return mean_bp
     # END OF FUNCTION
 
+def nuc_fractions(df, unit="", size_unit=""):
+    """
+
+    Estimate nucleosomal fragctions (percentages) of \
+    a sample's cfDNA based on pre-defined base pair ranges.
+
+    :param df: pandas.DataFrame
+    :param unit: str, usually normalized fluorescence unit
+    :param size_unit: str, fragment size unit (base pairs)
+    :return: float, average fragment size
+
+    """
+
+
+    ######################################################################
+    # 1. Make the histogram
+    ######################################################################
+
+
+    ######################################################################
+    # 2. Define the fraction inside each basepair range (~nucleosomal
+    # fraction)
+    ######################################################################
+
+
+    # Estimate the mean bp from the histogram (frequency rescaled 0-100)
+    df["counts"] = df[unit] * 100
+    df["product"] = df[size_unit] * df["counts"]
+    mean_bp = df["product"].sum() / df["counts"].sum()
+
+    return mean_bp
+    # END OF FUNCTION
+
 def run_kruskal(df, variable="", category=""):
     """
 
@@ -590,6 +623,7 @@ def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="b
         sub_df = df[df["sample"] == sample]
         # 2.2 Get mean bp for the sample
         mean_bp = mean_from_histogram(sub_df, unit=unit, size_unit=size_unit)
+        nuc_perc_df = nuc_fractions(sub_df, unit=unit, size_unit=size_unit)
         peak_info.append([sample, "average_size", np.nan, mean_bp])
 
         # 2.3 Add to array and find peaks
