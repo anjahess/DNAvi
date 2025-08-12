@@ -23,7 +23,7 @@ sys.path.insert(0, maindir)
 sys.path.insert(0, f"{maindir}/src")
 sys.path.insert(0, f"{maindir}/src")
 from constants import YLABEL, YCOL, XCOL, XLABEL, DISTANCE, CUSTOM_MIN_PEAK_HEIGHT, HALO_FACTOR, PEAK_PROMINANCE, NUC_DICT, BACKGROUND_SUBSTRACTION_STATS
-from plotting import lineplot, ladderplot, peakplot, gridplot
+from plotting import lineplot, ladderplot, peakplot, gridplot, stats_plot
 from data_checks import check_file
 import logging
 
@@ -464,13 +464,13 @@ def mean_from_histogram(df, unit="", size_unit=""):
 def nuc_fractions(df, unit="", size_unit=""):
     """
 
-    Estimate nucleosomal fragctions (percentages) of \
+    Estimate nucleosomal fractions (percentages) of \
     a sample's cfDNA based on pre-defined base pair ranges.
 
     :param df: pandas.DataFrame
     :param unit: str, usually normalized fluorescence unit
     :param size_unit: str, fragment size unit (base pairs)
-    :return: float, average fragment size
+    :return: pd.Dataframe of nucleosomal fractions
 
     """
 
@@ -609,7 +609,8 @@ def run_kruskal(df, variable="", category=""):
     kruskal_df.replace({'{': ' '}, inplace=True)
     return kruskal_df
 
-def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="bp_pos"):
+def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="bp_pos",
+              metric_unit="bp_or_frac"):
     """
 
     Compute and output basic statistics for DNA size distributions
@@ -629,6 +630,7 @@ def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="b
     df["sample"].astype(object) # Make sure all sample names are type obj
     basic_stats = df.describe()
     basic_stats.to_csv(f"{save_dir}basic_statistics.csv")
+    full_stats_dir = f"{save_dir}peak_statistics.csv"
 
     #####################################################################
     # 2. Average bp size, peak positions, and peak size per sample
@@ -666,15 +668,15 @@ def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="b
             if peak == max_peak:
                 peak_info.append([sample, "max_peak", peak, bp])
 
-    peak_df = pd.DataFrame(peak_info, columns=["sample", "peak_id",
-                                               "peak_fluorescence", "bp"])
+    peak_columns = ["sample", "peak_id","peak_fluorescence", metric_unit]
+    peak_df = pd.DataFrame(peak_info, columns=peak_columns)
 
     ######################################################################
     # 3. Optional: Grouped stats (Mean sizes)
     ######################################################################
-    cols_not_to_plot = [size_unit, "sample", unit]
+    cols_no_stats = [size_unit, "sample", unit]
     for categorical_variable in [c for c in df.columns if c not in
-                                                          cols_not_to_plot]:
+                                                          cols_no_stats]:
         print(f"--- Stats by {categorical_variable}")
         # Extract sample-to-condition info
         sample2cat = df.set_index("sample").to_dict()[categorical_variable]
@@ -686,12 +688,13 @@ def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="b
                   f"Please add a category in metadata file and try again.")
             exit()
         peak_df[categorical_variable] = peak_df["sample"].map(sample2cat)
-        peak_df.to_csv(f"{save_dir}peak_statistics.csv")
-        kruskal_df = run_kruskal(peak_df, variable="bp", category=categorical_variable)
+        kruskal_df = run_kruskal(peak_df, variable=metric_unit,
+                                 category=categorical_variable)
         kruskal_df.to_csv(f"{save_dir}group_statistics_by_{categorical_variable}.csv")
         # END LOOP
 
-    peak_df.to_csv(f"{save_dir}peak_statistics.csv")
+    peak_df.to_csv(full_stats_dir)
+    stats_plot(full_stats_dir, cols_not_to_plot=peak_columns)
     # END OF FUNCTION
 
 

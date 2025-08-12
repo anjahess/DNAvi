@@ -39,46 +39,39 @@ YLABEL = "Sample Intensity [Normalized FU]"
 XLABEL = "Size [bp]"
 """Standardized x label name"""
 
-PALETTE = ["darkgrey", "#d56763", "#fcd2a1",
-                "#85ada3", "#eacdcb", "#a7c6c9", "#2d435b",
-                "#d56763", "darkred", "#477b80", 'grey', "#d56763", "#bfcfcd",
-                "#fbc27b", "cadetblue", "#fbc27b","#477b80", "#2d435b",
-                'lightslategrey',  "#eacdcb", "#bfcfcd", "#2d435b",
-                "#986960", "#f1e8d7", "#d56763", "#fcd2a1", "#477b80", "#bfcfcd", "#d56763", "#fcd2a1", "#477b80",
-                "#2d435b", "#477b80", "#2d435b", "#986960", "#f1e8d7", "#d56763", "#fcd2a1", "#477b80", 'lightgrey',
-                "lightblue", "#fbc27b", "cadetblue", "#fbc27b", 'lightslategrey', "#85ada3", "#d56763", "#fcd2a1",
-                "#477b80", "#eacdcb", "#bfcfcd", "#2d435b", "#986960", "#f1e8d7", "#d56763", "#fcd2a1", "#477b80",
-                "#986960", "#f1e8d7", "#d56763", "#fcd2a1", "#477b80", "#bfcfcd", "#d56763", "#fcd2a1", "#477b80",
-                "#2d435b", "#477b80", "#2d435b", "#986960", "#f1e8d7", "#d56763", "#fcd2a1", "#477b80", 'lightgrey',
-                "lightblue", "#fbc27b", "cadetblue", "#fbc27b", 'lightslategrey', "#85ada3", "#d56763", "#fcd2a1",
-                "#477b80", "#eacdcb", "#bfcfcd", "#2d435b", "#986960", "#f1e8d7", "#d56763", "#fcd2a1", "#477b80",
-                ]
+PALETTE = ["cadetblue","#fbc27b", "#d56763", "darkgrey", "#85ada3", "#eacdcb", "#a7c6c9", "#2d435b",
+           "#d56763", "darkred", "#477b80", 'grey', "#d56763", "#bfcfcd", "#fbc27b", "#fbc27b", "#477b80",
+           "#2d435b", 'lightslategrey',  "#eacdcb", "#bfcfcd", "#2d435b", "#986960", "#f1e8d7", "#d56763",
+           "#fcd2a1", "#477b80", "#bfcfcd", "#d56763", "#fcd2a1", "#477b80", "#2d435b", "#477b80", "#2d435b",
+           "#986960", "#f1e8d7", "#d56763", "#fcd2a1", "#477b80", 'lightgrey', "lightblue", "#fbc27b",
+           "#fbc27b", 'lightslategrey', "#85ada3", "#d56763", "#fcd2a1", "#477b80", "#eacdcb", "#bfcfcd",
+           "#2d435b", "#986960", "#f1e8d7", "#d56763", "#fcd2a1", "#477b80"]
 """Standardized color palette"""
 
 LADDER_DICT = {"HSD5000": [15, 100, 250, 400, 600,
                          1000, 1500, 2500, 3500, 5000,
                          10000],
-             "gDNA": [100, 250, 400, 600, 900,
+               "gDNA": [100, 250, 400, 600, 900,
                       1200, 1500, 2000, 2500, 3000,
                       4000, 7000, 15000, 48500],
-             "cfDNA": [35, 50, 75, 100, 150,
+               "cfDNA": [35, 50, 75, 100, 150,
                        200, 300, 400, 500, 600,
                        700, 1000]}
 """Dictionary with standardized peak size options (beta)"""
 
 # Step size = 250 bp
-NUC_DICT = {"Mononucleosomal (100-250)": (100,250),
-            "Dinucleosomal (251-500)":(251,500),
-            "Trinucleosomal (501-750)": (501,750),
-            "Quatronucleosomal (751-1000)": (751,1000),
-            "Pentanucleosomal (1000-1250)": (1001,1250),
-            "Hexanucleosomal (1251-1500)": (1251, 1500),
-            "Heptanucleosomal (1501-1750)": (1501, 1750),
-            "Octanucleosomal (1751-2000)": (1751, 2000),
-            "Nonanucleosomal (2001-2250)": (2001, 2250),
-            "Hexanucleosomal (=> 2250)": (2250, None),
-            "Polynucleosomal (=> 750)": (751, None),
-            "Non-mono (> 250)": (251, None),
-            "Oligo (> 1250)": (1250, None),
+NUC_DICT = {"Mononucleosomal (100-250 bp)": (100,250),
+            "Dinucleosomal (251-500 bp)":(251,500),
+            "Trinucleosomal (501-750 bp)": (501,750),
+            "Tetranucleosomal (751-1000 bp)": (751,1000),
+            "Pentanucleosomal (1000-1250 bp)": (1001,1250),
+            "Hexanucleosomal (1251-1500 bp)": (1251, 1500),
+            "Heptanucleosomal (1501-1750 bp)": (1501, 1750),
+            "Octanucleosomal (1751-2000 bp)": (1751, 2000),
+            "Nonanucleosomal (2001-2250 bp)": (2001, 2250),
+            "Decanucleosomal (=> 2250 bp)": (2250, None),
+            "Polynucleosomal (=> 750 bp)": (751, None),
+            "Non-mono (> 250 bp)": (251, None),
+            "Oligo (> 1250 bp)": (1250, None),
             }
 """Dictionary with standardized peak size options (beta)"""

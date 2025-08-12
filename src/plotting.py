@@ -11,11 +11,13 @@ Date: 2025-AUG-06
 """
 import os
 import numpy as np
+import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 from matplotlib.ticker import ScalarFormatter
 from src.constants import PALETTE
 from matplotlib.patches import Patch
+import warnings; warnings.filterwarnings("ignore")
 
 def gridplot(df, x, y, save_dir="", title="", y_label="", x_label="",
              cols_not_to_plot=["bp_pos", "sample", "normalized_fluorescent_units"],
@@ -114,8 +116,71 @@ def gridplot(df, x, y, save_dir="", title="", y_label="", x_label="",
     plt.xscale('log')
     plt.savefig(f"{save_dir}{title}.pdf")
     plt.close()
-
     # END OF FUNCTION
+
+
+def p2stars(p):
+    """
+    Add asterisk based on p-value
+    :param p: float, the p-value
+    :return: str
+    """
+    if p > 0.05:
+        return "ns"
+    if p < 0.001:
+        return '***'
+    elif p < 0.01:
+        return '**'
+    elif p < 0.05:
+        return '*'
+    # END OF FUNCTION
+
+
+def stats_plot(path_to_df, cols_not_to_plot=None):
+    """
+    Plot statistical results
+    :param path_to_df: str
+    :param cols_not_to_plot: list of columns to exclude from plot
+    :return: plots statistics in same directory as input dataframe
+    """
+    df = pd.read_csv(path_to_df, index_col=0)
+    sns.set_context("paper")
+    #####################################################################
+    # 1. Plot grid based on every available metric in peak_id
+    #####################################################################
+    for categorical_var in (["sample"] +  [e for e in df.columns if
+                             e not in cols_not_to_plot]):
+        #################################################################
+        # If possible, plot the p-value
+        #################################################################
+        possible_stats_dir = (path_to_df.rsplit("/", 1)[0] +
+                              f"/group_statistics_by_{categorical_var}.csv")
+        if os.path.exists(possible_stats_dir):
+            stats_info = pd.read_csv(possible_stats_dir, index_col=0
+                                     ).round({'p_value': 3})
+            stats_dict = pd.Series(stats_info.p_value.values,
+                                   index=stats_info.peak_name).to_dict()
+            df["p_val"] = df["peak_id"].map(stats_dict)
+            df["stars"] = df["p_val"].apply(p2stars)
+            df["peak_id"] = (df["peak_id"].astype(str) + " \n p=" +
+                             df["p_val"].astype(str)) + " (" + df["stars"] + ")"
+        g = sns.FacetGrid(df, col="peak_id", col_wrap=4, hue=categorical_var,
+                          sharex=True, sharey=False, palette=PALETTE)
+        if categorical_var == "sample":
+            g.map(sns.barplot, categorical_var,
+                  "bp_or_frac", palette=PALETTE)
+        g.map(sns.violinplot, categorical_var, "bp_or_frac",
+              inner_kws=dict(box_width=5, whis_width=2, color="black"),
+              edgecolor="black")
+        g.map(sns.stripplot, categorical_var, "bp_or_frac",
+              color="white", linewidth=1, edgecolor="black")
+        plt.savefig(path_to_df.replace(".csv", f"_{categorical_var}.pdf"),
+                    bbox_inches='tight')
+        plt.close()
+    # END OF FUNCTION
+
+
+
 
 def peakplot(array, peaks, ladder_id, ref, i, qc_save_dir, y_label=""):
     """
