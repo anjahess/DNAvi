@@ -136,7 +136,8 @@ def p2stars(p):
     # END OF FUNCTION
 
 
-def stats_plot(path_to_df, cols_not_to_plot=None):
+def stats_plot(path_to_df, cols_not_to_plot=None, peak_id="peak_id",
+               y="bp_or_frac"):
     """
     Plot statistical results
     :param path_to_df: str
@@ -145,35 +146,48 @@ def stats_plot(path_to_df, cols_not_to_plot=None):
     """
     df = pd.read_csv(path_to_df, index_col=0)
     sns.set_context("paper")
+
+    #####################################################################
+    # Remove peaks where all values are 0
+    #####################################################################
+    cat_counts = df.groupby([peak_id])[y].sum()
+    peaks_without_vals = cat_counts[cat_counts == 0].index.tolist()
+    print(f"--- Not plotting {peaks_without_vals} (bp/frac = 0 for all samples)")
+    df = df[~df[peak_id].isin(peaks_without_vals)]
+
     #####################################################################
     # 1. Plot grid based on every available metric in peak_id
     #####################################################################
     for categorical_var in (["sample"] +  [e for e in df.columns if
                              e not in cols_not_to_plot]):
+        plot_df = df.copy()
+        print(f"--- Plotting by {categorical_var}")
         #################################################################
-        # If possible, plot the p-value
+        # If possible, get the p value, anno stars
         #################################################################
         possible_stats_dir = (path_to_df.rsplit("/", 1)[0] +
                               f"/group_statistics_by_{categorical_var}.csv")
+
         if os.path.exists(possible_stats_dir):
             stats_info = pd.read_csv(possible_stats_dir, index_col=0
                                      ).round({'p_value': 3})
             stats_dict = pd.Series(stats_info.p_value.values,
                                    index=stats_info.peak_name).to_dict()
-            df["p_val"] = df["peak_id"].map(stats_dict)
-            df["stars"] = df["p_val"].apply(p2stars)
-            df["peak_id"] = (df["peak_id"].astype(str) + " \n p=" +
-                             df["p_val"].astype(str)) + " (" + df["stars"] + ")"
-        g = sns.FacetGrid(df, col="peak_id", col_wrap=4, hue=categorical_var,
+            plot_df["p_val"] = plot_df[peak_id].map(stats_dict)
+            plot_df["stars"] = plot_df["p_val"].apply(p2stars)
+            #df.dropna(subset=["p_val"], inplace=True)
+            plot_df[peak_id] = (plot_df[peak_id].astype(str) + " \n p=" +
+                             plot_df["p_val"].astype(str)) + " (" + plot_df["stars"] + ")"
+        #################################################################
+        # Create the grid plot
+        #################################################################
+        g = sns.FacetGrid(plot_df, col=peak_id, col_wrap=4, hue=categorical_var,
                           sharex=True, sharey=False, palette=PALETTE)
         if categorical_var == "sample":
-            g.map(sns.barplot, categorical_var,
-                  "bp_or_frac", palette=PALETTE)
-        g.map(sns.violinplot, categorical_var, "bp_or_frac",
-              inner_kws=dict(box_width=5, whis_width=2, color="black"),
-              edgecolor="black")
-        g.map(sns.stripplot, categorical_var, "bp_or_frac",
-              color="white", linewidth=1, edgecolor="black")
+            g.map(sns.barplot, categorical_var, y, palette=PALETTE)
+        g.map(sns.violinplot, categorical_var, y, inner_kws=dict(box_width=5, whis_width=2, color="black"),
+              edgecolor="black", alpha=.7)
+        g.map(sns.stripplot, categorical_var, y, color="white", linewidth=1, edgecolor="black")
         plt.savefig(path_to_df.replace(".csv", f"_{categorical_var}.pdf"),
                     bbox_inches='tight')
         plt.close()

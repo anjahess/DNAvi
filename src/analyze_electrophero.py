@@ -524,7 +524,7 @@ def run_kruskal(df, variable="", category=""):
 
     test_performed = "Kruskal Wallis"
     kruskal_data = []
-
+    n_groups = len(df[category].unique())
     #####################################################################
     # 1. Collect numerical values for each identified peak (or av/max)
     # for each group of the cond. variable
@@ -555,7 +555,7 @@ def run_kruskal(df, variable="", category=""):
         ##################################################################
         # 2. Run Kruskal Wallis Test or ttest dep on sample size
         ##################################################################
-        if len(kruskal_groups) == 2:
+        if len(names) == 2 and n_groups == 2: # only if that's the max
             test_performed = "Student's t - test (independent)"
             stats, p_value = ttest_ind(kruskal_groups[0], kruskal_groups[1])
             if p_value < 0.05:
