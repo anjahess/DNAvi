@@ -46,7 +46,7 @@ Module Contents
 
 
 
-.. py:function:: analyze_gel(image_file, run_id=None)
+.. py:function:: analyze_gel(image_file, run_id=None, marker_lane=0)
 
    Core function to generate a signal table from a DNA gel image.
 

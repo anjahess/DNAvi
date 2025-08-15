@@ -65,14 +65,15 @@
 <li class="toctree-l4"><a class="reference internal" href="#constants.DISTANCE"><code class="docutils literal notranslate"><span class="pre">DISTANCE</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#constants.CUSTOM_MIN_PEAK_HEIGHT"><code class="docutils literal notranslate"><span class="pre">CUSTOM_MIN_PEAK_HEIGHT</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#constants.PEAK_PROMINANCE"><code class="docutils literal notranslate"><span class="pre">PEAK_PROMINANCE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#constants.BACKGROUND_SUBSTRACTION_STATS"><code class="docutils literal notranslate"><span class="pre">BACKGROUND_SUBSTRACTION_STATS</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#constants.HALO_FACTOR"><code class="docutils literal notranslate"><span class="pre">HALO_FACTOR</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#constants.YCOL"><code class="docutils literal notranslate"><span class="pre">YCOL</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#constants.XCOL"><code class="docutils literal notranslate"><span class="pre">XCOL</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#constants.YLABEL"><code class="docutils literal notranslate"><span class="pre">YLABEL</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#constants.XLABEL"><code class="docutils literal notranslate"><span class="pre">XLABEL</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#constants.palettediff3"><code class="docutils literal notranslate"><span class="pre">palettediff3</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#constants.palettediff2"><code class="docutils literal notranslate"><span class="pre">palettediff2</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#constants.peak_dict"><code class="docutils literal notranslate"><span class="pre">peak_dict</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#constants.PALETTE"><code class="docutils literal notranslate"><span class="pre">PALETTE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#constants.LADDER_DICT"><code class="docutils literal notranslate"><span class="pre">LADDER_DICT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#constants.NUC_DICT"><code class="docutils literal notranslate"><span class="pre">NUC_DICT</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -130,28 +131,31 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#constants.PEAK_PROMINANCE" title="constants.PEAK_PROMINANCE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PEAK_PROMINANCE</span></code></a></p></td>
 <td><p>Tuple, minimum peak prominence</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#constants.HALO_FACTOR" title="constants.HALO_FACTOR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HALO_FACTOR</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#constants.BACKGROUND_SUBSTRACTION_STATS" title="constants.BACKGROUND_SUBSTRACTION_STATS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BACKGROUND_SUBSTRACTION_STATS</span></code></a></p></td>
+<td><p>Int, fraction of max peak to be removed from fataset for statistical testing higher -&gt; lower sens but pot better discrimination, lower -&gt; sens up, more noise</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#constants.HALO_FACTOR" title="constants.HALO_FACTOR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HALO_FACTOR</span></code></a></p></td>
 <td><p>Float [0-1] factor by which the marker will be multiplied to define cropping range when removing marker peaks</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#constants.YCOL" title="constants.YCOL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">YCOL</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#constants.YCOL" title="constants.YCOL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">YCOL</span></code></a></p></td>
 <td><p>Standardized y axis name</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#constants.XCOL" title="constants.XCOL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">XCOL</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#constants.XCOL" title="constants.XCOL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">XCOL</span></code></a></p></td>
 <td><p>Standardized x axis name</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#constants.YLABEL" title="constants.YLABEL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">YLABEL</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#constants.YLABEL" title="constants.YLABEL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">YLABEL</span></code></a></p></td>
 <td><p>Standardized y labe name</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#constants.XLABEL" title="constants.XLABEL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">XLABEL</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#constants.XLABEL" title="constants.XLABEL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">XLABEL</span></code></a></p></td>
 <td><p>Standardized x label name</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#constants.palettediff3" title="constants.palettediff3"><code class="xref py py-obj docutils literal notranslate"><span class="pre">palettediff3</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#constants.PALETTE" title="constants.PALETTE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PALETTE</span></code></a></p></td>
 <td><p>Standardized color palette</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#constants.palettediff2" title="constants.palettediff2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">palettediff2</span></code></a></p></td>
-<td><p>Standardized color palette</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#constants.LADDER_DICT" title="constants.LADDER_DICT"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LADDER_DICT</span></code></a></p></td>
+<td><p>Dictionary with standardized peak size options (beta)</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#constants.peak_dict" title="constants.peak_dict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">peak_dict</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#constants.NUC_DICT" title="constants.NUC_DICT"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NUC_DICT</span></code></a></p></td>
 <td><p>Dictionary with standardized peak size options (beta)</p></td>
 </tr>
 </tbody>
@@ -184,8 +188,14 @@
 </dd></dl>
 
 <dl class="py data">
+<dt class="sig sig-object py" id="constants.BACKGROUND_SUBSTRACTION_STATS">
+<span class="sig-prename descclassname"><span class="pre">constants.</span></span><span class="sig-name descname"><span class="pre">BACKGROUND_SUBSTRACTION_STATS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.1</span></em><a class="headerlink" href="#constants.BACKGROUND_SUBSTRACTION_STATS" title="Link to this definition"></a></dt>
+<dd><p>Int, fraction of max peak to be removed from fataset for statistical testing higher -&gt; lower sens but pot better discrimination, lower -&gt; sens up, more noise</p>
+</dd></dl>
+
+<dl class="py data">
 <dt class="sig sig-object py" id="constants.HALO_FACTOR">
-<span class="sig-prename descclassname"><span class="pre">constants.</span></span><span class="sig-name descname"><span class="pre">HALO_FACTOR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.3</span></em><a class="headerlink" href="#constants.HALO_FACTOR" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">constants.</span></span><span class="sig-name descname"><span class="pre">HALO_FACTOR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.35</span></em><a class="headerlink" href="#constants.HALO_FACTOR" title="Link to this definition"></a></dt>
 <dd><p>Float [0-1] factor by which the marker will be multiplied to define cropping range when removing marker peaks</p>
 </dd></dl>
 
@@ -214,20 +224,20 @@
 </dd></dl>
 
 <dl class="py data">
-<dt class="sig sig-object py" id="constants.palettediff3">
-<span class="sig-prename descclassname"><span class="pre">constants.</span></span><span class="sig-name descname"><span class="pre">palettediff3</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['darkgrey',</span> <span class="pre">'black',</span> <span class="pre">'grey',</span> <span class="pre">'#d56763',</span> <span class="pre">'#85ada3',</span> <span class="pre">'#2d435b',</span> <span class="pre">'#eacdcb',</span> <span class="pre">'#fcd2a1',</span> <span class="pre">'#d56763',...</span></em><a class="headerlink" href="#constants.palettediff3" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="constants.PALETTE">
+<span class="sig-prename descclassname"><span class="pre">constants.</span></span><span class="sig-name descname"><span class="pre">PALETTE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['cadetblue',</span> <span class="pre">'#fbc27b',</span> <span class="pre">'#d56763',</span> <span class="pre">'darkgrey',</span> <span class="pre">'#85ada3',</span> <span class="pre">'#eacdcb',</span> <span class="pre">'#a7c6c9',</span> <span class="pre">'#2d435b',...</span></em><a class="headerlink" href="#constants.PALETTE" title="Link to this definition"></a></dt>
 <dd><p>Standardized color palette</p>
 </dd></dl>
 
 <dl class="py data">
-<dt class="sig sig-object py" id="constants.palettediff2">
-<span class="sig-prename descclassname"><span class="pre">constants.</span></span><span class="sig-name descname"><span class="pre">palettediff2</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['darkgrey',</span> <span class="pre">'#d56763',</span> <span class="pre">'#fcd2a1',</span> <span class="pre">'#85ada3',</span> <span class="pre">'#eacdcb',</span> <span class="pre">'#a7c6c9',</span> <span class="pre">'#2d435b',</span> <span class="pre">'#d56763',...</span></em><a class="headerlink" href="#constants.palettediff2" title="Link to this definition"></a></dt>
-<dd><p>Standardized color palette</p>
+<dt class="sig sig-object py" id="constants.LADDER_DICT">
+<span class="sig-prename descclassname"><span class="pre">constants.</span></span><span class="sig-name descname"><span class="pre">LADDER_DICT</span></span><a class="headerlink" href="#constants.LADDER_DICT" title="Link to this definition"></a></dt>
+<dd><p>Dictionary with standardized peak size options (beta)</p>
 </dd></dl>
 
 <dl class="py data">
-<dt class="sig sig-object py" id="constants.peak_dict">
-<span class="sig-prename descclassname"><span class="pre">constants.</span></span><span class="sig-name descname"><span class="pre">peak_dict</span></span><a class="headerlink" href="#constants.peak_dict" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="constants.NUC_DICT">
+<span class="sig-prename descclassname"><span class="pre">constants.</span></span><span class="sig-name descname"><span class="pre">NUC_DICT</span></span><a class="headerlink" href="#constants.NUC_DICT" title="Link to this definition"></a></dt>
 <dd><p>Dictionary with standardized peak size options (beta)</p>
 </dd></dl>
 

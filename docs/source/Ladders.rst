@@ -11,25 +11,21 @@ The ladder file is simply a translation of your marker bands to the associated b
 It is a .csv file with only 3 columns:
 
 
-.. list-table:: Example of a DNAvi ladder file
-   :widths: 25 25 50
-   :header-rows: 1
 
-   * - Peak
-     - Basepairs
-     - Name
-   * - 1
-     - 10000
-     - HSD5000
-   * - 2
-     - 5000
-     - HSD5000
-   * - ...
-     - ...
-     - ...
+2. Changing the position of the DNA ladder in the data
+^^^^^^^^^^^^^^^^^^
 
+If your input is a table, simply *rename* the column with the marker intensities to *Ladder*.
+No matter where the column is, it will be used as the ladder by autodetection.
 
-:download:`ladder file example <_static/ladder.csv>`
+Alternatively, force to use a specific lane running DNAvi with *--marker_lane* or *-ml* tag.
+This works for images as well.
+
+.. code-block::
+
+    python3 DNAvi.py -i electropherogram.csv -l ladder.csv -m meta.csv --marker_lane 3
+
+E.g. with above code the 3rd lane/column will be used as DNA marker.
 
 
 2. Handling marker bands

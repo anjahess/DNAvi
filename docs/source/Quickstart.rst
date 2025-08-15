@@ -49,29 +49,27 @@ Which will result in a display of command line arguments with additional explana
      | |_| | |\  |/ ___ \ V /| |
      |____/|_| \_/_/   \_\_/ |_|
 
-    usage: DNAvi.py [-h] [-i [<input-file-or-folder>]] -l [<ladder-file>]
-                    [-m [<metadata-file>]] [-n [<run-name>]] [-incl] [--verbose]
+    usage: DNAvi.py [-h] [-i [<input-file-or-folder>]] -l [<ladder-file>] [-m [<metadata-file>]] [-n [<run-name>]] [-incl]
+                    [-ml <int>] [--verbose] [-v]
 
     Analyse Electropherogram data e.g. for cell-free DNA from liquid biopsies
 
-      options:
-        -h, --help            show this help message and exit
-        -i [<input-file-or-folder>], --input [<input-file-or-folder>]
-                              Path to electropherogram table file or image file OR
-                              directory containing those files. Accepted formats:
-                              .csv/.png/.jpeg/.jpg or directory containing those.
-        -l [<ladder-file>], --ladder [<ladder-file>]
-                              Path to ladder table file. Accepted format: .csv
-        -m [<metadata-file>], --meta [<metadata-file>]
-                              Path to metadata table file containing grouping
-                              information for input file (e.g. age, sex, disease).
-                              Accepted format: .csv
-        -n [<run-name>], --name [<run-name>]
-                              Name of your run/experiment. Will define output folder
-                              name
-        -incl, --include      Include marker bands into analysis and plotting.
-        --verbose             increase output verbosity
-        -v, --version         show program's version number and exit
+    options:
+      -h, --help            show this help message and exit
+      -i [<input-file-or-folder>], --input [<input-file-or-folder>]
+                            Path to electropherogram table file or image file OR directory containing those files. Accepted formats:
+                            .csv/.png/.jpeg/.jpg or directory containing those.
+      -l [<ladder-file>], --ladder [<ladder-file>]
+                            Path to ladder table file. Accepted format: .csv
+      -m [<metadata-file>], --meta [<metadata-file>]
+                            Path to metadata table file containing grouping information for input file (e.g. age, sex, disease).
+                            Accepted format: .csv
+      -n [<run-name>], --name [<run-name>]
+                            Name of your run/experiment. Will define output folder name
+      -incl, --include      Include marker bands into analysis and plotting.
+      -ml <int>, --marker_lane <int>
+                            Change the lane selected as the DNA marker/ladder, default is first lane (1)
+      --verbose             increase output verbosity
+      -v, --version         show program's version number and exit
 
-      Version: 0.1, created by Anja Hess <anja.hess@mail.de>, Max Planck Institute
-      for Molecular Genetics, Berlin, GERMANY
+    Version: 0.1, created by Anja Hess <anja.hess@mail.de>, MPIMG

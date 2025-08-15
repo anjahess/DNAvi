@@ -90,7 +90,7 @@ def integrate(df, ladders_present=""):
     return merged_df
 
 def peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL,
-                   ladder_dir="", ladder_type="custom"):
+                   ladder_dir="", ladder_type="custom", marker_lane=0):
     """
 
     Function to infer ladder peaks from the signal table and annotate those to \
@@ -108,17 +108,35 @@ def peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL,
     """
     ladder2type = {}
     peak_dict = {}
-    return_df = df.copy()
 
     #####################################################################
-    # 1. In the signal matrix: iterate through ladder columns
+    # 0. Check for ladders
     #####################################################################
     ladders_present = [e for e in df.columns if "Ladder" in e]
     print(f"--- Ladder columns in data: {len(ladders_present)} ---")
+    if not ladders_present:
+        #################################################################
+        # If it's a simple upper lower error let's forgive it
+        #################################################################
+        if [e for e in df.columns if "ladder" in e]:
+            df.rename(columns={"ladder": "Ladder"}, inplace=True)
+        else:
+            ##################################################################
+            # In case of missing ladder, rename the first or specified col
+            ##################################################################
+            col_to_rename = df.columns[marker_lane]
+            print(f"--- WARNING: No 'Ladder' present in the signal table - "
+                  f"defaulting to {marker_lane-1}th ({col_to_rename}) as DNA marker.")
+            df.rename(columns={col_to_rename: "Ladder"}, inplace=True)
+        ladders_present = ["Ladder"]
     ladder_df = pd.read_csv(ladder_dir)
     parsed_ladders = ladder_df["Name"].unique()
     print(f"--- Ladder translations found: {len(parsed_ladders)} : "
           f"{parsed_ladders} ---")
+    return_df = df.copy()
+    #####################################################################
+    # 1. In the signal matrix: iterate through ladder columns
+    #####################################################################
     if len(ladders_present) != len(parsed_ladders):
         print(f"--- Error, {len(ladders_present)} Ladders detected in input"
               f", but only {len(parsed_ladders)} defined in ladder file.")
@@ -179,11 +197,13 @@ def peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL,
         # ---- SANITY CHECK ----- equals nr of detected peaks?
         ##################################################################
         if len(peak_dict[i][0]) != len(peak_list):
-            error = (f"Inconsistent number of peaks between ladder file "
-                     f"({len(peak_dict[i][0])}) and data input "
-                     f"({len(peak_list)})."
+            error = (f"Inconsistent number of peaks between what is "
+                     f"expected from your ladder_file "
+                     f"(n={len(peak_dict[i][0])} bands) and the actual "
+                     f"data in column {marker_lane-1} (n={len(peak_list)} bands). "
                      f"Please check {qc_save_dir} to see what peaks are "
-                     f"missing.")
+                     f"missing or whether your ladder is in the "
+                     f"wrong position.")
             print(error)
             exit()
 
@@ -699,7 +719,7 @@ def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="b
 
 
 def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
-                 include_marker=False, image_input=False, save_dir=False):
+                 include_marker=False, image_input=False, save_dir=False, marker_lane=0):
     """
     Core function to analyze DNA distribution from a signal table.
 
@@ -737,7 +757,7 @@ def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
     if not save_dir:
         save_dir = path_to_file.rsplit("/", 1)[0] + f"/{run_id}/"
     plot_dir = f"{save_dir}/plots/"
-    qc_dir = f"{save_dir}/qc/"
+    qc_dir = f"{save_dir}qc/"
     stats_dir =  f"{save_dir}/stats/"
     basepair_translation_file = f"{qc_dir}bp_translation.csv"
     source_file = f"{plot_dir}sourcedata.csv"
@@ -759,7 +779,8 @@ def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
     print("------------------------------------------------------------")
     print("        Calculating basepair positions based on ladder")
     print("------------------------------------------------------------")
-    peak_dict = peak2basepairs(df, qc_dir, ladder_dir=path_to_ladder)
+    peak_dict = peak2basepairs(df, qc_dir, ladder_dir=path_to_ladder,
+                               marker_lane=marker_lane)
     df = pd.read_csv(basepair_translation_file, header=0, index_col=0)
 
     #####################################################################

@@ -63,6 +63,7 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">data_checks</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-contents">Module Contents</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#data_checks.check_marker_lane"><code class="docutils literal notranslate"><span class="pre">check_marker_lane()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#data_checks.detect_delim"><code class="docutils literal notranslate"><span class="pre">detect_delim()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#data_checks.check_name"><code class="docutils literal notranslate"><span class="pre">check_name()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#data_checks.check_input"><code class="docutils literal notranslate"><span class="pre">check_input()</span></code></a></li>
@@ -112,22 +113,25 @@
 <h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#data_checks.detect_delim" title="data_checks.detect_delim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">detect_delim</span></code></a>(file[, num_rows])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#data_checks.check_marker_lane" title="data_checks.check_marker_lane"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_marker_lane</span></code></a>(input_nr)</p></td>
+<td><p>Quickly check if the number for marker lane is pos</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#data_checks.detect_delim" title="data_checks.detect_delim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">detect_delim</span></code></a>(file[, num_rows])</p></td>
 <td><p>Detect delimiter from input table with Sniffer</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#data_checks.check_name" title="data_checks.check_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_name</span></code></a>(filename)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#data_checks.check_name" title="data_checks.check_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_name</span></code></a>(filename)</p></td>
 <td><p>Function to generate secure filename from filename</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#data_checks.check_input" title="data_checks.check_input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_input</span></code></a>(filename)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#data_checks.check_input" title="data_checks.check_input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_input</span></code></a>(filename)</p></td>
 <td><p>Function to check if the input exists</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#data_checks.check_file" title="data_checks.check_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_file</span></code></a>(filename)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#data_checks.check_file" title="data_checks.check_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_file</span></code></a>(filename)</p></td>
 <td><p>Function to check if file is correctly formatted</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#data_checks.check_ladder" title="data_checks.check_ladder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_ladder</span></code></a>(filename)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#data_checks.check_ladder" title="data_checks.check_ladder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_ladder</span></code></a>(filename)</p></td>
 <td><p>Function to check if the ladder is formatted correctly</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#data_checks.check_meta" title="data_checks.check_meta"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_meta</span></code></a>(filename)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#data_checks.check_meta" title="data_checks.check_meta"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_meta</span></code></a>(filename)</p></td>
 <td><p>Check if the metadata file is formatted correctly</p></td>
 </tr>
 </tbody>
@@ -135,6 +139,14 @@
 </section>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="data_checks.check_marker_lane">
+<span class="sig-prename descclassname"><span class="pre">data_checks.</span></span><span class="sig-name descname"><span class="pre">check_marker_lane</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_nr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_checks.check_marker_lane" title="Link to this definition"></a></dt>
+<dd><p>Quickly check if the number for marker lane is pos
+:param input_nr: int
+:return: int if check passed</p>
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="data_checks.detect_delim">
 <span class="sig-prename descclassname"><span class="pre">data_checks.</span></span><span class="sig-name descname"><span class="pre">detect_delim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_checks.detect_delim" title="Link to this definition"></a></dt>

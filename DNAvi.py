@@ -23,7 +23,7 @@ logo=r"""Welcome to
 print(logo)
 import os
 import argparse
-from src.data_checks import check_input, check_ladder, check_meta, check_name
+from src.data_checks import check_input, check_ladder, check_meta, check_name, check_marker_lane
 from src.analyze_electrophero import epg_analysis
 from src.constants import ACCEPTED_FORMATS
 from src.analyze_gel import analyze_gel
@@ -35,9 +35,7 @@ parser = argparse.ArgumentParser(description=
                                  'Analyse Electropherogram data '
                                  'e.g. for cell-free DNA from liquid biopsies',
                                  epilog=f"""Version: 0.1, created by 
-                                 Anja Hess <anja.hess@mail.de>, 
-                                 Max Planck Institute for Molecular Genetics, 
-                                 Berlin, GERMANY""")
+                                 Anja Hess <anja.hess@mail.de>, MPIMG""")
 
 #########################################################################
 # Add arguments
@@ -82,6 +80,15 @@ parser.add_argument('-incl', '--include',
                     help='Include marker bands into analysis and plotting.',
                     required=False)
 
+parser.add_argument('-ml', '--marker_lane',
+                    type=check_marker_lane,
+                    metavar='<int>',
+                    default=1,
+                    help='Change the lane selected as the DNA marker/ladder, '
+                         'default is first lane (1). Using this will force to use the '
+                         'specified column even if other columns are called Ladder already.',
+                    required=False)
+
 parser.add_argument("--verbose", help="increase output verbosity",
                     action="store_true")
 
@@ -92,7 +99,8 @@ parser.add_argument('-v', '--version', action='version', version="v0.1")
 #########################################################################
 args = parser.parse_args()
 save_dir = None
-csv_path, ladder_path, meta_path, run_id = args.input, args.ladder, args.meta, args.name
+csv_path, ladder_path, meta_path, run_id, marker_lane = args.input, args.ladder, args.meta, args.name, args.marker_lane
+marker_lane = marker_lane - 1 #transfer to 0-based format
 
 #########################################################################
 # Decide: folder or single file processing
@@ -116,7 +124,8 @@ for file in files_to_check:
     # Optional: transform from image
     if not file.endswith(".csv"):
         # IMAGES GO HERE, then defines save_dir
-        signal_table, save_dir, error = analyze_gel(file, run_id=run_id)
+        signal_table, save_dir, error = analyze_gel(file, run_id=run_id,
+                                                    marker_lane=marker_lane)
         image_input = True
         if error:
             print(error)
@@ -129,7 +138,7 @@ for file in files_to_check:
     # Start analysis
     epg_analysis(signal_table, ladder_path, meta_path, run_id=run_id,
                  include_marker=args.include, image_input=image_input,
-                 save_dir=save_dir)
+                 save_dir=save_dir, marker_lane=marker_lane)
 
 print("")
 print("--- DONE. Results in same folder as input file.")

@@ -54,7 +54,7 @@ def resize_img(image):
     
     return image_resized
 
-def analyze_gel(image_file, run_id=None):
+def analyze_gel(image_file, run_id=None, marker_lane=0):
     """
 
     Core function to generate a signal table from a DNA gel image.
@@ -189,13 +189,22 @@ def analyze_gel(image_file, run_id=None):
                  "Make sure your image is a DNA gel image (must be white "
                  "background with black bands on it)")
         return "", error
-    ###################################################################################
-    # 6. Save the inentsity profile
-    ####################################################################################
-    df = pd.DataFrame.from_records(profiles).transpose()
-    df.rename(columns={0: "Ladder"}, inplace=True)
-    df.to_csv(save_table, index=False)
 
+    ###################################################################################
+    # 6. Transform to df + quick sanity check that ladder is available
+    ###################################################################################
+    df = pd.DataFrame.from_records(profiles).transpose()
+    avail_lanes = df.shape[1]-1
+    if avail_lanes < marker_lane:
+        print(f"--- Your marker lane ({marker_lane+1}) is outside the number of lanes "
+              f"detected from your image (found {avail_lanes}). "
+              f"Please check image outputs and try again.")
+        exit()
+    ###################################################################################
+    # 5. Save the inentsity profile
+    ###################################################################################
+    df.rename(columns={marker_lane: "Ladder"}, inplace=True)
+    df.to_csv(save_table, index=False)
     return save_table, save_dir, None
 
 # END OF SCRIPT

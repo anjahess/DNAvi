@@ -14,6 +14,24 @@ from csv import Sniffer
 import pandas as pd
 from werkzeug.utils import secure_filename
 
+def check_marker_lane(input_nr):
+    """
+    Quickly check if the number for marker lane is pos
+    :param input_nr: int
+    :return: int if check passed
+    """
+    try:
+        int(input_nr)
+    except:
+        print(f'Marker lane number must be an integer (full number) not ({input_nr})')
+        exit()
+
+    if int(input_nr) > 0:
+        return int(input_nr)
+    else:
+        print(f"--- Negative numbers are not allowed for marker lane positions ({input_nr})")
+        exit(1)
+
 def detect_delim(file, num_rows=1):
     """
 
@@ -117,10 +135,9 @@ def check_file(filename):
     #####################################################################
     detected_ladders = [e for e in df.columns if "Ladder" in e]
     if not detected_ladders:
-        error = ("Input file missing a ladder column. "
-                 "Please add and try again.")
+        error = ("--- Warning: Input file missing a ladder column, "
+                 "defaulting to first column as DNA marker.")
         print(error)
-        exit()
     return df
 
 def check_ladder(filename):

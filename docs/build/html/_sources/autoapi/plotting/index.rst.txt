@@ -21,6 +21,8 @@ Functions
 .. autoapisummary::
 
    plotting.gridplot
+   plotting.p2stars
+   plotting.stats_plot
    plotting.peakplot
    plotting.lineplot
    plotting.ladderplot
@@ -42,6 +44,21 @@ Module Contents
    :param x_label: str, x label of the figure
    :param cols_not_to_plot: list of columns to exclude from plot to get categorical vars
    :return: plot is generated and saved to disk.
+
+
+.. py:function:: p2stars(p)
+
+   Add asterisk based on p-value
+   :param p: float, the p-value
+   :return: str
+
+
+.. py:function:: stats_plot(path_to_df, cols_not_to_plot=None, peak_id='peak_id', y='bp_or_frac')
+
+   Plot statistical results
+   :param path_to_df: str
+   :param cols_not_to_plot: list of columns to exclude from plot
+   :return: plots statistics in same directory as input dataframe
 
 
 .. py:function:: peakplot(array, peaks, ladder_id, ref, i, qc_save_dir, y_label='')

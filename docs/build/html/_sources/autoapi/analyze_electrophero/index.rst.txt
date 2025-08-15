@@ -36,6 +36,7 @@ Functions
    analyze_electrophero.remove_marker_from_df
    analyze_electrophero.normalize
    analyze_electrophero.mean_from_histogram
+   analyze_electrophero.nuc_fractions
    analyze_electrophero.run_kruskal
    analyze_electrophero.epg_stats
    analyze_electrophero.epg_analysis
@@ -78,7 +79,7 @@ Module Contents
 
 
 
-.. py:function:: peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL, ladder_dir='', ladder_type='custom')
+.. py:function:: peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL, ladder_dir='', ladder_type='custom', marker_lane=0)
 
    Function to infer ladder peaks from the signal table and annotate those to     base pair positions with the user-provided ladder-file.
 
@@ -149,6 +150,17 @@ Module Contents
 
 
 
+.. py:function:: nuc_fractions(df, unit='', size_unit='')
+
+   Estimate nucleosomal fractions (percentages) of     a sample's cfDNA based on pre-defined base pair ranges.
+
+   :param df: pandas.DataFrame
+   :param unit: str, usually normalized fluorescence unit
+   :param size_unit: str, fragment size unit (base pairs)
+   :return: pd.Dataframe of nucleosomal fractions
+
+
+
 .. py:function:: run_kruskal(df, variable='', category='')
 
    Function to perform scipy.stats' the non-parametric     Kruskal Wallis Test to infer statistical significance for the difference     in mean base pair fragment size for patients/samples from different groups
@@ -160,7 +172,7 @@ Module Contents
 
 
 
-.. py:function:: epg_stats(df, save_dir='', unit='normalized_fluorescent_units', size_unit='bp_pos')
+.. py:function:: epg_stats(df, save_dir='', unit='normalized_fluorescent_units', size_unit='bp_pos', metric_unit='bp_or_frac')
 
    Compute and output basic statistics for DNA size distributions
 
@@ -172,7 +184,7 @@ Module Contents
 
 
 
-.. py:function:: epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None, include_marker=False, image_input=False, save_dir=False)
+.. py:function:: epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None, include_marker=False, image_input=False, save_dir=False, marker_lane=0)
 
    Core function to analyze DNA distribution from a signal table.
 

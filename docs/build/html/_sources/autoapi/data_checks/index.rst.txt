@@ -18,6 +18,7 @@ Functions
 
 .. autoapisummary::
 
+   data_checks.check_marker_lane
    data_checks.detect_delim
    data_checks.check_name
    data_checks.check_input
@@ -28,6 +29,13 @@ Functions
 
 Module Contents
 ---------------
+
+.. py:function:: check_marker_lane(input_nr)
+
+   Quickly check if the number for marker lane is pos
+   :param input_nr: int
+   :return: int if check passed
+
 
 .. py:function:: detect_delim(file, num_rows=1)
 

@@ -10,7 +10,7 @@ Tables have to be tab-separated in .csv / .tsv / .txt format and fulfill all cri
 
     • Columns are tab-separated
     • The first row is the header
-    • The first column is always named “Ladder”
+    • Marker column is always named “Ladder” - if this is not the case, the default will be to use the *first* column as the Ladder column unless otherwise specified with the --marker_lane argument
     • Sample names in header (not allowed: “,;’’!.” or white space)
     • Sample names must match metafile sample names (if provided)
     • All column values are numeric (and refer to DNA band intensity units)

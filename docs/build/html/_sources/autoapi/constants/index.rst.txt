@@ -22,14 +22,15 @@ Attributes
    constants.DISTANCE
    constants.CUSTOM_MIN_PEAK_HEIGHT
    constants.PEAK_PROMINANCE
+   constants.BACKGROUND_SUBSTRACTION_STATS
    constants.HALO_FACTOR
    constants.YCOL
    constants.XCOL
    constants.YLABEL
    constants.XLABEL
-   constants.palettediff3
-   constants.palettediff2
-   constants.peak_dict
+   constants.PALETTE
+   constants.LADDER_DICT
+   constants.NUC_DICT
 
 
 Module Contents
@@ -63,8 +64,15 @@ Module Contents
    Tuple, minimum peak prominence 
 
 
+.. py:data:: BACKGROUND_SUBSTRACTION_STATS
+   :value: 0.1
+
+
+   Int, fraction of max peak to be removed from fataset for statistical testing higher -> lower sens but pot better discrimination, lower -> sens up, more noise 
+
+
 .. py:data:: HALO_FACTOR
-   :value: 0.3
+   :value: 0.35
 
 
    Float [0-1] factor by which the marker will be multiplied to define cropping range when removing marker peaks
@@ -98,21 +106,19 @@ Module Contents
    Standardized x label name
 
 
-.. py:data:: palettediff3
-   :value: ['darkgrey', 'black', 'grey', '#d56763', '#85ada3', '#2d435b', '#eacdcb', '#fcd2a1', '#d56763',...
+.. py:data:: PALETTE
+   :value: ['cadetblue', '#fbc27b', '#d56763', 'darkgrey', '#85ada3', '#eacdcb', '#a7c6c9', '#2d435b',...
 
 
    Standardized color palette
 
 
-.. py:data:: palettediff2
-   :value: ['darkgrey', '#d56763', '#fcd2a1', '#85ada3', '#eacdcb', '#a7c6c9', '#2d435b', '#d56763',...
+.. py:data:: LADDER_DICT
+
+   Dictionary with standardized peak size options (beta)
 
 
-   Standardized color palette
-
-
-.. py:data:: peak_dict
+.. py:data:: NUC_DICT
 
    Dictionary with standardized peak size options (beta)
 

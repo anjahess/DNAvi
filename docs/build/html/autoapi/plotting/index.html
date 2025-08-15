@@ -61,6 +61,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-contents">Module Contents</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#plotting.gridplot"><code class="docutils literal notranslate"><span class="pre">gridplot()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#plotting.p2stars"><code class="docutils literal notranslate"><span class="pre">p2stars()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#plotting.stats_plot"><code class="docutils literal notranslate"><span class="pre">stats_plot()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#plotting.peakplot"><code class="docutils literal notranslate"><span class="pre">peakplot()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#plotting.lineplot"><code class="docutils literal notranslate"><span class="pre">lineplot()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#plotting.ladderplot"><code class="docutils literal notranslate"><span class="pre">ladderplot()</span></code></a></li>
@@ -113,6 +115,12 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#plotting.gridplot" title="plotting.gridplot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gridplot</span></code></a>(df, x, y[, save_dir, title, y_label, ...])</p></td>
 <td><p>Generate line plot for DNA fragment sizes with masking option for marker peaks</p></td>
 </tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#plotting.p2stars" title="plotting.p2stars"><code class="xref py py-obj docutils literal notranslate"><span class="pre">p2stars</span></code></a>(p)</p></td>
+<td><p>Add asterisk based on p-value</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#plotting.stats_plot" title="plotting.stats_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stats_plot</span></code></a>(path_to_df[, cols_not_to_plot, peak_id, y])</p></td>
+<td><p>Plot statistical results</p></td>
+</tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#plotting.peakplot" title="plotting.peakplot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">peakplot</span></code></a>(array, peaks, ladder_id, ref, i, qc_save_dir)</p></td>
 <td><p>Plot the peaks detected in a DNA size profile</p></td>
 </tr>
@@ -148,6 +156,23 @@
 <dd class="field-even"><p>plot is generated and saved to disk.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="plotting.p2stars">
+<span class="sig-prename descclassname"><span class="pre">plotting.</span></span><span class="sig-name descname"><span class="pre">p2stars</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotting.p2stars" title="Link to this definition"></a></dt>
+<dd><p>Add asterisk based on p-value
+:param p: float, the p-value
+:return: str</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="plotting.stats_plot">
+<span class="sig-prename descclassname"><span class="pre">plotting.</span></span><span class="sig-name descname"><span class="pre">stats_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_to_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cols_not_to_plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peak_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'peak_id'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bp_or_frac'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotting.stats_plot" title="Link to this definition"></a></dt>
+<dd><p>Plot statistical results
+:param path_to_df: str
+:param cols_not_to_plot: list of columns to exclude from plot
+:return: plots statistics in same directory as input dataframe</p>
 </dd></dl>
 
 <dl class="py function">
