@@ -31,7 +31,7 @@ Functions
 Module Contents
 ---------------
 
-.. py:function:: gridplot(df, x, y, save_dir='', title='', y_label='', x_label='', cols_not_to_plot=['bp_pos', 'sample', 'normalized_fluorescent_units'])
+.. py:function:: gridplot(df, x, y, save_dir='', title='', y_label='', x_label='', cols_not_to_plot=['bp_pos', 'normalized_fluorescent_units'])
 
    Generate line plot for DNA fragment sizes with masking option for marker peaks
 

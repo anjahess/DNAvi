@@ -7,32 +7,50 @@ Installation
 ===================
 
 
+Operating system
+^^^^^^^^^^^^^^^^^^
+
+Installation and testing of DNAvi has been performed for **Windows 10** and **Ubuntu 14.04.2 LTS**.
+
+.. code-block::
+
+    Suiatble systems:
+    Windows 10 Pro, Version 22H2        with Python 3.12.0 and Python 3.13
+    Ubuntu 24.04.2 LTS                  with Python 3.13.5
 
 1. Download dependencies
 ^^^^^^^^^^^^^^^^^^
 
-Please make sure you have installed **python => 3.12**. `Download Python <https://www.python.org/downloads/>`_.
+Please make sure you have installed **python => 3.13**. `Download Python <https://www.python.org/downloads/>`_.
 
 .. code-block::
 
-       python --version
-       >> Python 3.12.8
+   python --version
+   >> Python 3.13.5
 
 
 Next, download the required packages ...
 
 **Option 1:** Through pip.
 
-.. code-block::
 
-       pip install argparse "numpy<2" pandas seaborn scipy matplotlib imageio scikit-image werkzeug scikit_posthocs
-
-**Option 2:** Through conda. `Install Conda <https://www.anaconda.com/download/success/>`_.
+* Note: the first time running DNAvi may take a bit longer due to matplotlib configuring
 
 .. code-block::
 
-    conda create --name dnavi argparse numpy pandas seaborn scipy matplotlib imageio werkzeug scikit-image scikit_posthocs
+    pip install numpy pandas seaborn scipy matplotlib imageio scikit-image werkzeug scikit-posthocs
+
+**Option 2 (preferred):** Through conda. `Install Conda <https://www.anaconda.com/download/success/>`_.
+
+* Tested on x64 Windows 10 Pro, Version 22H2 with Python 3.13.
+* Tested on x64 Ubuntu 24.04.2 LTS, with Python 3.13.5
+* Note: After installing and initiating conda, a restart is required.
+
+.. code-block::
+
+    conda create --name dnavi numpy pandas seaborn scipy matplotlib imageio werkzeug scikit-image -y
     conda activate dnavi
+    conda install conda-forge::scikit-posthocs -y
 
 
 2. Install DNAvi

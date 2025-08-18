@@ -27,7 +27,7 @@ Make sure you are within DNAvi - typing 'ls' should show you the package content
 
     cd path/to/DNAvi/
     ls
-    DNAvi.py  docs  LICENSE  README.md  src  static  tests
+    >> DNAvi.py  docs  LICENSE  README.md  src  static  tests
 
 
 If you are in the right directory, you can run an example provided with the package (no downloads required).
