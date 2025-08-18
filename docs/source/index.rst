@@ -35,6 +35,14 @@ Workflow
     :alt: workflow
 
 
+Quickstart
+^^^^^^^^^^^^^^^^^^
+
+.. code-block::
+
+    python3 DNAvi.py -i tests/electropherogram.csv -l tests/ladder.csv -m tests/metadata.csv
+
+
 Example output
 ^^^^^^^^^^^^^^^^^^
 
@@ -44,7 +52,11 @@ Cell-free DNA electropherogram similarity clustering with group annotation
     :width: 600
     :alt: workflow
 
+Violin plots for average nucleosomal fractions including statistics
 
+.. image:: _static/example_stats_violin.png
+    :width: 600
+    :alt: stats
 
 Citation
 ^^^^^^^^^^^^^^^^^^

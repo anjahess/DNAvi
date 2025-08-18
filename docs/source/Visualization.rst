@@ -40,8 +40,12 @@ If no grouping information is provided, the profiles of all samples are averaged
                 :alt: All sample av line plot
 
 
-1.4 Grouped plot
+1.4 Grouped plots
 """"""""""""""""""""""""""
+
+
+1.4.1 Grouped line plot
+^^^^^^^^^^^^^^^^^^
 
 This visualization is generated for each colummn (variable) specified in the :doc:`/Metadata`.
 Each groups' sample line profiles will be averaged and displayed in an individual color.
@@ -51,8 +55,18 @@ Each groups' sample line profiles will be averaged and displayed in an individua
                 :alt: Single sample line plot
 
 
-1.5 Clustermap
+1.4.2 Grouped violin plot
 ^^^^^^^^^^^^^^^^^^
+
+Violin plots for average peak sizes and nucleosomal fractions including statistics are provided as well (in the stats folder)
+
+.. image:: _static/example_stats_violin.png
+    :width: 600
+    :alt: stats
+
+
+1.5 Clustermap
+""""""""""""""""""""""""""
 
 Clustering of samples by similarity, an additional column for each variable specified in the :doc:`/Metadata`.
 

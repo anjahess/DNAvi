@@ -25,7 +25,7 @@ release = '0.1'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ['autoapi.extension', 'sphinx_copybutton'] # pip install sphinx-copybutton
+extensions = ['autoapi.extension', 'sphinx_copybutton', 'sphinx_simplepdf'] # pip install sphinx-copybutton
 
 # Document Python Code
 autoapi_type = 'python'

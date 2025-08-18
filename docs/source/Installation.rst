@@ -11,15 +11,23 @@ Installation
 1. Download dependencies
 ^^^^^^^^^^^^^^^^^^
 
-Please make sure you have installed **python => 3.12**. Next, download the required packages:
-
-Through pip:
+Please make sure you have installed **python => 3.12**. `Download Python <https://www.python.org/downloads/>`_.
 
 .. code-block::
 
-       pip install argparse numpy pandas seaborn scipy matplotlib imageio scikit-image werkzeug scikit_posthocs
+       python --version
+       >> Python 3.12.8
 
-Through conda:
+
+Next, download the required packages ...
+
+**Option 1:** Through pip.
+
+.. code-block::
+
+       pip install argparse "numpy<2" pandas seaborn scipy matplotlib imageio scikit-image werkzeug scikit_posthocs
+
+**Option 2:** Through conda. `Install Conda <https://www.anaconda.com/download/success/>`_.
 
 .. code-block::
 
@@ -68,4 +76,4 @@ Go to DNAvi and call DNAvi.py to confirm it has been installed successfully:
    v0.1
 
 
-Nice! You are ready to use DNAvi.
+Nice! You are ready to use DNAvi. Go to :doc:`/Quickstart` to try an example!
