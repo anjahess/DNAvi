@@ -4,7 +4,7 @@ Visualization
 Below we will discuss DNAvi's visualization outputs and options.
 
 
-1.1 Sample line plots
+Sample line plots
 """"""""""""""""""""""""""
 
             .. image:: _static/example_sample.png
@@ -19,7 +19,7 @@ is titled by the sample name you specified either in the table or meta file.
 
 
 
-1.2 Sample grid plots
+Sample grid plots
 """"""""""""""""""""""""""
 
 If multiple samples are present, a grid plot showing each DNA sample as an individual line plot is provided:
@@ -30,7 +30,7 @@ If multiple samples are present, a grid plot showing each DNA sample as an indiv
 
 
 
-1.3 Sample average plot
+Sample average plot
 """"""""""""""""""""""""""
 
 If no grouping information is provided, the profiles of all samples are averaged into a single plot.
@@ -55,7 +55,7 @@ Each groups' sample line profiles will be averaged and displayed in an individua
                 :alt: Single sample line plot
 
 
-1.4.2 Grouped violin plot
+Grouped violin plot
 ^^^^^^^^^^^^^^^^^^
 
 Violin plots for average peak sizes and nucleosomal fractions including statistics are provided as well (in the stats folder)
@@ -65,7 +65,7 @@ Violin plots for average peak sizes and nucleosomal fractions including statisti
     :alt: stats
 
 
-1.5 Clustermap
+Clustermap
 """"""""""""""""""""""""""
 
 Clustering of samples by similarity, an additional column for each variable specified in the :doc:`/Metadata`.

@@ -3,7 +3,7 @@ Inputs
 
 
 
-1. DNA signal tables
+DNA signal tables
 ^^^^^^^^^^^^^^^^^^
 
 Tables have to be tab-separated in .csv / .tsv / .txt format and fulfill all criteria below:
@@ -21,7 +21,7 @@ Tables have to be tab-separated in .csv / .tsv / .txt format and fulfill all cri
    :header-rows: 1
 
 
-2. DNA gel images
+DNA gel images
 ^^^^^^^^^^^^^^^^^^
 
 Input images have to follow DNAvi's requirements to ensure successful evaluation.
@@ -46,7 +46,7 @@ following requirements will ensure optimal results and reproducibility:
 Note: Inputting an inverted standard DNA agarose gel image may work, but its on your own risk and you may want to carefully check in the output folder if the bands were properly segmented. We highly recommend using only virtual gels from capilarry electrophoresis machines for optimal performance.
 
 
-3. Multiple inputs
+Multiple inputs
 ^^^^^^^^^^^^^^^^^^
 
 If you wish to screen multiple files, put them into a single folder and use the path to this folder as input to DNAvi.

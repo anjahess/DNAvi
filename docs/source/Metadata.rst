@@ -3,7 +3,7 @@ Metadata
 
 
 
-1. The metadata format
+The metadata format
 ^^^^^^^^^^^^^^^^^^
 
 The metadata file in its simplest form is a two column table (**.csv format**). The first column has to be named **SAMPLE**
@@ -34,7 +34,7 @@ as input, the first *n* entries will be used, where *n* equals the number of lan
 
 :download:`Metadata example <_static/metadata.csv>`
 
-2. Adding more metadata
+Adding more metadata
 ^^^^^^^^^^^^^^^^^^
 
 
@@ -48,7 +48,7 @@ To add more metadata, simply add **additional columns** into the metadata file.
 
 :download:`Extended metadata example <_static/metadata_ext.csv>`
 
-3. Adding metadata for gel images
+Adding metadata for gel images
 ^^^^^^^^^^^^^^^^^^
 
 Since gel images do not contain lane names, the samples will be automatically named by lane number (e.g. 1,2,3...).

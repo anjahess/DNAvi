@@ -18,7 +18,7 @@ Installation and testing of DNAvi has been performed for **Windows 10** and **Ub
     Windows 10 Pro, Version 22H2        with Python 3.12.0 and Python 3.13
     Ubuntu 24.04.2 LTS                  with Python 3.13.5
 
-1. Download dependencies
+Download dependencies
 ^^^^^^^^^^^^^^^^^^
 
 Please make sure you have installed **python => 3.13**. `Download Python <https://www.python.org/downloads/>`_.
@@ -53,7 +53,7 @@ Next, download the required packages ...
     conda install conda-forge::scikit-posthocs -y
 
 
-2. Install DNAvi
+Install DNAvi
 ^^^^^^^^^^^^^^^^^^
 
 Next, download the repository.
@@ -73,7 +73,7 @@ Or wget:
 Unpack or move the DNAvi folder to your location of choice and you're ready to start.
 
 
-3. Test if the installation worked
+Test if the installation worked
 ^^^^^^^^^^^^^^^^^^
 
 Go to DNAvi and call DNAvi.py to confirm it has been installed successfully:

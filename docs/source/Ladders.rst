@@ -4,7 +4,7 @@ Ladders
 
 
 
-1. The DNAvi ladder file
+The DNAvi ladder file
 ^^^^^^^^^^^^^^^^^^
 
 The ladder file is simply a translation of your marker bands to the associated base pair sizes.
@@ -12,7 +12,7 @@ It is a .csv file with only 3 columns:
 
 
 
-2. Changing the position of the DNA ladder in the data
+Changing the position of the DNA ladder in the data
 ^^^^^^^^^^^^^^^^^^
 
 If your input is a table, simply *rename* the column with the marker intensities to *Ladder*.
@@ -28,10 +28,10 @@ This works for images as well.
 E.g. with above code the 3rd lane/column will be used as DNA marker.
 
 
-2. Handling marker bands
+Handling marker bands
 ^^^^^^^^^^^^^^^^^^
 
-2.1 What is a marker band?
+What is a marker band?
 """"""""""""""""""""""""""
 
 For many electrophoresis systems, the ladder DNA contains an upper and/or lower DNA marker band for calibration.
@@ -45,7 +45,7 @@ Therefore, DNAvi offers the option to **exclude** marker bands from the analysis
 
 
 
-2.2 How to exclude marker peaks
+How to exclude marker peaks
 """"""""""""""""""""""""""
 
 To exclude markers, change the peak name in the **ladder file** to a string containing the word **"marker"**:
@@ -77,7 +77,7 @@ DNAvi will now **exclude** the peaks at 10,000 and 15 base pairs from its analys
   :alt: No marker
 
 
-2.3 How to include marker peaks
+How to include marker peaks
 """"""""""""""""""""""""""
 
 You have two options. Either, you rename the markers so that the peak column does not contain the word **marker** anymore.
@@ -94,13 +94,13 @@ This will result in the markers being included, without the need to change the l
   :alt: No marker unanno
 
 
-3. Handling multipe ladders (beta)
+Handling multipe ladders (beta)
 ^^^^^^^^^^^^^^^^^^
 
 You may choose to combine electropherogram signal tables that were run with **multiple (different)** ladders.
 In this case, DNAvi offers an explorative feature to handle this:
 
-3.1 Step 1: providing a multi-ladder ladder file.
+Step 1: providing a multi-ladder ladder file.
 """"""""""""""""""""""""""
 
 Simply add the markers of the second ladder below the first ladder. Make sure the **Name** is changed accordingly.
@@ -113,7 +113,7 @@ The **order** of the ladders in this file will dictate their translation in the 
 
 :download:`example <_static/ladder.csv>`
 
-3.1 Step 2: Combining input from electrophoresis with two different ladders
+Step 2: Combining input from electrophoresis with two different ladders
 """"""""""""""""""""""""""
 
 Next, you can create the input file by copy-pasting the second file (including the second ladder) to the first table,

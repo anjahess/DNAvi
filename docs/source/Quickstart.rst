@@ -7,19 +7,17 @@ Quickstart
 ===================
 
 
-
-1. Open the termial
+Go to the DNAvi directory
 ^^^^^^^^^^^^^^^^^^
 
-Linux: **Ctrl+Alt+T**
+Open your terminal:
 
-MAC: **Launchpad -> Search Terminal -> Click on Terminal**
+.. code-block::
 
-Windows: **Windows Symbol -> search cmd.exe -> Click cmd.exe**
+    Linux: **Ctrl+Alt+T**
+    MAC: **Launchpad -> Search Terminal -> Click on Terminal**
+    Windows: **Windows Symbol -> search cmd.exe -> Click cmd.exe**
 
-
-2. Run DNAvi
-^^^^^^^^^^^^^^^^^^
 
 Make sure you are within DNAvi - typing 'ls' should show you the package contents, e.g. **DNAvi.py**
 
@@ -29,6 +27,9 @@ Make sure you are within DNAvi - typing 'ls' should show you the package content
     ls
     >> DNAvi.py  docs  LICENSE  README.md  src  static  tests
 
+
+Run DNAvi
+^^^^^^^^^^^^^^^^^^
 
 If you are in the right directory, you can run an example provided with the package (no downloads required).
 Just type:
@@ -43,7 +44,14 @@ Alternatively, you can find all input files are provided here for download as we
 * **ladder.csv**: DNA ladder annotation :download:`example <_static/ladder.csv>` .
 * **meta.csv**: Metadata file DNA ladder annotation :download:`example <_static/metadata.csv>` .
 
+
+
+Watch DNAvi work
+^^^^^^^^^^^^^^^^^^
+
 Now you should receive the full DNAvi output providing details on the ongoing analysis. Wait for DNAvi to finish:
+
+
 
 
 .. code-block::
@@ -134,7 +142,7 @@ Now you should receive the full DNAvi output providing details on the ongoing an
 As you can see in the very end, DNAvi has sucessfully finished the analysis.
 
 
-3. Check results
+Check results
 ^^^^^^^^^^^^^^^^^^
 
 Lets make sure outputs are created, we will look for the folder:
@@ -178,7 +186,7 @@ We can see the new folder *electropherogram* was created ...
 ... and contains the 3 result directories. You can explore them by yourself or consultate :doc:`/Outputs` for more details.
 
 
-3. Command line help
+Command line help
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 To see all DNAvi commands run:

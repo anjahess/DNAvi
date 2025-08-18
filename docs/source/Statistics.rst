@@ -3,7 +3,7 @@ Statistics
 
 This section describes DNAvi's statistical analyses and outputs.
 
-1. Basic statistics
+Basic statistics
 ^^^^^^^^^^^^^^^^^^
 
 This table is a broad description of your dataset, specifically all numerical data provided.
@@ -22,7 +22,7 @@ The following metrics are provided and examplified based on the "bp_pos" column:
     • **25%, 50%, 75%** - percentiles
 
 
-2. Peak statistics
+Peak statistics
 ^^^^^^^^^^^^^^^^^^
 
 This table contains information on average sizes and individual peaks. Let's have a look at the line plots for two samples to understand the corresponding statistics:
@@ -45,7 +45,7 @@ For each sample, peak metrics are provided:
     • **peak_id**: the detected peaks (0-based) for each sample, numbered from low to high fragment size, and their metrics. In the example, 6 peaks are detected in Sample_1 while 7 peaks detected in Sample_2.
 
 
-2. Group statistics
+Group statistics
 ^^^^^^^^^^^^^^^^^^
 
 For each variable specified in the :doc:`/Metadata` a table containing statistical testing results is provided.

@@ -3,7 +3,7 @@ Outputs
 
 After your analysis has been performed, your data will be appear in the directory of the input file(s).
 
-1. Output folder
+Output folder
 ^^^^^^
 
 If you wish to specify your output folder's name you can do so with the **-n/--name** argument
@@ -15,7 +15,7 @@ If you wish to specify your output folder's name you can do so with the **-n/--n
 The folder will contain the inputs you have submitted to DNAvi prior to the analysis.
 The results folder contains two sub-directories, called QC and plots.
 
-1.1 QC
+QC
 """"""""""""""""""""""""""
 The QC folder is all about the DNA marker and detecting its peaks. It makes sense to check it and make sure your DNA ladder has been recognized correctly, and that the base pairs assigned make sense. You will find the following files:
     • **info.csv** – a simple table giving information on your ladder type
@@ -43,7 +43,7 @@ Once you have checked the QC outputs and found your ladder correctly annotated, 
 
 
 
-1.2 Plots
+Plots
 """"""""""""""""""""""""""
 
 The directory contains results in a long table format and visualization. The visualization provides line profiles of individual samples,
@@ -64,7 +64,7 @@ A single sample example is provided below:
 Continue to :doc:`/Visualization` for a detailed overview on the generated plots.
 
 
-1.3 Stats
+Stats
 """"""""""""""""""""""""""
 
 This folder contains the statistics including group metrics in case you provided :doc:`/Metadata`.
@@ -78,14 +78,14 @@ Continue to :doc:`/Statistics` for a detailed overview on the statistics.
 
 
 
-2. Gel image outputs
+Gel image outputs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In case you have uploaded a gel image a third folder called **images** will provide outputs from the image analysis. This is particularly helpful for
 troubleshooting. It's recommended to carefully check these outputs to understand if all DNA lanes have been successfully recognized.
 
 
-2.1 Thresholding
+Thresholding
 """"""""""""""""""""""""""
 
 **gel_thresholded.png** is the first intermediate output showing the result of DNAvi's thresholding. In white are all objects recognized on the image.
@@ -96,7 +96,7 @@ troubleshooting. It's recommended to carefully check these outputs to understand
   :alt: Gel lanes
 
 
-2.2 Object detection
+Object detection
 """"""""""""""""""""""""""
 
 **gel_lanes.png** should look like below example. Every band that is recognized will be marked by a colored overlay.
@@ -107,7 +107,7 @@ troubleshooting. It's recommended to carefully check these outputs to understand
   :alt: Gel lanes
 
 
-2.3 Lane border inference
+Lane border inference
 """"""""""""""""""""""""""
 **gel_lanes_border.png** should look like below example. Every band that is recognized will be marked by a colored overlay.
 
@@ -117,7 +117,7 @@ troubleshooting. It's recommended to carefully check these outputs to understand
   :alt: Gel lanes
 
 
-2.4 Individual DNA profiles
+Individual DNA profiles
 """"""""""""""""""""""""""
 Each lane detected will be sliced and annotated. Below how this would look like for a ladder lane:
 
