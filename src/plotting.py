@@ -20,7 +20,7 @@ from matplotlib.patches import Patch
 import warnings; warnings.filterwarnings("ignore")
 
 def gridplot(df, x, y, save_dir="", title="", y_label="", x_label="",
-             cols_not_to_plot=["bp_pos", "sample", "normalized_fluorescent_units"],
+             cols_not_to_plot=["bp_pos", "normalized_fluorescent_units"],
              ):
     """
 
@@ -59,17 +59,21 @@ def gridplot(df, x, y, save_dir="", title="", y_label="", x_label="",
         #################################################################
         # Clustermap
         #################################################################
-
         # In case marker is in reduce to one entry per sample
         df["sample-bp"] = df[x].astype(str) + "_" + df["sample"].astype(str)
         prep_df = df.drop_duplicates(subset=["sample-bp"])
         del prep_df["sample-bp"]
 
         # Now ready to be transformed to wide
-        wide_df = prep_df.pivot(index=["sample", col], columns=x,
-                           values=y).reset_index()
-        lut = dict(zip(wide_df[col].unique(), sns.color_palette(
-            palette='colorblind')))
+        if col == "sample":
+            # Allows to plot clustermap even when no group data is provided
+            wide_df = prep_df.pivot(index=col, columns=x,
+                                    values=y).reset_index()
+        else:
+            wide_df = prep_df.pivot(index=["sample", col], columns=x,
+                               values=y).reset_index()
+        required_colors = round(int(len(wide_df[col].unique())/5))
+        lut = dict(zip(wide_df[col].unique(), sns.color_palette(palette='colorblind')*required_colors))
         row_colors = wide_df[col].map(lut)
         sns.clustermap(wide_df.drop(columns=["sample", col]),
                        rasterized=True, row_cluster=True,
