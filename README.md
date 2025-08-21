@@ -21,22 +21,23 @@ Please make sure you have installed **python => 3.12**. Next, download the requi
 
 Python packages:
 
-    pip install argparse numpy pandas seaborn scipy matplotlib imageio scikit-image werkzeug scikit_posthocs
+    pip install numpy pandas seaborn scipy matplotlib imageio scikit-image werkzeug scikit-posthocs
 
 Conda:
 
-    conda create --name dnavi argparse numpy pandas seaborn scipy matplotlib imageio werkzeug scikit-image scikit_posthocs
+    conda create --name dnavi numpy pandas seaborn scipy matplotlib imageio werkzeug scikit-image -y
     conda activate dnavi
+    conda install conda-forge::scikit-posthocs -y
 
 Next, download the repository.
 
 Through *github CLI*:
     
-    gh repo clone anjahess/DNAvi_light
+    gh repo clone anjahess/DNAvi
 
 Or through *wget*:
 
-    wget https://github.com/anjahess/DNAvi_light/archive/refs/heads/main.zip
+    wget https://github.com/anjahess/DNAvi/archive/refs/heads/main.zip
 
 Unpack or move the DNAvi folder to your location of choice and you're ready to start.
 
@@ -62,38 +63,38 @@ If you need help, simply run
 
 Which will result in a display of command line arguments with additional explanaitons:
 
+
     Welcome to
       ____  _   _    _        _
      |  _ |  \ | |  / \__   _(_)
      | | | |  \| | / _ \ \ / / |
      | |_| | |\  |/ ___ \ V /| |
-     |____/|_| \_/_/   \_\_/ |_| 
-     
-    usage: DNAvi.py [-h] [-i [<input-file-or-folder>]] -l [<ladder-file>]
-                    [-m [<metadata-file>]] [-n [<run-name>]] [-incl] [--verbose]
-    
+     |____/|_| \_/_/   \_\_/ |_|
+
+    usage: DNAvi.py [-h] [-i [<input-file-or-folder>]] -l [<ladder-file>] [-m [<metadata-file>]] [-n [<run-name>]] [-incl]
+                    [-ml <int>] [--verbose] [-v]
+
     Analyse Electropherogram data e.g. for cell-free DNA from liquid biopsies
-    
+
     options:
       -h, --help            show this help message and exit
       -i [<input-file-or-folder>], --input [<input-file-or-folder>]
-                            Path to electropherogram table file or image file OR
-                            directory containing those files. Accepted formats:
+                            Path to electropherogram table file or image file OR directory containing those files. Accepted formats:
                             .csv/.png/.jpeg/.jpg or directory containing those.
       -l [<ladder-file>], --ladder [<ladder-file>]
                             Path to ladder table file. Accepted format: .csv
       -m [<metadata-file>], --meta [<metadata-file>]
-                            Path to metadata table file containing grouping
-                            information for input file (e.g. age, sex, disease).
+                            Path to metadata table file containing grouping information for input file (e.g. age, sex, disease).
                             Accepted format: .csv
       -n [<run-name>], --name [<run-name>]
-                            Name of your run/experiment. Will define output folder
-                            name
+                            Name of your run/experiment. Will define output folder name
       -incl, --include      Include marker bands into analysis and plotting.
+      -ml <int>, --marker_lane <int>
+                            Change the lane selected as the DNA marker/ladder, default is first lane (1)
       --verbose             increase output verbosity
-    
-    Version: 0.1, created by Anja Hess <anja.hess@mail.de>, Max Planck Institute
-    for Molecular Genetics, Berlin, GERMANY
+      -v, --version         show program's version number and exit
+
+      Version: 0.1, created by Anja Hess <anja.hess@mail.de>, MPIMG
 
 ## 4. Example
 
@@ -130,7 +131,7 @@ This will result in the following output:
 
 
 
-... and additional infos depending on the verbosty level. Once DNAvi is finished,
+... and additional infos depending on the analysis details. Once DNAvi is finished,
 this message will appear:
 
 
