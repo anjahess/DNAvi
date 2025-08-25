@@ -218,11 +218,14 @@ def peakplot(array, peaks, ladder_id, ref, i, qc_save_dir, y_label="",
 
     plt.plot(array)
     plt.plot(peaks, array[peaks], "x")
+
     # Add the annotated base-pair values if possible
+    max_x = len(array) # relative val for label
+    center_factor = max_x * 0.035 # labels look prettier when up
     if size_values:
         for x, y in zip(peaks, array[peaks]):
             real_pos = round(size_values[x])
-            plt.annotate(f"{real_pos}bp", xy=(x, y))
+            plt.annotate(f"{real_pos} bp", xy=(x-center_factor, y+0.02))
     plt.plot(np.zeros_like(array), "--", color="gray")
     plt.title(ladder_id + f" {ref}")
     plt.xlim(10 ^ 0, None)
