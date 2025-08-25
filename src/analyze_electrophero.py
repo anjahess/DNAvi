@@ -22,7 +22,7 @@ sys.path.insert(0, script_path)
 sys.path.insert(0, maindir)
 sys.path.insert(0, f"{maindir}/src")
 sys.path.insert(0, f"{maindir}/src")
-from constants import YLABEL, YCOL, XCOL, XLABEL, DISTANCE, CUSTOM_MIN_PEAK_HEIGHT, HALO_FACTOR, PEAK_PROMINENCE, NUC_DICT, BACKGROUND_SUBSTRACTION_STATS
+from constants import YLABEL, YCOL, XCOL, XLABEL, DISTANCE, MIN_PEAK_HEIGHT_FACTOR, MAX_PEAK_WIDTH_FACTOR, HALO_FACTOR, PEAK_PROMINENCE, NUC_DICT, BACKGROUND_SUBSTRACTION_STATS, INTERPOLATE_FUNCTION
 from plotting import lineplot, ladderplot, peakplot, gridplot, stats_plot
 from data_checks import check_file
 import logging
@@ -149,18 +149,13 @@ def peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL,
         #################################################################
         array = np.array(df[ladder].values.tolist())
         max_peak = array.max()
-        min_peak_height = max_peak*0.2
+        min_peak_height = max_peak*MIN_PEAK_HEIGHT_FACTOR
         max_width = len(df)
-        max_peak_width = max_width*0.1
-        # Potential to customize ladder peak calling (for developers)
-        if "adjust" in ladder_type:
-            peaks, _ = find_peaks(array, distance=DISTANCE,
-                                  height=CUSTOM_MIN_PEAK_HEIGHT)
-        else:
-            peaks, _ = find_peaks(array, distance=DISTANCE,
-                                  prominence=PEAK_PROMINENCE,
-                                  height=min_peak_height,
-                                  width=(None,max_peak_width))
+        max_peak_width = max_width*MAX_PEAK_WIDTH_FACTOR
+        peaks, _ = find_peaks(array, distance=DISTANCE,
+                              prominence=PEAK_PROMINENCE,
+                              height=min_peak_height,
+                              width=(None,max_peak_width))
         peak_list = peaks.tolist()
         print(f"--- Ladder #{i}: {len(peak_list)} peaks detected.")
 
@@ -220,8 +215,9 @@ def peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL,
         # 1.5 Interpolate missing positions between the peaks
         #################################################################
         s = pd.Series(peak_col)
-        df[ladder + "_interpol"] = s.interpolate()
-        return_df[ladder] = s.interpolate()
+        interpolated =  s.interpolate(method=INTERPOLATE_FUNCTION)
+        df[ladder + "_interpol"] = interpolated
+        return_df[ladder] = interpolated
 
         #################################################################
         # 1.6 Plot again with the inferred base pair scale
@@ -671,7 +667,7 @@ def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="b
         min_peak_height = max_peak * 0.2 # Define min peak height
         peaks, _ = find_peaks(array, distance=DISTANCE,  # n pos apart
                               height=min_peak_height, # minimum height
-                             )
+                              prominence=PEAK_PROMINENCE)
 
         bp_positions = sub_df[size_unit].values.tolist()
         # Plot the peaks for each sample

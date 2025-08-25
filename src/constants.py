@@ -16,11 +16,18 @@ ACCEPTED_FORMATS = ['.csv', '.png', '.jpeg', '.jpg']
 DISTANCE = 20 # 20 pos apart min
 """Minimum required distance of two peaks to be discriminated."""
 
-CUSTOM_MIN_PEAK_HEIGHT=50 # if not auto-calc, requires ladder type to be set to "adjust"
-"""Minimum required height for a peak to be detected. """
+MIN_PEAK_HEIGHT_FACTOR=0.2
+"""Factor by which to multiply the maximum peak height to set the minimum peak height to be detected. """
+
+MAX_PEAK_WIDTH_FACTOR=0.1
+"""Fraction of entire gel length to set the maximum accepted peak width - ONLY FOR THE LADDER, not for sample peaks"""
 
 PEAK_PROMINENCE=(0.3, None)
 """Tuple, minimum peak prominence """
+
+# Constants for basepair annotation
+INTERPOLATE_FUNCTION="quadratic"
+"""Function to interpolate missing base pair values based on user-annotated values """
 
 BACKGROUND_SUBSTRACTION_STATS=0.1
 """Int, fraction of max peak to be removed from dataset for statistical testing \
