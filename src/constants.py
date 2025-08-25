@@ -19,11 +19,11 @@ DISTANCE = 20 # 20 pos apart min
 CUSTOM_MIN_PEAK_HEIGHT=50 # if not auto-calc, requires ladder type to be set to "adjust"
 """Minimum required height for a peak to be detected. """
 
-PEAK_PROMINANCE=(0.2, None)
+PEAK_PROMINENCE=(0.3, None)
 """Tuple, minimum peak prominence """
 
 BACKGROUND_SUBSTRACTION_STATS=0.1
-"""Int, fraction of max peak to be removed from fataset for statistical testing \
+"""Int, fraction of max peak to be removed from dataset for statistical testing \
 higher -> lower sens but pot better discrimination, lower -> sens up, more noise """
 
 # Marker band cropping

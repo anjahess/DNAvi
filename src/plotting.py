@@ -200,7 +200,8 @@ def stats_plot(path_to_df, cols_not_to_plot=None, peak_id="peak_id",
 
 
 
-def peakplot(array, peaks, ladder_id, ref, i, qc_save_dir, y_label=""):
+def peakplot(array, peaks, ladder_id, ref, i, qc_save_dir, y_label="",
+             size_values=""):
     """
 
     Plot the peaks detected in a DNA size profile
@@ -213,16 +214,23 @@ def peakplot(array, peaks, ladder_id, ref, i, qc_save_dir, y_label=""):
     :param qc_save_dir: str, path to folder to save the figure to
     :param y_label: str, y label name
     :return: plots are generated and saved to disk.
-
     """
+
     plt.plot(array)
     plt.plot(peaks, array[peaks], "x")
+    # Add the annotated base-pair values if possible
+    if size_values:
+        for x, y in zip(peaks, array[peaks]):
+            real_pos = round(size_values[x])
+            plt.annotate(f"{real_pos}bp", xy=(x, y))
     plt.plot(np.zeros_like(array), "--", color="gray")
     plt.title(ladder_id + f" {ref}")
     plt.xlim(10 ^ 0, None)
     plt.ylabel(y_label)
+    plt.xlabel("Relative position in gel (arbitrary units)")
     plt.savefig(f"{qc_save_dir}peaks_{i}_{ref}.pdf")
     plt.close()
+
     # END OF FUNCTION
 
 

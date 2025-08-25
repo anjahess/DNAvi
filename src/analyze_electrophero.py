@@ -22,7 +22,7 @@ sys.path.insert(0, script_path)
 sys.path.insert(0, maindir)
 sys.path.insert(0, f"{maindir}/src")
 sys.path.insert(0, f"{maindir}/src")
-from constants import YLABEL, YCOL, XCOL, XLABEL, DISTANCE, CUSTOM_MIN_PEAK_HEIGHT, HALO_FACTOR, PEAK_PROMINANCE, NUC_DICT, BACKGROUND_SUBSTRACTION_STATS
+from constants import YLABEL, YCOL, XCOL, XLABEL, DISTANCE, CUSTOM_MIN_PEAK_HEIGHT, HALO_FACTOR, PEAK_PROMINENCE, NUC_DICT, BACKGROUND_SUBSTRACTION_STATS
 from plotting import lineplot, ladderplot, peakplot, gridplot, stats_plot
 from data_checks import check_file
 import logging
@@ -144,22 +144,23 @@ def peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL,
 
     for i, ladder in enumerate([e for e in df.columns if "Ladder" in e]):
         ladder_id = ladder.replace(' ', '').replace(':', '')
-
         #################################################################
         # 1.1 Get values and find maxima (require at least 50% of max)
         #################################################################
         array = np.array(df[ladder].values.tolist())
         max_peak = array.max()
         min_peak_height = max_peak*0.2
-
+        max_width = len(df)
+        max_peak_width = max_width*0.1
         # Potential to customize ladder peak calling (for developers)
         if "adjust" in ladder_type:
             peaks, _ = find_peaks(array, distance=DISTANCE,
                                   height=CUSTOM_MIN_PEAK_HEIGHT)
         else:
             peaks, _ = find_peaks(array, distance=DISTANCE,
-                                  prominence=PEAK_PROMINANCE,
-                                  height=min_peak_height)
+                                  prominence=PEAK_PROMINENCE,
+                                  height=min_peak_height,
+                                  width=(None,max_peak_width))
         peak_list = peaks.tolist()
         print(f"--- Ladder #{i}: {len(peak_list)} peaks detected.")
 
@@ -182,26 +183,22 @@ def peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL,
             'marker')]["Basepairs"].tolist()
         if markers:
             print("--- Found markers: {}".format(markers))
-
         peak_dict[i] = [peak_annos, markers]
-
         ladder2type.update({ladder: i})
-
         #################################################################
         # 1.3 Plot intermed results
         #################################################################
         peakplot(array, peaks, ladder_id, i, i, qc_save_dir,
                  y_label=y_label)
-
         ##################################################################
         # ---- SANITY CHECK ----- equals nr of detected peaks?
         ##################################################################
         if len(peak_dict[i][0]) != len(peak_list):
-            error = (f"Inconsistent number of peaks between what is "
-                     f"expected from your ladder_file "
-                     f"(n={len(peak_dict[i][0])} bands) and the actual "
-                     f"data in column {marker_lane-1} (n={len(peak_list)} bands). "
-                     f"Please check {qc_save_dir} to see what peaks are "
+            error = (f"Inconsistent number of peaks between "
+                     f"ladder file ({len(peak_dict[i][0])} bands) "
+                     f"and the actual data in gel image/table ladder "
+                     f"({len(peak_list)} bands). "
+                     f"Please check {qc_save_dir}/ to see what peaks are "
                      f"missing or whether your ladder is in the "
                      f"wrong position.")
             print(error)
@@ -669,10 +666,18 @@ def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="b
 
         # 2.3 Add to array and find peaks
         array = np.array(sub_df[unit].values.tolist())
+
         max_peak = array.max()
         min_peak_height = max_peak * 0.2 # Define min peak height
         peaks, _ = find_peaks(array, distance=DISTANCE,  # n pos apart
-                              height=min_peak_height)  # minimum height
+                              height=min_peak_height, # minimum height
+                             )
+
+        bp_positions = sub_df[size_unit].values.tolist()
+        # Plot the peaks for each sample
+        peakplot(array, peaks, str(sample), "sample", str(sample), save_dir,
+                 y_label=unit, size_values=bp_positions)
+
         # Get the fluorescence val for each peak
         peak_list = [array[e] for e in peaks.tolist()]
         if not peak_list:
