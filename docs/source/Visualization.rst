@@ -8,7 +8,7 @@ Sample line plots
 """"""""""""""""""""""""""
 
             .. image:: _static/example_sample.png
-                :width: 400
+                :width: 300
                 :alt: Single sample line plot
 
 
@@ -39,12 +39,20 @@ If no grouping information is provided, the profiles of all samples are averaged
                 :width: 400
                 :alt: All sample av line plot
 
+Annotated basepair peak plots
+""""""""""""""""""""""""""
+Line plots for each sample with the detected peaks and the annotated size in base pairs are in the **stats folder**
 
-1.4 Grouped plots
+            .. image:: _static/example_stats_anno.png
+                :width: 400
+                :alt: stats
+
+
+
+Grouped plots
 """"""""""""""""""""""""""
 
-
-1.4.1 Grouped line plot
+Grouped line plot
 ^^^^^^^^^^^^^^^^^^
 
 This visualization is generated for each colummn (variable) specified in the :doc:`/Metadata`.
@@ -55,10 +63,11 @@ Each groups' sample line profiles will be averaged and displayed in an individua
                 :alt: Single sample line plot
 
 
+
 Grouped violin plot
 ^^^^^^^^^^^^^^^^^^
 
-Violin plots for average peak sizes and nucleosomal fractions including statistics are provided as well (in the stats folder)
+Violin plots for average peak sizes and nucleosomal fractions including statistics (**p value / significance stars**) are provided as well in the **stats folder**
 
 .. image:: _static/example_stats_violin.png
     :width: 600

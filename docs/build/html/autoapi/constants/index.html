@@ -46,7 +46,7 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../Installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Quickstart.html">Quickstart</a></li>
@@ -56,17 +56,20 @@
 <li class="toctree-l1"><a class="reference internal" href="../../Outputs.html">Outputs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Visualization.html">Visualization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Statistics.html">Statistics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Advanced.html">Advanced Settings</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../plotting/index.html">plotting</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">constants</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#attributes">Attributes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-contents">Module Contents</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#constants.ACCEPTED_FORMATS"><code class="docutils literal notranslate"><span class="pre">ACCEPTED_FORMATS</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#constants.DISTANCE"><code class="docutils literal notranslate"><span class="pre">DISTANCE</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#constants.CUSTOM_MIN_PEAK_HEIGHT"><code class="docutils literal notranslate"><span class="pre">CUSTOM_MIN_PEAK_HEIGHT</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#constants.PEAK_PROMINANCE"><code class="docutils literal notranslate"><span class="pre">PEAK_PROMINANCE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#constants.MIN_PEAK_HEIGHT_FACTOR"><code class="docutils literal notranslate"><span class="pre">MIN_PEAK_HEIGHT_FACTOR</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#constants.MAX_PEAK_WIDTH_FACTOR"><code class="docutils literal notranslate"><span class="pre">MAX_PEAK_WIDTH_FACTOR</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#constants.PEAK_PROMINENCE"><code class="docutils literal notranslate"><span class="pre">PEAK_PROMINENCE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#constants.INTERPOLATE_FUNCTION"><code class="docutils literal notranslate"><span class="pre">INTERPOLATE_FUNCTION</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#constants.BACKGROUND_SUBSTRACTION_STATS"><code class="docutils literal notranslate"><span class="pre">BACKGROUND_SUBSTRACTION_STATS</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#constants.HALO_FACTOR"><code class="docutils literal notranslate"><span class="pre">HALO_FACTOR</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#constants.ACCEPTED_FORMATS"><code class="docutils literal notranslate"><span class="pre">ACCEPTED_FORMATS</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#constants.YCOL"><code class="docutils literal notranslate"><span class="pre">YCOL</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#constants.XCOL"><code class="docutils literal notranslate"><span class="pre">XCOL</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#constants.YLABEL"><code class="docutils literal notranslate"><span class="pre">YLABEL</span></code></a></li>
@@ -119,23 +122,29 @@
 <h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#constants.ACCEPTED_FORMATS" title="constants.ACCEPTED_FORMATS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ACCEPTED_FORMATS</span></code></a></p></td>
-<td><p>Possible input formats</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#constants.DISTANCE" title="constants.DISTANCE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DISTANCE</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#constants.DISTANCE" title="constants.DISTANCE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DISTANCE</span></code></a></p></td>
 <td><p>Minimum required distance of two peaks to be discriminated.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#constants.CUSTOM_MIN_PEAK_HEIGHT" title="constants.CUSTOM_MIN_PEAK_HEIGHT"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CUSTOM_MIN_PEAK_HEIGHT</span></code></a></p></td>
-<td><p>Minimum required height for a peak to be detected.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#constants.MIN_PEAK_HEIGHT_FACTOR" title="constants.MIN_PEAK_HEIGHT_FACTOR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MIN_PEAK_HEIGHT_FACTOR</span></code></a></p></td>
+<td><p>Factor by which to multiply the maximum peak height to set the minimum peak height to be detected.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#constants.PEAK_PROMINANCE" title="constants.PEAK_PROMINANCE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PEAK_PROMINANCE</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#constants.MAX_PEAK_WIDTH_FACTOR" title="constants.MAX_PEAK_WIDTH_FACTOR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MAX_PEAK_WIDTH_FACTOR</span></code></a></p></td>
+<td><p>Fraction of entire gel length to set the maximum accepted peak width - ONLY FOR THE LADDER, not for sample peaks</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#constants.PEAK_PROMINENCE" title="constants.PEAK_PROMINENCE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PEAK_PROMINENCE</span></code></a></p></td>
 <td><p>Tuple, minimum peak prominence</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#constants.BACKGROUND_SUBSTRACTION_STATS" title="constants.BACKGROUND_SUBSTRACTION_STATS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BACKGROUND_SUBSTRACTION_STATS</span></code></a></p></td>
-<td><p>Int, fraction of max peak to be removed from fataset for statistical testing higher -&gt; lower sens but pot better discrimination, lower -&gt; sens up, more noise</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#constants.INTERPOLATE_FUNCTION" title="constants.INTERPOLATE_FUNCTION"><code class="xref py py-obj docutils literal notranslate"><span class="pre">INTERPOLATE_FUNCTION</span></code></a></p></td>
+<td><p>Function to interpolate missing base pair values based on user-annotated values</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#constants.HALO_FACTOR" title="constants.HALO_FACTOR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HALO_FACTOR</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#constants.BACKGROUND_SUBSTRACTION_STATS" title="constants.BACKGROUND_SUBSTRACTION_STATS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BACKGROUND_SUBSTRACTION_STATS</span></code></a></p></td>
+<td><p>Int, fraction of max peak to be removed from dataset for statistical testing higher -&gt; lower sens but pot better discrimination, lower -&gt; sens up, more noise</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#constants.HALO_FACTOR" title="constants.HALO_FACTOR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HALO_FACTOR</span></code></a></p></td>
 <td><p>Float [0-1] factor by which the marker will be multiplied to define cropping range when removing marker peaks</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#constants.ACCEPTED_FORMATS" title="constants.ACCEPTED_FORMATS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ACCEPTED_FORMATS</span></code></a></p></td>
+<td><p>Possible input formats</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#constants.YCOL" title="constants.YCOL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">YCOL</span></code></a></p></td>
 <td><p>Standardized y axis name</p></td>
@@ -164,39 +173,51 @@
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
 <dl class="py data">
-<dt class="sig sig-object py" id="constants.ACCEPTED_FORMATS">
-<span class="sig-prename descclassname"><span class="pre">constants.</span></span><span class="sig-name descname"><span class="pre">ACCEPTED_FORMATS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['.csv',</span> <span class="pre">'.png',</span> <span class="pre">'.jpeg',</span> <span class="pre">'.jpg']</span></em><a class="headerlink" href="#constants.ACCEPTED_FORMATS" title="Link to this definition"></a></dt>
-<dd><p>Possible input formats</p>
-</dd></dl>
-
-<dl class="py data">
 <dt class="sig sig-object py" id="constants.DISTANCE">
 <span class="sig-prename descclassname"><span class="pre">constants.</span></span><span class="sig-name descname"><span class="pre">DISTANCE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">20</span></em><a class="headerlink" href="#constants.DISTANCE" title="Link to this definition"></a></dt>
 <dd><p>Minimum required distance of two peaks to be discriminated.</p>
 </dd></dl>
 
 <dl class="py data">
-<dt class="sig sig-object py" id="constants.CUSTOM_MIN_PEAK_HEIGHT">
-<span class="sig-prename descclassname"><span class="pre">constants.</span></span><span class="sig-name descname"><span class="pre">CUSTOM_MIN_PEAK_HEIGHT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">50</span></em><a class="headerlink" href="#constants.CUSTOM_MIN_PEAK_HEIGHT" title="Link to this definition"></a></dt>
-<dd><p>Minimum required height for a peak to be detected.</p>
+<dt class="sig sig-object py" id="constants.MIN_PEAK_HEIGHT_FACTOR">
+<span class="sig-prename descclassname"><span class="pre">constants.</span></span><span class="sig-name descname"><span class="pre">MIN_PEAK_HEIGHT_FACTOR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.2</span></em><a class="headerlink" href="#constants.MIN_PEAK_HEIGHT_FACTOR" title="Link to this definition"></a></dt>
+<dd><p>Factor by which to multiply the maximum peak height to set the minimum peak height to be detected.</p>
 </dd></dl>
 
 <dl class="py data">
-<dt class="sig sig-object py" id="constants.PEAK_PROMINANCE">
-<span class="sig-prename descclassname"><span class="pre">constants.</span></span><span class="sig-name descname"><span class="pre">PEAK_PROMINANCE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">(0.2,</span> <span class="pre">None)</span></em><a class="headerlink" href="#constants.PEAK_PROMINANCE" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="constants.MAX_PEAK_WIDTH_FACTOR">
+<span class="sig-prename descclassname"><span class="pre">constants.</span></span><span class="sig-name descname"><span class="pre">MAX_PEAK_WIDTH_FACTOR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.1</span></em><a class="headerlink" href="#constants.MAX_PEAK_WIDTH_FACTOR" title="Link to this definition"></a></dt>
+<dd><p>Fraction of entire gel length to set the maximum accepted peak width - ONLY FOR THE LADDER, not for sample peaks</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="constants.PEAK_PROMINENCE">
+<span class="sig-prename descclassname"><span class="pre">constants.</span></span><span class="sig-name descname"><span class="pre">PEAK_PROMINENCE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">(0.3,</span> <span class="pre">None)</span></em><a class="headerlink" href="#constants.PEAK_PROMINENCE" title="Link to this definition"></a></dt>
 <dd><p>Tuple, minimum peak prominence</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="constants.INTERPOLATE_FUNCTION">
+<span class="sig-prename descclassname"><span class="pre">constants.</span></span><span class="sig-name descname"><span class="pre">INTERPOLATE_FUNCTION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'quadratic'</span></em><a class="headerlink" href="#constants.INTERPOLATE_FUNCTION" title="Link to this definition"></a></dt>
+<dd><p>Function to interpolate missing base pair values based on user-annotated values</p>
 </dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="constants.BACKGROUND_SUBSTRACTION_STATS">
 <span class="sig-prename descclassname"><span class="pre">constants.</span></span><span class="sig-name descname"><span class="pre">BACKGROUND_SUBSTRACTION_STATS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.1</span></em><a class="headerlink" href="#constants.BACKGROUND_SUBSTRACTION_STATS" title="Link to this definition"></a></dt>
-<dd><p>Int, fraction of max peak to be removed from fataset for statistical testing higher -&gt; lower sens but pot better discrimination, lower -&gt; sens up, more noise</p>
+<dd><p>Int, fraction of max peak to be removed from dataset for statistical testing higher -&gt; lower sens but pot better discrimination, lower -&gt; sens up, more noise</p>
 </dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="constants.HALO_FACTOR">
 <span class="sig-prename descclassname"><span class="pre">constants.</span></span><span class="sig-name descname"><span class="pre">HALO_FACTOR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.35</span></em><a class="headerlink" href="#constants.HALO_FACTOR" title="Link to this definition"></a></dt>
 <dd><p>Float [0-1] factor by which the marker will be multiplied to define cropping range when removing marker peaks</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="constants.ACCEPTED_FORMATS">
+<span class="sig-prename descclassname"><span class="pre">constants.</span></span><span class="sig-name descname"><span class="pre">ACCEPTED_FORMATS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['.csv',</span> <span class="pre">'.png',</span> <span class="pre">'.jpeg',</span> <span class="pre">'.jpg']</span></em><a class="headerlink" href="#constants.ACCEPTED_FORMATS" title="Link to this definition"></a></dt>
+<dd><p>Possible input formats</p>
 </dd></dl>
 
 <dl class="py data">

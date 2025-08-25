@@ -8,8 +8,15 @@ The DNAvi ladder file
 ^^^^^^^^^^^^^^^^^^
 
 The ladder file is simply a translation of your marker bands to the associated base pair sizes.
-It is a .csv file with only 3 columns:
+It is a .csv file with 3 columns: **Peak, Basepairs, Name**
 
+    .. csv-table:: Example of  ladder DNAvi ladder file
+       :file: _static/ladder.csv
+       :widths: 30, 30, 30
+       :header-rows: 1
+
+Each peak should be connected to a base pair value in **descending** order, as expected in a normal agarose gel.
+The name, which you may choose, has to be the **same for all peaks of a ladder**.
 
 
 Changing the position of the DNA ladder in the data

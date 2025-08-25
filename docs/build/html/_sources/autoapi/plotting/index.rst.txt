@@ -61,7 +61,7 @@ Module Contents
    :return: plots statistics in same directory as input dataframe
 
 
-.. py:function:: peakplot(array, peaks, ladder_id, ref, i, qc_save_dir, y_label='')
+.. py:function:: peakplot(array, peaks, ladder_id, ref, i, qc_save_dir, y_label='', size_values='')
 
    Plot the peaks detected in a DNA size profile
 
@@ -73,7 +73,6 @@ Module Contents
    :param qc_save_dir: str, path to folder to save the figure to
    :param y_label: str, y label name
    :return: plots are generated and saved to disk.
-
 
 
 .. py:function:: lineplot(df, x, y, save_dir='', title='', y_label='', x_label='', hue=None, units=None, plot_lower=False, estimator='mean', style=None, window=False)

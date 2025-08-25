@@ -18,12 +18,14 @@ Attributes
 
 .. autoapisummary::
 
-   constants.ACCEPTED_FORMATS
    constants.DISTANCE
-   constants.CUSTOM_MIN_PEAK_HEIGHT
-   constants.PEAK_PROMINANCE
+   constants.MIN_PEAK_HEIGHT_FACTOR
+   constants.MAX_PEAK_WIDTH_FACTOR
+   constants.PEAK_PROMINENCE
+   constants.INTERPOLATE_FUNCTION
    constants.BACKGROUND_SUBSTRACTION_STATS
    constants.HALO_FACTOR
+   constants.ACCEPTED_FORMATS
    constants.YCOL
    constants.XCOL
    constants.YLABEL
@@ -36,13 +38,6 @@ Attributes
 Module Contents
 ---------------
 
-.. py:data:: ACCEPTED_FORMATS
-   :value: ['.csv', '.png', '.jpeg', '.jpg']
-
-
-   Possible input formats
-
-
 .. py:data:: DISTANCE
    :value: 20
 
@@ -50,25 +45,39 @@ Module Contents
    Minimum required distance of two peaks to be discriminated.
 
 
-.. py:data:: CUSTOM_MIN_PEAK_HEIGHT
-   :value: 50
+.. py:data:: MIN_PEAK_HEIGHT_FACTOR
+   :value: 0.2
 
 
-   Minimum required height for a peak to be detected. 
+   Factor by which to multiply the maximum peak height to set the minimum peak height to be detected. 
 
 
-.. py:data:: PEAK_PROMINANCE
-   :value: (0.2, None)
+.. py:data:: MAX_PEAK_WIDTH_FACTOR
+   :value: 0.1
+
+
+   Fraction of entire gel length to set the maximum accepted peak width - ONLY FOR THE LADDER, not for sample peaks
+
+
+.. py:data:: PEAK_PROMINENCE
+   :value: (0.3, None)
 
 
    Tuple, minimum peak prominence 
+
+
+.. py:data:: INTERPOLATE_FUNCTION
+   :value: 'quadratic'
+
+
+   Function to interpolate missing base pair values based on user-annotated values 
 
 
 .. py:data:: BACKGROUND_SUBSTRACTION_STATS
    :value: 0.1
 
 
-   Int, fraction of max peak to be removed from fataset for statistical testing higher -> lower sens but pot better discrimination, lower -> sens up, more noise 
+   Int, fraction of max peak to be removed from dataset for statistical testing higher -> lower sens but pot better discrimination, lower -> sens up, more noise 
 
 
 .. py:data:: HALO_FACTOR
@@ -76,6 +85,13 @@ Module Contents
 
 
    Float [0-1] factor by which the marker will be multiplied to define cropping range when removing marker peaks
+
+
+.. py:data:: ACCEPTED_FORMATS
+   :value: ['.csv', '.png', '.jpeg', '.jpg']
+
+
+   Possible input formats
 
 
 .. py:data:: YCOL

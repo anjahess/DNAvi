@@ -12,6 +12,7 @@ DNAvi -  Integration, statistics and visualization of cfDNA fragment traces
 
 DNAvi is a Python-based tool for rapid analysis and visualization of cell-free DNA (cfDNA) fragment size profiles directly from electrophoresis data, without the need for sequencing. It enables normalization, statistical comparison, and publication-ready plotting of multiple samples, supporting quality control and exploratory fragmentomics in clinical and research workflows.
 
+
 .. toctree::
    Installation
    Quickstart
@@ -21,9 +22,9 @@ DNAvi is a Python-based tool for rapid analysis and visualization of cell-free D
    Outputs
    Visualization
    Statistics
+   Advanced
    :maxdepth: 1
    :caption: Contents
-
 
 
 

@@ -8,10 +8,9 @@ Date: 2023-AUG-06
 
 """
 
-
-ACCEPTED_FORMATS = ['.csv', '.png', '.jpeg', '.jpg']
-"""Possible input formats"""
-
+########################################################################################################################
+# BAND DETECTION SETTINGS
+########################################################################################################################
 # Peak detection ladder
 DISTANCE = 20 # 20 pos apart min
 """Minimum required distance of two peaks to be discriminated."""
@@ -36,6 +35,14 @@ higher -> lower sens but pot better discrimination, lower -> sens up, more noise
 # Marker band cropping
 HALO_FACTOR=0.35 # factor to calc bp to crop from markers
 """Float [0-1] factor by which the marker will be multiplied to define cropping range when removing marker peaks"""
+
+
+########################################################################################################################
+# OTHER SETTINGS
+########################################################################################################################
+
+ACCEPTED_FORMATS = ['.csv', '.png', '.jpeg', '.jpg']
+"""Possible input formats"""
 
 YCOL = "normalized_fluorescent_units"
 """Standardized y axis name"""
