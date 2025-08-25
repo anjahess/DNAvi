@@ -14,7 +14,7 @@ Installation and testing of DNAvi has been performed for **Windows 10** and **Ub
 
 .. code-block::
 
-    Suiatble systems:
+    Suitable systems:
     Windows 10 Pro, Version 22H2        with Python 3.12.0 and Python 3.13
     Ubuntu 24.04.2 LTS                  with Python 3.13.5
 
@@ -62,13 +62,13 @@ Use github CLI:
 
 .. code-block::
 
-    gh repo clone anjahess/DNAvi_light
+    gh repo clone anjahess/DNAvi
 
 Or wget:
 
 .. code-block::
 
-    wget https://github.com/anjahess/DNAvi_light/archive/refs/heads/main.zip
+    wget https://github.com/anjahess/DNAvi/archive/refs/heads/main.zip
 
 Unpack or move the DNAvi folder to your location of choice and you're ready to start.
 
