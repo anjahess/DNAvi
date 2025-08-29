@@ -52,6 +52,7 @@ In this example we will run DNAvi on a test electropherogram signal table provid
     cd DNAvi/
     python3 DNAvi.py -i tests/electropherogram.csv -l tests/ladder.csv -m tests/metadata.csv
 
+
 This will result in the following output:
     
     Welcome to
