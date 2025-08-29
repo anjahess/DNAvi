@@ -18,10 +18,10 @@ DISTANCE = 20 # 20 pos apart min
 MIN_PEAK_HEIGHT_FACTOR=0.2
 """Factor by which to multiply the maximum peak height to set the minimum peak height to be detected. """
 
-MAX_PEAK_WIDTH_FACTOR=0.1
+MAX_PEAK_WIDTH_FACTOR=1
 """Fraction of entire gel length to set the maximum accepted peak width - ONLY FOR THE LADDER, not for sample peaks"""
 
-PEAK_PROMINENCE=(0.3, None)
+PEAK_PROMINENCE=(0.2, None)
 """Tuple, minimum peak prominence """
 
 # Constants for basepair annotation
