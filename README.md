@@ -1,19 +1,13 @@
-DNAvi: a python tool for integration, analysis, and visualization of cell-free DNA fragments in liquid biopsies
+DNAvi: integration, analysis, and visualization of cell-free DNA fragment traces
 ===========
 
-Author: Anja Hess
 
-Date: 2025-JUL-22
+![DNA Image 1](static/workflow.png)
 
-Affiliations: 
-1. Max Planck Institute for Molecular Genetics, Berlin, Germany
-2. Exploratory Diagnostic Sciences, Berlin Institute of Health at Charité Universitätsmedizin Berlin, Berlin, Germany 
-3. Digital Health Cluster, Hasso Plattner Institute for Digital Engineering, Digital Engineering Faculty, University of Potsdam, Potsdam, Germany
-4. Department of Biology, Chemistry and Pharmacy, Freie Universität Berlin, Berlin, Germany
 
 ## 1. Description
-DNAvi is an open-access software to integrate, analyze and visualize multiple DNA fragmentation profiles from automated gel electrophoresis 
-devices. The tool was tested on a 32 GB memory local PC on Ubuntu 24.04.2 LTS.
+DNAvi is an open-access software to integrate, analyze and visualize multiple cell-free DNA fragmentation profiles from liquid biopsies. It uses either gel images
+or automated gel electrophoresis device output tables (electropherograms). The tool was tested on a 32 GB memory local PC on Ubuntu 24.04.2 LTS, as well as on Windows 10 and MAC-OS.
 
 ## 2. Installation
 
@@ -55,7 +49,68 @@ Windows: **Windows Symbol -> search cmd.exe -> Click cmd.exe**
 
 In this example we will run DNAvi on a test electropherogram signal table provided in this package:
 
-    python3 DNAvi.py -i electropherogram.csv -l ladder.csv -m meta.csv
+    cd DNAvi/
+    python3 DNAvi.py -i tests/electropherogram.csv -l tests/ladder.csv -m tests/metadata.csv
+
+This will result in the following output:
+    
+    Welcome to
+      ____  _   _    _        _
+     |  _ |  \ | |  / \__   _(_)
+     | | | |  \| | / _ \ \ / / |
+     | |_| | |\  |/ ___ \ V /| |
+     |____/|_| \_/_/   \_\_/ |_| 
+      
+        DNA file: tests/electropherogram.csv      
+        Ladder file: tests/ladder.csv
+        Meta file: tests/metadata.csv
+
+    ------------------------------------------------------------
+               ELECTROPHEROGRAM DNA SIZE ANALYSIS
+    ------------------------------------------------------------
+         
+            DNA file: tests/electropherogram.csv      
+            Ladder file: tests/ladder.csv
+            Meta file: None
+    
+    Saving results to: tests/results/
+    
+    ------------------------------------------------------------
+
+
+
+... and additional infos depending on the analysis details. Once DNAvi is finished,
+this message will appear:
+
+You can now go to you results folder:
+    
+       ├── results
+            ├── plots
+            ├── stats
+            └── qc
+
+In the plots and stats folder, you will find various visualizations summarizing fragmentomic traces of your samples.
+
+![DNA Image 1](static/example_cluster_condition.jpg)
+
+![DNA Image 1](static/plot_example_2.png)
+
+In case you provided a metadata file, each category will result in its own plot. In the example below, the 27 samples stem from
+two experiments, and we can see the integrated profile plot for each expeirment below:
+![DNA Image 2](static/plot_example_1.png)
+
+
+
+## 4. Multi-file input
+
+If you have multiple gel images or csv files to process, just put them into a folder and point DNAvi to that folder: \
+**! Attention:** Run together only files that have the **same DNA ladder**.
+
+    python3 DNAvi.py -i /path/to/folder -l ladder.csv
+
+
+## 5. Help and documentation
+
 
 If you need help, simply run
 
@@ -96,81 +151,13 @@ Which will result in a display of command line arguments with additional explana
 
       Version: 0.1, created by Anja Hess <anja.hess@mail.de>, MPIMG
 
-## 4. Example
-
-
-In this example we will run DNAvi on a test electropherogram signal table provided in this package:
-
-    cd DNAvi/
-    python3 DNAvi.py -i tests/electropherogram.csv -l tests/ladder.csv -m tests/metadata.csv
-
-This will result in the following output:
-    
-    Welcome to
-      ____  _   _    _        _
-     |  _ |  \ | |  / \__   _(_)
-     | | | |  \| | / _ \ \ / / |
-     | |_| | |\  |/ ___ \ V /| |
-     |____/|_| \_/_/   \_\_/ |_| 
-      
-        DNA file: tests/electropherogram.csv      
-        Ladder file: tests/ladder.csv
-        Meta file: tests/metadata.csv
-
-    ------------------------------------------------------------
-               ELECTROPHEROGRAM DNA SIZE ANALYSIS
-    ------------------------------------------------------------
-         
-            DNA file: tests/electropherogram.csv      
-            Ladder file: tests/ladder.csv
-            Meta file: None
-    
-    Saving results to: tests/results/
-    
-    ------------------------------------------------------------
-
-
-
-... and additional infos depending on the analysis details. Once DNAvi is finished,
-this message will appear:
-
-
-
-You can now go to you results folder:
-    
-       ├── results
-            ├── plots
-            │   ├── all_samples_nomarker_summary.pdf
-            │   ├── all_samples.pdf
-            │   ├── basic_statistics.csv
-            │   ├── group_statistics.csv
-            │   ├── peak_statistics.csv
-            │   └── sourcedata.csv
-            └── qc
-                ├── 0_custom_interpolated.pdf
-                ├── bp_translation.csv
-                ├── info.csv
-                ├── interpolated.csv
-                ├── peaks_0_custom.pdf
-                └── peaks_all_interpolated.pdf
-
-In the plots folder, you will find various plots summarizing fragmentomic traces of your samples.
-
-![DNA Image 1](static/plot_example_2.png)
-
-In case you provided a metadata file, each category will result in its own plot. In the example below, the 27 samples stem from
-two experiments, and we can see the integrated profile plot for each expeirment below:
-![DNA Image 2](static/plot_example_1.png)
-
-## 5. Multi-file input
-
-If you have multiple gel images or csv files to process, just put them into a folder and point DNAvi to that folder: \
-**! Attention:** Run together only files that have the **same DNA ladder**.
-
-    python3 DNAvi.py -i /path/to/folder -l ladder.csv
-
 
 ## 6. Citation
 
-Anja Hess, Alexander Meissner, Dominik Seelow, and Helene Kretzmer: 
+Anja Hess(1,2,3), Dominik Seelow(1), and Helene Kretzmer(2,4): 
 **DNAvi: a python tool for integration, analysis, and visualization of cell-free DNA fragments in liquid biopsies (2025)**
+
+1. Exploratory Diagnostic Sciences, Berlin Institute of Health at Charité Universitätsmedizin Berlin, Berlin, Germany 
+2. Max Planck Institute for Molecular Genetics, Berlin, Germany
+3. Department of Biology, Chemistry and Pharmacy, Freie Universität Berlin, Berlin, Germany
+4. Digital Health Cluster, Hasso Plattner Institute for Digital Engineering, Digital Engineering Faculty, University of Potsdam, Potsdam, Germany
