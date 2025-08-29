@@ -155,7 +155,8 @@ def peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL,
         peaks, _ = find_peaks(array, distance=DISTANCE,
                               prominence=PEAK_PROMINENCE,
                               height=min_peak_height,
-                              width=(None,max_peak_width))
+                              width=(None,max_peak_width)
+                              )
         peak_list = peaks.tolist()
         print(f"--- Ladder #{i}: {len(peak_list)} peaks detected.")
 
@@ -193,7 +194,7 @@ def peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL,
                      f"ladder file ({len(peak_dict[i][0])} bands) "
                      f"and the actual data in gel image/table ladder "
                      f"({len(peak_list)} bands). "
-                     f"Please check {qc_save_dir}/ to see what peaks are "
+                     f"Please check {qc_save_dir} to see what peaks are "
                      f"missing or whether your ladder is in the "
                      f"wrong position.")
             print(error)
