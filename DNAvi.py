@@ -1,15 +1,9 @@
 """
 
-CMD interface for electropherogram analysis.
+Command line interface tool for cell-free DNA fragment trace analysis with DNAvi.
 
-Input: raw electropherogram csv file. In the same directory
-you can add a meta file (name_of_csv + "_meta.csv") explaining the conditions.
-
-Usage: python3 DNAvi.py /path/to/csv
-# Alias dnaint: dnaint /home/anja/Documents/projects/mpi/5_lab/3_project/
-liquid_bio/x_results/2_manuscript/nextcloud/v5/00_Electros/Electropherogram.csv
-@author: Anja Hess
-@date: 2023-JUL-01
+Author: Anja Hess
+Date: 2023-AUG-01
 
 """
 
@@ -27,7 +21,6 @@ from src.data_checks import check_input, check_ladder, check_meta, check_name, c
 from src.analyze_electrophero import epg_analysis
 from src.constants import ACCEPTED_FORMATS
 from src.analyze_gel import analyze_gel
-
 #########################################################################
 # Initiate Parser
 #########################################################################
