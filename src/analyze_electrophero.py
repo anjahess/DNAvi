@@ -196,7 +196,7 @@ def peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL,
                      f"({len(peak_list)} bands). "
                      f"Please check {qc_save_dir} to see what peaks are "
                      f"missing or whether your ladder is in the "
-                     f"wrong position.")
+                     f"wrong position or if this is NOT a gel image.")
             print(error)
             exit()
 

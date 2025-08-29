@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import imageio.v3 as iio
 import skimage as ski
+import numpy as np
 from skimage import measure, util
 from skimage.filters import threshold_otsu
 from skimage.measure import label, regionprops
@@ -54,6 +55,20 @@ def resize_img(image):
     
     return image_resized
 
+
+def remove_colors_from_img(image, max_range=0.3):
+    """
+    Remove colors from an image, especially colored arrows or marker annotations
+    :param image: numpy array
+    :param max_range: maximum color range to accept before making this black -> increasing = more tolerance
+    :return: all colors now black.
+    """
+    RGBrange = np.ptp(image, axis=2)
+    coloured = RGBrange > max_range
+    image[coloured] = [0,0,0]
+    return image
+
+
 def analyze_gel(image_file, run_id=None, marker_lane=0):
     """
 
@@ -83,9 +98,15 @@ def analyze_gel(image_file, run_id=None, marker_lane=0):
     ####################################################################################
     input_image = image_file
 
-    # load and resize
+    # load, resize, remove colors
     gel = iio.imread(uri=input_image)[:,:,:3]
     gel = resize_img(gel)
+    gel = remove_colors_from_img(gel)
+
+    fig, ax = plt.subplots()
+    ax.imshow(gel, cmap="gray")
+    plt.savefig(f"{gel_dir}colors-removed.png")
+    plt.close()
 
     grey = ski.color.rgb2gray(gel)
     blurred_shapes = ski.filters.gaussian(grey, sigma=1.0)
@@ -123,7 +144,6 @@ def analyze_gel(image_file, run_id=None, marker_lane=0):
         if region.area >= 100: # Minimum size
             ovlp = None
             minr, minc, maxr, maxc = region.bbox
-
             #############################################################################
             # GET X-COORDINATES (Y=Same)
             # Exclude overlapping coordinates that are already in the dict
@@ -184,11 +204,13 @@ def analyze_gel(image_file, run_id=None, marker_lane=0):
     ####################################################################################
     # 5. Checkpoint - do we have enough lanes?
     ####################################################################################
+
     if len(profiles) <= 1:
         error = ("Insufficient gel lanes detected. "
                  "Make sure your image is a DNA gel image (must be white "
-                 "background with black bands on it)")
-        return "", error
+                 "background with black bands on it")
+        print(error)
+        exit()
 
     ###################################################################################
     # 6. Transform to df + quick sanity check that ladder is available
@@ -205,6 +227,7 @@ def analyze_gel(image_file, run_id=None, marker_lane=0):
     ###################################################################################
     df.rename(columns={marker_lane: "Ladder"}, inplace=True)
     df.to_csv(save_table, index=False)
+
     return save_table, save_dir, None
 
 # END OF SCRIPT
