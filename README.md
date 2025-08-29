@@ -92,15 +92,16 @@ You can now go to you results folder:
 In the plots and stats folder, you will find various visualizations summarizing fragmentomic traces of your samples.
 
 
-<img src="static/example_cluster_condition.jpg" alt="Img_1" width="550">
+<p align="center">
+<img src="static/example_cluster_condition.jpg" alt="Img_1" width="650">
 
-<img src="static/plot_example_2.png" alt="Img_2" width="550">
-
+<img src="static/plot_example_2.png" alt="Img_2" width="650">
+</p>
 In case you provided a metadata file, each category will result in its own plot. In the example below, the 27 samples stem from
 two experiments, and we can see the integrated profile plot for each expeirment below:
 
 <p align="center">
-<img src="static/plot_example_1.png" alt="Img_3" width="400">
+<img src="static/plot_example_1.png" alt="Img_3" width="450">
 </p>
 
 ## 4. Multi-file input
