@@ -91,13 +91,13 @@ You can now go to you results folder:
 
 In the plots and stats folder, you will find various visualizations summarizing fragmentomic traces of your samples.
 
-![[DNA Image 1|400]](static/example_cluster_condition.jpg )
+![[DNA Image 1|200]](static/example_cluster_condition.jpg )
 
-![[DNA Image 2|400]](static/plot_example_2.png)
+![[DNA Image 2|200]](static/plot_example_2.png)
 
 In case you provided a metadata file, each category will result in its own plot. In the example below, the 27 samples stem from
 two experiments, and we can see the integrated profile plot for each expeirment below:
-![[DNA Image 3|400]](static/plot_example_1.png)
+![[DNA Image 3|200]](static/plot_example_1.png)
 
 
 
