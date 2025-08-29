@@ -73,8 +73,11 @@ def gridplot(df, x, y, save_dir="", title="", y_label="", x_label="",
             wide_df = prep_df.pivot(index=["sample", col], columns=x,
                                values=y).reset_index()
         required_colors = round(int(len(wide_df[col].unique())/5))
+        if required_colors <= 5:
+            required_colors = 2
         lut = dict(zip(wide_df[col].unique(), sns.color_palette(palette='colorblind')*required_colors))
         row_colors = wide_df[col].map(lut)
+
         sns.clustermap(wide_df.drop(columns=["sample", col]),
                        rasterized=True, row_cluster=True,
                        cmap="YlGnBu",yticklabels=False,xticklabels=False,
