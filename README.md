@@ -154,10 +154,9 @@ Which will result in a display of command line arguments with additional explana
 
 ## 6. Citation
 
-Anja Hess(1,2,3), Dominik Seelow(1), and Helene Kretzmer(2,4): 
-**DNAvi: a python tool for integration, analysis, and visualization of cell-free DNA fragments in liquid biopsies (2025)**
-
-1. Exploratory Diagnostic Sciences, Berlin Institute of Health at Charité Universitätsmedizin Berlin, Berlin, Germany 
+**Anja Hess<sup>1,2,3</sup>, Dominik Seelow<sup>1</sup>, and Helene Kretzmer<sup>2,4</sup>: 
+DNAvi: Integration, statistics, and visualization of cell-free DNA fragment traces**
+1. Center of Genomic Medicine, Berlin Institute of Health at Charité Universitätsmedizin Berlin, Berlin, Germany 
 2. Max Planck Institute for Molecular Genetics, Berlin, Germany
 3. Department of Biology, Chemistry and Pharmacy, Freie Universität Berlin, Berlin, Germany
 4. Digital Health Cluster, Hasso Plattner Institute for Digital Engineering, Digital Engineering Faculty, University of Potsdam, Potsdam, Germany
