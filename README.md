@@ -25,13 +25,18 @@ Conda:
 
 Next, download the repository.
 
+Through *https*:
+
+    git clone https://github.com/anjahess/DNAvi.git
+
 Through *github CLI*:
     
     gh repo clone anjahess/DNAvi
 
-Or through *wget*:
+Or through *zip download*:
 
-    wget https://github.com/anjahess/DNAvi/archive/refs/heads/main.zip
+    Go to <Code> (top right), then click 'Download ZIP'. 
+    
 
 Unpack or move the DNAvi folder to your location of choice and you're ready to start.
 
