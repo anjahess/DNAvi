@@ -30,8 +30,6 @@ fastjsonschema==2.21.2
 Flask==3.1.0
 Flask-Login==0.6.3
 fonttools==4.55.0
-# Editable install with no version control (GelGenie==1.0.0)
--e /home/anja/Documents/projects/mpi/5_lab/3_project/DNAInt/3_Manuscript/BIOINFORMATICS/other_tools/GelGenie-main/python-gelgenie
 gseapy==1.1.5
 h5py==3.12.1
 idna==3.10
