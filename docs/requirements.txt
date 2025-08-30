@@ -4,6 +4,7 @@
 #
 #    pip-compile requirements.in
 #
+autoapi
 alabaster==1.0.0
     # via sphinx
 babel==2.17.0
