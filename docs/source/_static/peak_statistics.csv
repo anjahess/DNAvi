@@ -1,0 +1,11 @@
+sample,peak_id,peak_fluorescence,bp,CONDITION,AGE
+Sample_1,average_size,,973.9,Control,12
+Sample_1,max_peak,1.0,1282.6,Control,12
+Sample_1,0,0.9,152.0,Control,12
+…,…,…,…,…,…
+Sample_1,5,1.0,1282.6,Control,12
+Sample_2,average_size,,1385.5,Control,15
+Sample_2,max_peak,1.0,161.2,Control,15
+Sample_2,0,1.0,161.2,Control,15
+…,…,…,…,…,…
+Sample_2,6,0.3,4250.0,Control,15

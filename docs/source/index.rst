@@ -61,5 +61,5 @@ Violin plots for average nucleosomal fractions including statistics
 
 Citation
 ^^^^^^^^^^^^^^^^^^
-**Anja Hess, Alexander Meissner, Dominik Seelow, and Helene Kretzmer: DNAvi:  Integration, statistics and visualization of cfDNA fragment traces (2025)**
+**Anja Hess, Dominik Seelow, and Helene Kretzmer: DNAvi:  Integration, statistics and visualization of cfDNA fragment traces (2025).**
 
