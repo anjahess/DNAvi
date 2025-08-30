@@ -156,10 +156,14 @@ Which will result in a display of command line arguments with additional explana
       Version: 0.1, created by Anja Hess <anja.hess@mail.de>, MPIMG
 
 
-## 6. Citation
+## 6. Acknowledgements
+
+Special thanks to [Yara Matani](https://github.com/yaramt) and [Philine Guckelberger](https://github.com/philinegu) for testing DNAvi!
+
+## 7. Citation
 
 **Anja Hess<sup>1,2,3</sup>, Dominik Seelow<sup>1</sup>, and Helene Kretzmer<sup>2,4</sup>: 
-DNAvi: Integration, statistics, and visualization of cell-free DNA fragment traces**
+DNAvi: Integration, statistics, and visualization of cell-free DNA fragment traces (2025).**
 1. Center of Genomic Medicine, Berlin Institute of Health at Charité Universitätsmedizin Berlin, Berlin, Germany 
 2. Max Planck Institute for Molecular Genetics, Berlin, Germany
 3. Department of Biology, Chemistry and Pharmacy, Freie Universität Berlin, Berlin, Germany
