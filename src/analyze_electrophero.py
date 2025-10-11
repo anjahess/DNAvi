@@ -596,7 +596,8 @@ def run_kruskal(df, variable="", category=""):
                                                   kruskal_groups[1]],
                                                  p_adjust=p_adjust_test)
                 else:
-                    kruskal_groups_for_posthoc = np.array(kruskal_groups)
+                    # Asarray - to avoid errors w/ n>2 and unequal numbers
+                    kruskal_groups_for_posthoc = np.asarray(kruskal_groups, dtype="object")
                     results = sp.posthoc_conover(kruskal_groups_for_posthoc,
                                                  p_adjust=p_adjust_test)
                 results.columns = names
@@ -620,7 +621,6 @@ def run_kruskal(df, variable="", category=""):
                                        "unique_peak",
                                        "average", "modal", "median",
                                        "groups"])
-    kruskal_df.replace({'{': ' '}, inplace=True)
     return kruskal_df
 
 def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="bp_pos",
