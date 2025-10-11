@@ -23,7 +23,7 @@ The QC folder is all about the DNA marker and detecting its peaks. It makes sens
     • **bp_translation.csv** – your input, but instead of ladder intensity values now with the assigned base pair position.
     • **Peaks_LADDER-NAME.pdf** – A line plot that will show you the detected peaks as yellow crosses. Make sure all peaks that you consider important are correctly detected. The x-axis will only give you positional values at that stage.
 
-        .. image:: _static/ladder_peaks.svg
+        .. image:: _static/peak_detected.png
           :width: 400
           :alt: Gel lanes
 

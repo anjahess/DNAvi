@@ -50,10 +50,7 @@ Group statistics
 
 For each variable specified in the :doc:`/Metadata` a table containing statistical testing results is provided.
 Let's have a look at an example where cell-free DNA from two groups (Control vs. Treatment) were compared.
-The metadata-based evaluation allows to answer biological questions on our cohort.
-
-**Question 1: Does the treatment impact liquid biopsies in our example cohort?**
-
+The metadata-based evaluation allows to answer biological questions (see also next section).
 
 .. image:: _static/example_stats_condition.jpg
   :width: 300
@@ -68,21 +65,3 @@ The metadata-based evaluation allows to answer biological questions on our cohor
 **Result:** In this example, the **average_size**, **max_peak**, and also the **first peak** size do show a statistical difference
 between the two groups, as the Kruskal Wallis test computed a *p* value **< 0.05**. **Unique peaks** refer to peaks that only occur in one group,
 but not in the other. Because they are unique to a group, no statistical comparison is performed for those peaks.
-
-**Question 2: Does the patient age impact liquid biopsies in our example cohort?**
-
-.. image:: _static/example_stats_age.jpg
-  :width: 300
-  :alt: Example stats
-
-
-.. csv-table:: Example of group statistics output II
-   :file: _static/group_statistics_by_AGE.csv
-   :widths: 30, 30, 30, 30, 30, 30, 30
-   :header-rows: 1
-
-**Result:** If we stratify the cell-free DNA samples by age, no significant difference is found (all p values are > 0.05). This
-may be because our sample size is too small or because we have not pooled patients by age groups.
-
-**Biological interpretation:** From this example dataset we would interpret that age does not have a statistically significant effect of cfDNA
-fragment profiles, while treatment does. Please keep in mind that adding more metadata may require more stringet statistics due to multiple testing.

@@ -22,6 +22,7 @@ DNAvi is a Python-based tool for rapid analysis and visualization of cell-free D
    Outputs
    Visualization
    Statistics
+   Biology
    Advanced
    :maxdepth: 1
    :caption: Contents

@@ -15,9 +15,9 @@ Tables have to be tab-separated in .csv / .tsv / .txt format and fulfill all cri
     • Sample names must match metafile sample names (if provided)
     • All column values are numeric (and refer to DNA band intensity units)
 
-.. csv-table:: Example of an extended DNAvi metadata file
+.. csv-table:: Example of a DNAvi input table
    :file: _static/table_input.csv
-   :widths: 30, 30, 30, 30, 30
+   :widths: 30, 30, 30, 30, 30,30
    :header-rows: 1
 
 
