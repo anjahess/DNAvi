@@ -82,6 +82,16 @@ parser.add_argument('-ml', '--marker_lane',
                          'specified column even if other columns are called Ladder already.',
                     required=False)
 
+parser.add_argument('-c', '--config',
+                    type=check_config,
+                    metavar='<metadata-file>',
+                    nargs='?',  # single file
+                    help='Path to configuration file containing custom '
+                         '(nucleosome) intervals for statistics. '
+                         'Accepted format: tab-separated text files (.txt)',
+                    required=False)
+
+
 parser.add_argument("--verbose", help="increase output verbosity",
                     action="store_true")
 
