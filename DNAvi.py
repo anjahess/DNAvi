@@ -18,7 +18,7 @@ print(logo)
 import os
 import argparse
 from src.data_checks import (check_input, check_ladder, check_meta, check_name,
-                             check_marker_lane, check_config, compute_nuc_intervals)
+                             check_marker_lane, check_config, check_interval)
 from src.analyze_electrophero import epg_analysis
 from src.constants import ACCEPTED_FORMATS, NUC_DICT
 from src.analyze_gel import analyze_gel
@@ -42,6 +42,11 @@ parser.add_argument('-i', '--input',
                          'file OR directory containing those files. '
                          'Accepted formats: .csv/.png/.jpeg/.jpg '
                          'or directory containing those.')
+
+#parser.add_argument('-bm', '--benchmark',
+ #                   action="store_true",
+  #                  default=False,
+   #                 help='Get performance metrics for DNAvi')
 
 parser.add_argument('-l', '--ladder',
                     type=check_ladder,
@@ -92,6 +97,13 @@ parser.add_argument('-c', '--config',
                          'Accepted format: tab-separated text files (.txt)',
                     required=False)
 
+parser.add_argument('-iv', '--interval',
+                    type=check_interval,
+                    metavar='<(start,step)>',
+                    nargs='?',  # single file
+                    help='Interval (start,step) for auto-generated nucleosomal '
+                         'fractions',
+                    required=False)
 
 parser.add_argument("--verbose", help="increase output verbosity",
                     action="store_true")
@@ -103,9 +115,16 @@ parser.add_argument('-v', '--version', action='version', version="v0.1")
 #########################################################################
 args = parser.parse_args()
 save_dir = None
-csv_path, ladder_path, meta_path, run_id, marker_lane = args.input, args.ladder, args.meta, args.name, args.marker_lane
+nuc_dict = NUC_DICT
+csv_path, ladder_path, meta_path, run_id, marker_lane, nuc_dict \
+    = args.input, args.ladder, args.meta, args.name, args.marker_lane, args.config #args.benchmark
 marker_lane = marker_lane - 1 #transfer to 0-based format
 
+if args.interval and args.config:
+    print("Cannot use both interval and nuc_dict arguments.")
+    exit(1)
+if args.interval:
+    nuc_dict = args.interval
 #########################################################################
 # Decide: folder or single file processing
 #########################################################################
