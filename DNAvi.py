@@ -131,7 +131,8 @@ for file in files_to_check:
     # Start analysis
     epg_analysis(signal_table, ladder_path, meta_path, run_id=run_id,
                  include_marker=args.include, image_input=image_input,
-                 save_dir=save_dir, marker_lane=marker_lane)
+                 save_dir=save_dir, marker_lane=marker_lane,
+                 nuc_dict=nuc_dict)
 
 print("")
 print("--- DONE. Results in same folder as input file.")
