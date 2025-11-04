@@ -287,4 +287,69 @@ def check_meta(filename):
         exit()
 
     return filename
+
+
+def check_config(filename):
+    """
+
+    Check if the config file is formatted correctly
+
+    :param filename: str, path to config file
+
+    :return: raise error if file does not have correct format
+
+    """
+    print("--- Performing custom config file check")
+    ######################################################################
+    # 1. Make sure all arguments exist
+    ######################################################################
+    if not(os.path.exists(filename)):
+        print(f"{filename} doesn't exist")
+        exit()
+    ######################################################################
+    # 2. Detect delimiter
+    ######################################################################
+    try:
+        delim = detect_delim(filename, num_rows=2)
+    except:
+        print(f"--- {filename} seems to have less than 2 rows. "
+              f"Not plausible. Please check your input file.")
+        exit()
+    try:
+        df = pd.read_csv(filename, header=0, delimiter=delim)
+    except:
+        print("--- Error reading your ladder file,"
+              "please check it and try again.")
+        exit()
+    ######################################################################
+    # 3. Check nomenclature in names column
+    ######################################################################
+    try:
+        print(df)
+    except:
+        print("Metafile misformatted. Make sure first column is called"
+              "'name', the second is 'start', and the third is 'end'")
+        exit()
+    if df["name"].isnull().values.any():
+        print("--- Config file table contains NaNs in 'name' column."
+              "Make sure every range has a name, and try again.")
+        exit()
+
+    ######################################################################
+    # 4. Replace NaN with 0 for int check, check dups
+    ######################################################################
+    df["start"].fillna( 0, inplace=True)
+    df["end"].fillna( 0, inplace=True)
+    try:
+        df["start"] = df["start"].astype(int)
+        df["end"] = df["end"].astype(int)
+    except:
+        print("--- Non-integers in start/end. Make sure only integers are there.")
+        exit()
+    if df.duplicated(subset=["name"]).any():
+        print("--- Duplicate sample names in config. Please give each "
+              "sample a unique ID and try again.")
+        exit()
+
+    return filename
 # END OF SCRIPT
