@@ -758,6 +758,8 @@ def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
         run_id = path_to_file.rsplit("/", 1)[1].rsplit(".", 1)[0]
     if not save_dir:
         save_dir = path_to_file.rsplit("/", 1)[0] + f"/{run_id}/"
+    if not save_dir.startswith("/"):
+        save_dir = maindir + "/" + save_dir
     plot_dir = f"{save_dir}/plots/"
     qc_dir = f"{save_dir}qc/"
     stats_dir =  f"{save_dir}/stats/"
