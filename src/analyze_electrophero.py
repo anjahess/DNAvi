@@ -784,6 +784,7 @@ def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
     with open(f"{save_dir}{LOGFILE_NAME}", "w") as log_file:
         log_file.write(f"--- DNAvi RUN LOG {datetime.UTC} ---\n")
         log_file.write(f"DNAvi Start time\t{t1}\n")
+        log_file.write(f"DNAvi Nuc Fractions: \t{nuc_dict}\n")
 
     print("------------------------------------------------------------")
     print("        Calculating basepair positions based on ladder")
