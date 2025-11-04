@@ -351,5 +351,72 @@ def check_config(filename):
               "sample a unique ID and try again.")
         exit()
 
-    return filename
+    ######################################################################
+    # 5. Check for common errors
+    ######################################################################
+
+    # Convert back
+    df["end"].replace(0, None, inplace=True)
+    df["start"].replace(0, None, inplace=True)
+    ######################################################################
+    # 5. Check for common errors
+    ######################################################################
+    # Start > End
+    len_too_small = len(df[df["end"] < df["start"]])
+    if len_too_small > 0:
+        print("--- Positions in end are < start, please correct the config file:",
+              df[df["end"] < df["start"]]
+              )
+        exit()
+    # Interval <2bp
+    len_too_narrow = len(df[(df["end"] - df["start"]) < 2])
+    if len_too_narrow > 0:
+        print("--- The interval is < 2bp. Please make it larger.",
+              df[(df["end"] - df["start"]) < 2]
+              )
+        exit()
+    isnull_len = df.isnull().sum(axis=1).max()
+    # Two NaNs
+    if isnull_len > 1:
+        print("--- Two Empty interval detected, please change or remove it.")
+        exit()
+    ######################################################################
+    # 6. Finally parse to the normal nuc dict format and return
+    ######################################################################
+    nuc_dict = {row[0]: (row[1], row[2]) for row in df.values}
+    return nuc_dict
+
+
+
+
+def compute_nuc_intervals(start, step=200, total_steps=10, prefixes=["Mono", "Di", "Tri", "Tetra", "Penta", "Hexa", "Hepta", "Octa", "Nona", "Deca"]):
+    """
+
+    :param start:
+    :param step:
+    :param total_steps:
+    :param prefixes:
+    :return: new nuc_dict (pyhton dictionary)
+    """
+
+    #####################################################################
+    # 5. Add the metadata
+    #####################################################################
+    max_list = total_steps * step
+
+    nuc_dict = {}
+    for i, size in enumerate(range(start, max_list, step)):
+
+        interval_name = prefixes[i]
+        start_1based = size + 1
+        end = size + step
+        nuc_dict[interval_name] = (start_1based, end)
+
+    print(nuc_dict)
+    return nuc_dict
+
+compute_nuc_intervals(100, step=200)
+
+
+
 # END OF SCRIPT
