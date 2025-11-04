@@ -17,7 +17,7 @@ logo=r"""Welcome to
 print(logo)
 import os
 import argparse
-from src.data_checks import check_input, check_ladder, check_meta, check_name, check_marker_lane
+from src.data_checks import check_input, check_ladder, check_meta, check_name, check_marker_lane, check_config
 from src.analyze_electrophero import epg_analysis
 from src.constants import ACCEPTED_FORMATS
 from src.analyze_gel import analyze_gel
