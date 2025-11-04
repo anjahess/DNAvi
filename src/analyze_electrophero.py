@@ -624,7 +624,7 @@ def run_kruskal(df, variable="", category=""):
     return kruskal_df
 
 def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="bp_pos",
-              metric_unit="bp_or_frac"):
+              metric_unit="bp_or_frac", nuc_dict=NUC_DICT):
     """
 
     Compute and output basic statistics for DNA size distributions
