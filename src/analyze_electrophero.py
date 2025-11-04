@@ -830,5 +830,12 @@ def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
     print("------------------------------------------------------------")
     gridplot(df, x=XCOL, y=YCOL, save_dir=plot_dir, title=f"all_samples",
              y_label=YLABEL, x_label=XLABEL)
+    t_plot2 = time.time()
+    print("------------------------------------------------------------")
+    print(f" Finished plotting in {t_plot2-t_plot1} ")
+    print("------------------------------------------------------------")
+    with open(f"{save_dir}{LOGFILE_NAME}", "a") as log_file:
+        log_file.write(f"Plot module total time\t{t_plot2 - t_plot1}\n")
+        log_file.write(f"DNAVI TOTAL TIME\t{t_plot2 - t1}\n")
     # END OF FUNCTION
 # END OF SCRIPT
