@@ -475,7 +475,7 @@ def mean_from_histogram(df, unit="", size_unit=""):
     return mean_bp
     # END OF FUNCTION
 
-def nuc_fractions(df, unit="", size_unit=""):
+def nuc_fractions(df, unit="", size_unit="", nuc_dict=NUC_DICT):
     """
 
     Estimate nucleosomal fractions (percentages) of \
