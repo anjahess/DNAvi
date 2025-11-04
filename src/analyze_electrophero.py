@@ -822,6 +822,15 @@ def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
     print("------------------------------------------------------------")
     epg_stats(df, save_dir=stats_dir) #, peak_dict=peak_dict)
 
+    # Time the basic modules
+    t_mod2 = time.time()
+
+    print("------------------------------------------------------------")
+    print(f" Finished basic analysis and statistics in {t_mod2-t1} ")
+    print("------------------------------------------------------------")
+    with open(f"{save_dir}{LOGFILE_NAME}", "a") as log_file:
+        log_file.write(f"Basic module ends\t{t_mod2}\n")
+        log_file.write(f"Basic module total time\t{t_mod2-t1}\n")
     #####################################################################
     # 5. Plot raw data (samples seperated)
     #####################################################################
