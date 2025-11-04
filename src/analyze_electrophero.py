@@ -5,7 +5,7 @@ Author: Anja Hess \n
 Date: 2025-AUG-06 \n
 
 """
-
+import datetime
 import os
 import numpy as np
 import pandas as pd
@@ -14,6 +14,7 @@ import statistics
 from scipy.signal import find_peaks
 from scipy.stats import kruskal, ttest_ind, mannwhitneyu
 import scikit_posthocs as sp
+import time
 script_path = os.path.dirname(os.path.abspath(__file__))
 """Local directory of DNAvi analyze_electrophero module"""
 maindir = script_path.split("/src")[0]
@@ -22,7 +23,9 @@ sys.path.insert(0, script_path)
 sys.path.insert(0, maindir)
 sys.path.insert(0, f"{maindir}/src")
 sys.path.insert(0, f"{maindir}/src")
-from constants import YLABEL, YCOL, XCOL, XLABEL, DISTANCE, MIN_PEAK_HEIGHT_FACTOR, MAX_PEAK_WIDTH_FACTOR, HALO_FACTOR, PEAK_PROMINENCE, NUC_DICT, BACKGROUND_SUBSTRACTION_STATS, INTERPOLATE_FUNCTION
+from constants import (YLABEL, YCOL, XCOL, XLABEL, DISTANCE, MIN_PEAK_HEIGHT_FACTOR, MAX_PEAK_WIDTH_FACTOR,
+                       HALO_FACTOR, PEAK_PROMINENCE, NUC_DICT, BACKGROUND_SUBSTRACTION_STATS,
+                       INTERPOLATE_FUNCTION, LOGFILE_NAME)
 from plotting import lineplot, ladderplot, peakplot, gridplot, stats_plot
 from data_checks import check_file
 import logging
@@ -383,7 +386,6 @@ def remove_marker_from_df(df, peak_dict="", on=""):
     # 1. Define the markers (for now based on one ladder only)
     ######################################################################
     first_ladder = list(peak_dict)[0]
-
     if len(peak_dict[first_ladder][1]) == 1:
         if peak_dict[0][1][0] == peak_dict[0][0][0]: # if == lowest bp val
             print(f"Only lower marker {peak_dict[0][1][0]} bp.")
@@ -491,7 +493,7 @@ def nuc_fractions(df, unit="", size_unit="", nuc_dict=NUC_DICT):
     fraction_df = []
 
     ######################################################################
-    # 0. Perform background substraction (
+    # 0. Perform background substraction
     ######################################################################
     df = df[df[unit] > (df[unit].max()*BACKGROUND_SUBSTRACTION_STATS)]
 
@@ -504,13 +506,15 @@ def nuc_fractions(df, unit="", size_unit="", nuc_dict=NUC_DICT):
     # 2. Define the fraction inside each basepair range (~nucleosomal
     # fraction)
     ######################################################################
-    for range in NUC_DICT:
-        start = NUC_DICT[range][0]
-        end = NUC_DICT[range][1]
+    for range in nuc_dict:
+        start = nuc_dict[range][0]
+        end = nuc_dict[range][1]
         if not end:
             sub_df = df[df[size_unit] >= start]
+        if not start:
+            sub_df = df[df[size_unit] < end]
         # Crop df to nuc range
-        else:
+        if start and end:
             sub_df = df[(df[size_unit] > start) & (df[size_unit] <= end)]
         fraction_signal_range = sub_df[unit].sum() / sum_all
         fraction_df.append([range, start, end, fraction_signal_range,
