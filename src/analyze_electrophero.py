@@ -777,6 +777,13 @@ def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
     # Only then make the effort to create folders
     for directory in [save_dir, plot_dir, qc_dir, stats_dir]:
         os.makedirs(directory, exist_ok=True)
+    ######################################################################
+    # Save the metrics to log file
+    ######################################################################
+    t1 = time.time()
+    with open(f"{save_dir}{LOGFILE_NAME}", "w") as log_file:
+        log_file.write(f"--- DNAvi RUN LOG {datetime.UTC} ---\n")
+        log_file.write(f"DNAvi Start time\t{t1}\n")
 
     print("------------------------------------------------------------")
     print("        Calculating basepair positions based on ladder")
