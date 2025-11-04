@@ -721,7 +721,8 @@ def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="b
 
 
 def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
-                 include_marker=False, image_input=False, save_dir=False, marker_lane=0):
+                 include_marker=False, image_input=False, save_dir=False, marker_lane=0,
+                 nuc_dict=NUC_DICT):
     """
     Core function to analyze DNA distribution from a signal table.
 
