@@ -820,7 +820,7 @@ def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
     print("------------------------------------------------------------")
     print("        Performing statistical analysis")
     print("------------------------------------------------------------")
-    epg_stats(df, save_dir=stats_dir) #, peak_dict=peak_dict)
+    epg_stats(df, save_dir=stats_dir, nuc_dict=nuc_dict)
 
     # Time the basic modules
     t_mod2 = time.time()
