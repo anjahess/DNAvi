@@ -654,7 +654,8 @@ def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="b
         # 2.1 Select data for only this sample
         sub_df = df[df["sample"] == sample]
         # 2.2 Get mean bp for the sample
-        nuc_df = nuc_fractions(sub_df, unit=unit, size_unit=size_unit)
+        nuc_df = nuc_fractions(sub_df, unit=unit, size_unit=size_unit,
+                               nuc_dict=nuc_dict)
         for nuc_feature in nuc_df.index:
             percentage = nuc_df.loc[nuc_feature,"percent"]
             peak_info.append([sample, nuc_feature, "", percentage,])
