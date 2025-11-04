@@ -389,8 +389,12 @@ def check_config(filename):
 
 
 
-def compute_nuc_intervals(start, step=200, total_steps=10, prefixes=["Mono", "Di", "Tri", "Tetra", "Penta", "Hexa", "Hepta", "Octa", "Nona", "Deca"]):
+def compute_nuc_intervals(start, step=200, total_steps=10,
+                          prefixes=["Mono", "Di", "Tri", "Tetra", "Penta", "Hexa", "Hepta", "Octa", "Nona", "Deca"]):
     """
+
+    Compute interpretable nucleosomaal intervals in format them
+    into a common DNAvi nuc dict.
 
     :param start:
     :param step:
@@ -400,23 +404,77 @@ def compute_nuc_intervals(start, step=200, total_steps=10, prefixes=["Mono", "Di
     """
 
     #####################################################################
-    # 5. Add the metadata
+    # 1. Define list range and add the name for each
     #####################################################################
-    max_list = total_steps * step
-
+    max_list = (total_steps * step) + step
     nuc_dict = {}
-    for i, size in enumerate(range(start, max_list, step)):
-
+    for i, size in enumerate(range(start, max_list, step+1)):
         interval_name = prefixes[i]
+        print(interval_name)
         start_1based = size + 1
         end = size + step
-        nuc_dict[interval_name] = (start_1based, end)
+        nuc_dict[f"{interval_name}({start_1based}-{end}bp)"] = (start_1based, end)
 
-    print(nuc_dict)
+    #####################################################################
+    # Everything larger goes up
+    #####################################################################
+    nuc_dict[f"Deca({start_1based}-{end}bp)"] = \
+        (nuc_dict[f"Deca({start_1based}-{end}bp)"][1]+1, None)
+
     return nuc_dict
-
-compute_nuc_intervals(100, step=200)
-
+    # END OF FUNCTION
 
 
+def check_interval(interval_string, max_val=100000):
+    """
+
+    Check if the config file is formatted correctly
+
+    :param filename: str, path to config file
+
+    :return: raise error if file does not have correct format
+
+    """
+    print("--- Performing interval check")
+
+    ######################################################################
+    # 1. Detect delimiter
+    ######################################################################
+    if "," not in interval_string:
+        print("Missing interval delimiter. Please provide interval "
+              "as Start,Step (e.g. 100,200 for starting at 100bp and increasing "
+              "in 200 bp steps).")
+        exit(1)
+    if interval_string.count(",") > 1:
+        print("Too many delimiters. Please provide interval "
+              "as Start,Step (e.g. 100,200 for starting at 100bp and increasing "
+              "in 200 bp steps).")
+        exit(1)
+    ######################################################################
+    # 2. Split and convert to int
+    ######################################################################
+    start, step = interval_string.replace(" ","").split(",")
+    try:
+        start = int(start)
+    except ValueError:
+        print(f"--- Invalid start value for interval: {start}. Please provide integer.")
+        exit(1)
+    try:
+        step = int(step)
+    except ValueError:
+        print(f"--- Invalid start value for interval: {step}. Please provide integer.")
+        exit(1)
+    print(f"--- Computing nucleosomal intervals from {start} bp in steps of {step} bp.")
+
+    if step < 5 or start < 5:
+        print(f"--- Start/Step too small. Please increase value.")
+        exit(1)
+    if start > max_val or step > max_val:
+        print(f"--- Start or step value too large. Please lower value.")
+        exit(1)
+    ######################################################################
+    # 3. Convert to nucleosomal dict
+    ######################################################################
+    nuc_dict = compute_nuc_intervals(start=start, step=step)
+    return nuc_dict
 # END OF SCRIPT
