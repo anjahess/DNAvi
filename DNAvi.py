@@ -85,7 +85,7 @@ parser.add_argument('-ml', '--marker_lane',
 
 parser.add_argument('-c', '--config',
                     type=check_config,
-                    metavar='<metadata-file>',
+                    metavar='<config-file>',
                     nargs='?',  # single file
                     help='Path to configuration file containing custom '
                          '(nucleosome) intervals for statistics. '
