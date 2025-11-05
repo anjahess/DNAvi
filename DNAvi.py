@@ -138,6 +138,11 @@ if os.path.isdir(csv_path):
     print(f"--- Checking folder {csv_path}")
     files_to_check = [f"{csv_path}{e}" for e in os.listdir(csv_path) if
                       e.endswith(tuple(ACCEPTED_FORMATS))]
+    ######################################################################
+    # Multi-file metadata handling
+    ######################################################################
+    meta_dict = generate_meta_dict(meta_path, files=files_to_check)
+
 elif os.path.isfile(csv_path):
     files_to_check = [e for e in [csv_path] if
                       e.endswith(tuple(ACCEPTED_FORMATS))]
