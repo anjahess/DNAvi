@@ -5,7 +5,7 @@ Author: Anja Hess \n
 Date: 2025-AUG-06 \n
 
 """
-
+import datetime
 import os
 import numpy as np
 import pandas as pd
@@ -14,6 +14,7 @@ import statistics
 from scipy.signal import find_peaks
 from scipy.stats import kruskal, ttest_ind, mannwhitneyu
 import scikit_posthocs as sp
+import time
 script_path = os.path.dirname(os.path.abspath(__file__))
 """Local directory of DNAvi analyze_electrophero module"""
 maindir = script_path.split("/src")[0]
@@ -22,7 +23,9 @@ sys.path.insert(0, script_path)
 sys.path.insert(0, maindir)
 sys.path.insert(0, f"{maindir}/src")
 sys.path.insert(0, f"{maindir}/src")
-from constants import YLABEL, YCOL, XCOL, XLABEL, DISTANCE, MIN_PEAK_HEIGHT_FACTOR, MAX_PEAK_WIDTH_FACTOR, HALO_FACTOR, PEAK_PROMINENCE, NUC_DICT, BACKGROUND_SUBSTRACTION_STATS, INTERPOLATE_FUNCTION
+from constants import (YLABEL, YCOL, XCOL, XLABEL, DISTANCE, MIN_PEAK_HEIGHT_FACTOR, MAX_PEAK_WIDTH_FACTOR,
+                       HALO_FACTOR, PEAK_PROMINENCE, NUC_DICT, BACKGROUND_SUBSTRACTION_STATS,
+                       INTERPOLATE_FUNCTION, LOGFILE_NAME)
 from plotting import lineplot, ladderplot, peakplot, gridplot, stats_plot
 from data_checks import check_file
 import logging
@@ -383,7 +386,6 @@ def remove_marker_from_df(df, peak_dict="", on=""):
     # 1. Define the markers (for now based on one ladder only)
     ######################################################################
     first_ladder = list(peak_dict)[0]
-
     if len(peak_dict[first_ladder][1]) == 1:
         if peak_dict[0][1][0] == peak_dict[0][0][0]: # if == lowest bp val
             print(f"Only lower marker {peak_dict[0][1][0]} bp.")
@@ -475,7 +477,7 @@ def mean_from_histogram(df, unit="", size_unit=""):
     return mean_bp
     # END OF FUNCTION
 
-def nuc_fractions(df, unit="", size_unit=""):
+def nuc_fractions(df, unit="", size_unit="", nuc_dict=NUC_DICT):
     """
 
     Estimate nucleosomal fractions (percentages) of \
@@ -491,7 +493,7 @@ def nuc_fractions(df, unit="", size_unit=""):
     fraction_df = []
 
     ######################################################################
-    # 0. Perform background substraction (
+    # 0. Perform background substraction
     ######################################################################
     df = df[df[unit] > (df[unit].max()*BACKGROUND_SUBSTRACTION_STATS)]
 
@@ -504,13 +506,15 @@ def nuc_fractions(df, unit="", size_unit=""):
     # 2. Define the fraction inside each basepair range (~nucleosomal
     # fraction)
     ######################################################################
-    for range in NUC_DICT:
-        start = NUC_DICT[range][0]
-        end = NUC_DICT[range][1]
+    for range in nuc_dict:
+        start = nuc_dict[range][0]
+        end = nuc_dict[range][1]
         if not end:
             sub_df = df[df[size_unit] >= start]
+        if not start:
+            sub_df = df[df[size_unit] < end]
         # Crop df to nuc range
-        else:
+        if start and end:
             sub_df = df[(df[size_unit] > start) & (df[size_unit] <= end)]
         fraction_signal_range = sub_df[unit].sum() / sum_all
         fraction_df.append([range, start, end, fraction_signal_range,
@@ -624,7 +628,7 @@ def run_kruskal(df, variable="", category=""):
     return kruskal_df
 
 def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="bp_pos",
-              metric_unit="bp_or_frac"):
+              metric_unit="bp_or_frac", nuc_dict=NUC_DICT):
     """
 
     Compute and output basic statistics for DNA size distributions
@@ -654,7 +658,8 @@ def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="b
         # 2.1 Select data for only this sample
         sub_df = df[df["sample"] == sample]
         # 2.2 Get mean bp for the sample
-        nuc_df = nuc_fractions(sub_df, unit=unit, size_unit=size_unit)
+        nuc_df = nuc_fractions(sub_df, unit=unit, size_unit=size_unit,
+                               nuc_dict=nuc_dict)
         for nuc_feature in nuc_df.index:
             percentage = nuc_df.loc[nuc_feature,"percent"]
             peak_info.append([sample, nuc_feature, "", percentage,])
@@ -721,7 +726,8 @@ def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="b
 
 
 def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
-                 include_marker=False, image_input=False, save_dir=False, marker_lane=0):
+                 include_marker=False, image_input=False, save_dir=False, marker_lane=0,
+                 nuc_dict=NUC_DICT):
     """
     Core function to analyze DNA distribution from a signal table.
 
@@ -758,6 +764,8 @@ def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
         run_id = path_to_file.rsplit("/", 1)[1].rsplit(".", 1)[0]
     if not save_dir:
         save_dir = path_to_file.rsplit("/", 1)[0] + f"/{run_id}/"
+    if not save_dir.startswith("/"):
+        save_dir = maindir + "/" + save_dir
     plot_dir = f"{save_dir}/plots/"
     qc_dir = f"{save_dir}qc/"
     stats_dir =  f"{save_dir}/stats/"
@@ -777,6 +785,14 @@ def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
     # Only then make the effort to create folders
     for directory in [save_dir, plot_dir, qc_dir, stats_dir]:
         os.makedirs(directory, exist_ok=True)
+    ######################################################################
+    # Save the metrics to log file
+    ######################################################################
+    t1 = time.time()
+    with open(f"{save_dir}{LOGFILE_NAME}", "w") as log_file:
+        log_file.write(f"--- DNAvi RUN LOG {datetime.UTC} ---\n")
+        log_file.write(f"DNAvi Start time\t{t1}\n")
+        log_file.write(f"DNAvi Nuc Fractions: \t{nuc_dict}\n")
 
     print("------------------------------------------------------------")
     print("        Calculating basepair positions based on ladder")
@@ -820,15 +836,32 @@ def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
     print("------------------------------------------------------------")
     print("        Performing statistical analysis")
     print("------------------------------------------------------------")
-    epg_stats(df, save_dir=stats_dir) #, peak_dict=peak_dict)
+    epg_stats(df, save_dir=stats_dir, nuc_dict=nuc_dict)
 
+    # Time the basic modules
+    t_mod2 = time.time()
+
+    print("------------------------------------------------------------")
+    print(f" Finished basic analysis and statistics in {t_mod2-t1} ")
+    print("------------------------------------------------------------")
+    with open(f"{save_dir}{LOGFILE_NAME}", "a") as log_file:
+        log_file.write(f"Basic module ends\t{t_mod2}\n")
+        log_file.write(f"Basic module total time\t{t_mod2-t1}\n")
     #####################################################################
     # 5. Plot raw data (samples seperated)
     #####################################################################
+    t_plot1 = time.time()
     print("------------------------------------------------------------")
     print("        Plotting results")
     print("------------------------------------------------------------")
     gridplot(df, x=XCOL, y=YCOL, save_dir=plot_dir, title=f"all_samples",
              y_label=YLABEL, x_label=XLABEL)
+    t_plot2 = time.time()
+    print("------------------------------------------------------------")
+    print(f" Finished plotting in {t_plot2-t_plot1} ")
+    print("------------------------------------------------------------")
+    with open(f"{save_dir}{LOGFILE_NAME}", "a") as log_file:
+        log_file.write(f"Plot module total time\t{t_plot2 - t_plot1}\n")
+        log_file.write(f"DNAVI TOTAL TIME\t{t_plot2 - t1}\n")
     # END OF FUNCTION
 # END OF SCRIPT

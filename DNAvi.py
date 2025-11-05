@@ -17,9 +17,11 @@ logo=r"""Welcome to
 print(logo)
 import os
 import argparse
-from src.data_checks import check_input, check_ladder, check_meta, check_name, check_marker_lane
+from src.data_checks import (check_input, check_ladder, check_meta, check_name,
+                             check_marker_lane, check_config, check_interval,
+                             generate_meta_dict)
 from src.analyze_electrophero import epg_analysis
-from src.constants import ACCEPTED_FORMATS
+from src.constants import ACCEPTED_FORMATS, NUC_DICT
 from src.analyze_gel import analyze_gel
 #########################################################################
 # Initiate Parser
@@ -41,6 +43,11 @@ parser.add_argument('-i', '--input',
                          'file OR directory containing those files. '
                          'Accepted formats: .csv/.png/.jpeg/.jpg '
                          'or directory containing those.')
+
+#parser.add_argument('-bm', '--benchmark',
+ #                   action="store_true",
+  #                  default=False,
+   #                 help='Get performance metrics for DNAvi')
 
 parser.add_argument('-l', '--ladder',
                     type=check_ladder,
@@ -82,6 +89,23 @@ parser.add_argument('-ml', '--marker_lane',
                          'specified column even if other columns are called Ladder already.',
                     required=False)
 
+parser.add_argument('-c', '--config',
+                    type=check_config,
+                    metavar='<config-file>',
+                    nargs='?',  # single file
+                    help='Path to configuration file containing custom '
+                         '(nucleosome) intervals for statistics. '
+                         'Accepted format: tab-separated text files (.txt)',
+                    required=False)
+
+parser.add_argument('-iv', '--interval',
+                    type=check_interval,
+                    metavar='<(start,step)>',
+                    nargs='?',  # single file
+                    help='Interval (start,step) for auto-generated nucleosomal '
+                         'fractions',
+                    required=False)
+
 parser.add_argument("--verbose", help="increase output verbosity",
                     action="store_true")
 
@@ -92,16 +116,35 @@ parser.add_argument('-v', '--version', action='version', version="v0.1")
 #########################################################################
 args = parser.parse_args()
 save_dir = None
-csv_path, ladder_path, meta_path, run_id, marker_lane = args.input, args.ladder, args.meta, args.name, args.marker_lane
+meta_dict = False
+nuc_dict = NUC_DICT
+csv_path, ladder_path, meta_path, run_id, marker_lane \
+    = args.input, args.ladder, args.meta, args.name, args.marker_lane #args.benchmark
+
 marker_lane = marker_lane - 1 #transfer to 0-based format
+
+if args.interval and args.config:
+    print("Cannot use both interval and nuc_dict arguments.")
+    exit(1)
+if args.interval:
+    nuc_dict = args.interval
+if args.config:
+    nuc_dict = args.config
 
 #########################################################################
 # Decide: folder or single file processing
 #########################################################################
 if os.path.isdir(csv_path):
+    if not csv_path.endswith("/"):
+        csv_path = f"{csv_path}/"
     print(f"--- Checking folder {csv_path}")
     files_to_check = [f"{csv_path}{e}" for e in os.listdir(csv_path) if
                       e.endswith(tuple(ACCEPTED_FORMATS))]
+    ######################################################################
+    # Multi-file metadata handling
+    ######################################################################
+    meta_dict = generate_meta_dict(meta_path, files=files_to_check)
+
 elif os.path.isfile(csv_path):
     files_to_check = [e for e in [csv_path] if
                       e.endswith(tuple(ACCEPTED_FORMATS))]
@@ -128,10 +171,14 @@ for file in files_to_check:
         signal_table = file
         image_input = False
 
+    if meta_dict:
+        meta_path = meta_dict[file]
+
     # Start analysis
     epg_analysis(signal_table, ladder_path, meta_path, run_id=run_id,
                  include_marker=args.include, image_input=image_input,
-                 save_dir=save_dir, marker_lane=marker_lane)
+                 save_dir=save_dir, marker_lane=marker_lane,
+                 nuc_dict=nuc_dict)
 
 print("")
 print("--- DONE. Results in same folder as input file.")

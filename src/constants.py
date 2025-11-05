@@ -12,7 +12,7 @@ Date: 2023-AUG-06
 # BAND DETECTION SETTINGS
 ########################################################################################################################
 # Peak detection ladder
-DISTANCE = 20 # 20 pos apart min
+DISTANCE = 10 # 20 pos apart min
 """Minimum required distance of two peaks to be discriminated."""
 
 MIN_PEAK_HEIGHT_FACTOR=0.2
@@ -37,12 +37,15 @@ HALO_FACTOR=0.35 # factor to calc bp to crop from markers
 """Float [0-1] factor by which the marker will be multiplied to define cropping range when removing marker peaks"""
 
 
+
 ########################################################################################################################
 # OTHER SETTINGS
 ########################################################################################################################
 
 ACCEPTED_FORMATS = ['.csv', '.png', '.jpeg', '.jpg']
 """Possible input formats"""
+
+LOGFILE_NAME = "dnavi.log"
 
 YCOL = "normalized_fluorescent_units"
 """Standardized y axis name"""
@@ -87,5 +90,6 @@ NUC_DICT = {"Mononucleosomal (100-250 bp)": (100,250),
             "Polynucleosomal (=> 750 bp)": (751, None),
             "Non-mono (> 250 bp)": (251, None),
             "Oligo (> 1250 bp)": (1250, None),
+            "Mitochondrial/TF":(None,100)
             }
 """Dictionary with standardized peak size options (beta)"""
