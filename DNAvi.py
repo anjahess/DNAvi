@@ -115,6 +115,7 @@ parser.add_argument('-v', '--version', action='version', version="v0.1")
 #########################################################################
 args = parser.parse_args()
 save_dir = None
+meta_dict = False
 nuc_dict = NUC_DICT
 csv_path, ladder_path, meta_path, run_id, marker_lane \
     = args.input, args.ladder, args.meta, args.name, args.marker_lane #args.benchmark
