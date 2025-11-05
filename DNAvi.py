@@ -164,6 +164,9 @@ for file in files_to_check:
         signal_table = file
         image_input = False
 
+    if meta_dict:
+        meta_path = meta_dict[file]
+
     # Start analysis
     epg_analysis(signal_table, ladder_path, meta_path, run_id=run_id,
                  include_marker=args.include, image_input=image_input,
