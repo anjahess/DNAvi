@@ -116,8 +116,9 @@ parser.add_argument('-v', '--version', action='version', version="v0.1")
 args = parser.parse_args()
 save_dir = None
 nuc_dict = NUC_DICT
-csv_path, ladder_path, meta_path, run_id, marker_lane, nuc_dict \
-    = args.input, args.ladder, args.meta, args.name, args.marker_lane, args.config #args.benchmark
+csv_path, ladder_path, meta_path, run_id, marker_lane \
+    = args.input, args.ladder, args.meta, args.name, args.marker_lane #args.benchmark
+
 marker_lane = marker_lane - 1 #transfer to 0-based format
 
 if args.interval and args.config:
@@ -125,6 +126,9 @@ if args.interval and args.config:
     exit(1)
 if args.interval:
     nuc_dict = args.interval
+if args.config:
+    nuc_dict = args.config
+
 #########################################################################
 # Decide: folder or single file processing
 #########################################################################
