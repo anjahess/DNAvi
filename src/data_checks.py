@@ -477,4 +477,39 @@ def check_interval(interval_string, max_val=100000):
     ######################################################################
     nuc_dict = compute_nuc_intervals(start=start, step=step)
     return nuc_dict
+
+
+def generate_meta_dict(meta_path, files=[]):
+    """
+    A function to conveniently parse metadata for multiple files
+    when handling multi-file inputs
+
+    :param meta_path: path to metadata file
+    :param files: list
+    :return: dictionary parsing the new split metadata file for each input file
+    """
+
+    meta_df = pd.read_csv(meta_path)
+    meta_dict = {}
+
+    toplevel_dir = f"{os.path.dirname(meta_path)}/"
+
+    for file in files:
+        file_name = file.split("/")[-1]
+        print(f"--- Getting metadata for {file_name} ---")
+        meta_df_file = meta_df[meta_df["FILE"] == file_name]
+        if meta_df_file.empty:
+            meta_dict[file] = False
+        else:
+            file_meta = file.rsplit('.',1)[0]+"_meta.csv"
+            file_id = file_meta.rsplit('/',1)[1]
+            file_meta_name = f"{toplevel_dir}{file_id}"
+            meta_df_file.to_csv(file_meta_name, index=False)
+            meta_dict[file] = file_meta_name
+    return meta_dict
+    # END OF FUNCTION
+
+
+
+
 # END OF SCRIPT
