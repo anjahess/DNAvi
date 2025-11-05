@@ -18,7 +18,8 @@ print(logo)
 import os
 import argparse
 from src.data_checks import (check_input, check_ladder, check_meta, check_name,
-                             check_marker_lane, check_config, check_interval)
+                             check_marker_lane, check_config, check_interval,
+                             generate_meta_dict)
 from src.analyze_electrophero import epg_analysis
 from src.constants import ACCEPTED_FORMATS, NUC_DICT
 from src.analyze_gel import analyze_gel

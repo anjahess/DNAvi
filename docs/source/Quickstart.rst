@@ -231,3 +231,163 @@ This will result in a display of command line arguments with additional explanai
       -v, --version         show program's version number and exit
 
     Version: 0.1, created by Anja Hess <anja.hess@mail.de>, MPIMG
+
+
+Use a gel image as input
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+You can start the analysis from a gel image as well. We provide an example in the tests/ directory that
+comes with downloading DNAvi. Simply type:
+
+.. code-block::
+
+    python3 DNAvi.py -i tests/gel.png -l tests/ladder.csv -m tests/metadata_gel.csv
+
+
+Watch DNAvi work:
+
+.. code-block::
+
+        Welcome to
+      ____  _   _    _        _
+     |  _ |  \ | |  / \__   _(_)
+     | | | |  \| | / _ \ \ / / |
+     | |_| | |\  |/ ___ \ V /| |
+     |____/|_| \_/_/   \_\_/ |_|
+
+    --- Performing ladder check
+    --- Performing metadata check
+    ------------------------------------------------------------
+            Loading image for signal table generation
+    ------------------------------------------------------------
+
+    ------------------------------------------------------------
+               DNA FRAGMENT SIZE ANALYSIS
+    ------------------------------------------------------------
+
+            Image input: True
+            DNA file: tests/hlo-gel/signal_table.csv
+            Ladder file: tests/ladder.csv
+            Meta file: tests/metadata_gel.csv
+            Include marker: False
+
+             run_id: signal_table
+             results to: /./DNAvi/tests/hlo-gel/
+    ------------------------------------------------------------
+            Loading signal table
+    ------------------------------------------------------------
+    --- Performing input check
+         Ladder         1         2         3         4
+    0  0.231248  0.077621  0.054479  0.066294  0.066193
+    1  0.252772  0.089723  0.063269  0.075393  0.074656
+    2  0.289584  0.110746  0.079725  0.092882  0.089840
+    ------------------------------------------------------------
+            Calculating basepair positions based on ladder
+    ------------------------------------------------------------
+    --- Ladder columns in data: 1 ---
+    --- Ladder translations found: 1 : ['HSD5000'] ---
+    --- Ladder #0: 11 peaks detected.
+    ... Selecting HSD5000
+    --- Checking for marker bands
+    --- Found markers: [10000, 15]
+    ------------------------------------------------------------
+            Height-normalizing data and removing markers
+    ------------------------------------------------------------
+    --- Excluding marker peaks from analysis (factor: 0.35)
+               bp_pos sample  normalized_fluorescent_units
+    0       31.117611      1                      0.216739
+    1       31.556239      1                      0.209807
+    2       31.993652      1                      0.201972
+    3       32.429849      1                      0.192685
+    4       32.864831      1                      0.183947
+    ...           ...    ...                           ...
+    1591  5878.676510      4                      0.011366
+    1592  6005.916862      4                      0.016435
+    1593  6137.025167      4                      0.020189
+    1594  6272.001426      4                      0.021767
+    1595  6410.845637      4                      0.023694
+
+    [1596 rows x 3 columns]
+    ------------------------------------------------------------
+            Parsing metadata
+    ------------------------------------------------------------
+    --- WARNING: Image - ONLY first 4 entries used (out of 4)
+    --- Adding metatadata for CONDITION
+    {'1': 'Group A', '2': 'Group B', '3': 'Group A', '4': 'Group B'}
+    ------------------------------------------------------------
+            Performing statistical analysis
+    ------------------------------------------------------------
+    --- Stats by CONDITION
+    --- Not plotting [] (bp/frac = 0 for all samples)
+    --- Plotting by sample
+    --- Plotting by CONDITION
+    ------------------------------------------------------------
+     Finished basic analysis and statistics in 12.800647258758545
+    ------------------------------------------------------------
+    ------------------------------------------------------------
+            Plotting results
+    ------------------------------------------------------------
+    --- Plotting by sample
+    --- Plotting by CONDITION
+    --- Sample grid plot
+    ------------------------------------------------------------
+     Finished plotting in 22.0695583820343
+    ------------------------------------------------------------
+
+    --- DONE. Results in same folder as input file.
+
+
+And check the results (here are a few examples of the output):
+
+
+           .. image:: _static/GELEXAMPLE_profile.png
+
+           .. image:: _static/GELEXAMPLE_samples.png
+
+           .. image:: _static/GELEXAMPLE_cluster.png
+
+
+Use a directory with multiple files as input
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+Sometimes you may wish to run DNAvi on multiple images / signal tables without restarting
+the analysis every single time. You do so by pointing DNAvi to the folder where your files are.
+We provide an example, you can simply type:
+
+.. code-block::
+
+    python3 DNAvi.py -i tests/mutltifolder -l tests/ladder.csv -m tests/metadata_multi.csv
+
+
+**Note**: If processing multiple files, your metadata file needs to specify the file name in a separate column.
+
+:download:`Multi metadata example <_static/metadata_multi_full.csv>`
+
+.. csv-table:: Example of a multi-file input DNAvi metadata file
+   :file: _static/metadata_multi.csv
+   :widths: 30, 30, 30
+   :header-rows: 1
+
+
+**Note**: To enjoy a smooth analysis, only put signal tables or images into the multi-input folder.
+
+
+DNAvi will then go through your files and create the usual outputs for each file inside the multi-input folder.
+On top of the interface there will be a short short message, indicating that your metafiles are parsed:
+
+.. code-block::
+
+
+    Welcome to
+      ____  _   _    _        _
+     |  _ |  \ | |  / \__   _(_)
+     | | | |  \| | / _ \ \ / / |
+     | |_| | |\  |/ ___ \ V /| |
+     |____/|_| \_/_/   \_\_/ |_|
+
+    --- Performing ladder check
+    --- Performing metadata check
+    --- Checking folder tests/multifolder/
+    --- Getting metadata for gel3.jpg ---
+    --- Getting metadata for gel1.png ---
+    --- Getting metadata for gel2.png ---
