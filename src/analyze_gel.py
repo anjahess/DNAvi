@@ -228,6 +228,6 @@ def analyze_gel(image_file, run_id=None, marker_lane=0):
     df.rename(columns={marker_lane: "Ladder"}, inplace=True)
     df.to_csv(save_table, index=False)
 
-    return save_table, save_dir, None
+    return save_table, save_dir, error
 
 # END OF SCRIPT
