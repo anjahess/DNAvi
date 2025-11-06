@@ -207,7 +207,6 @@ def check_ladder(filename):
     ######################################################################
     for ladder in df["Name"].unique():
         sub_df = df[df["Name"] == ladder].reset_index(drop=True)
-        sub_df["Basepairs"].astype(int).values.tolist()[::-1]
         peak_annos = sub_df["Basepairs"].astype(int).values.tolist()[::-1]
 
         if not sorted(peak_annos) == peak_annos:
