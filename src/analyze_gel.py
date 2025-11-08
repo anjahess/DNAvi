@@ -15,6 +15,7 @@ import matplotlib.patches as mpatches
 import imageio.v3 as iio
 import skimage as ski
 import numpy as np
+import logging
 from skimage import measure, util
 from skimage.filters import threshold_otsu
 from skimage.measure import label, regionprops
@@ -210,6 +211,7 @@ def analyze_gel(image_file, run_id=None, marker_lane=0):
                  "Make sure your image is a DNA gel image (must be white "
                  "background with black bands on it")
         print(error)
+        logging.error(error)
         exit()
 
     ###################################################################################
@@ -218,9 +220,11 @@ def analyze_gel(image_file, run_id=None, marker_lane=0):
     df = pd.DataFrame.from_records(profiles).transpose()
     avail_lanes = df.shape[1]-1
     if avail_lanes < marker_lane:
-        print(f"--- Your marker lane ({marker_lane+1}) is outside the number of lanes "
+        error = (f"--- Your marker lane ({marker_lane+1}) is outside the number of lanes "
               f"detected from your image (found {avail_lanes}). "
               f"Please check image outputs and try again.")
+        print(error)
+        logging.error(error)
         exit()
     ###################################################################################
     # 5. Save the inentsity profile

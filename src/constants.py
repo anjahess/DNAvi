@@ -8,32 +8,41 @@ Date: 2023-AUG-06
 
 """
 
+import logging
+
 ########################################################################################################################
 # BAND DETECTION SETTINGS
 ########################################################################################################################
 # Peak detection ladder
 DISTANCE = 10 # 20 pos apart min
 """Minimum required distance of two peaks to be discriminated."""
+logging.info("--- DNAvi constants:", DISTANCE)
 
 MIN_PEAK_HEIGHT_FACTOR=0.2
 """Factor by which to multiply the maximum peak height to set the minimum peak height to be detected. """
+logging.info(MIN_PEAK_HEIGHT_FACTOR)
 
 MAX_PEAK_WIDTH_FACTOR=1
 """Fraction of entire gel length to set the maximum accepted peak width - ONLY FOR THE LADDER, not for sample peaks"""
+logging.info(MAX_PEAK_WIDTH_FACTOR)
 
 PEAK_PROMINENCE=(0.2, None)
 """Tuple, minimum peak prominence """
+logging.info(PEAK_PROMINENCE)
 
 # Constants for basepair annotation
 INTERPOLATE_FUNCTION="quadratic"
 """Function to interpolate missing base pair values based on user-annotated values """
+logging.info(INTERPOLATE_FUNCTION)
 
 BACKGROUND_SUBSTRACTION_STATS=0.1
+logging.info(BACKGROUND_SUBSTRACTION_STATS)
 """Int, fraction of max peak to be removed from dataset for statistical testing \
 higher -> lower sens but pot better discrimination, lower -> sens up, more noise """
 
 # Marker band cropping
 HALO_FACTOR=0.35 # factor to calc bp to crop from markers
+logging.info(HALO_FACTOR)
 """Float [0-1] factor by which the marker will be multiplied to define cropping range when removing marker peaks"""
 
 
@@ -74,6 +83,7 @@ LADDER_DICT = {"HSD5000": [15, 100, 250, 400, 600,
                "cfDNA": [35, 50, 75, 100, 150,
                        200, 300, 400, 500, 600,
                        700, 1000]}
+
 """Dictionary with standardized peak size options (beta)"""
 # Step size = 200 bp (default) (excl < 100bp)
 NUC_DICT = {"Mononucleosomal (100-200 bp)": (100,200),

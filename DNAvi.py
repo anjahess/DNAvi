@@ -18,12 +18,24 @@ print(logo)
 import os
 import glob
 import argparse
+import logging
+import datetime
 from src.data_checks import (check_input, check_ladder, check_meta, check_name,
                              check_marker_lane, check_config, check_interval,
                              generate_meta_dict)
 from src.analyze_electrophero import epg_analysis, merge_tables
-from src.constants import ACCEPTED_FORMATS, NUC_DICT
+from src.constants import ACCEPTED_FORMATS, NUC_DICT, LOGFILE_NAME
 from src.analyze_gel import analyze_gel
+#########################################################################
+# Initiate Logging (save to working dir)
+#########################################################################
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
+                    datefmt='%m-%d %H:%M',
+                    filename=f'{os.getcwd()}/{LOGFILE_NAME}',
+                    filemode='w')
+logging.info(f"--- RUN STARTED, {datetime.datetime.now()}")
+
 #########################################################################
 # Initiate Parser
 #########################################################################
@@ -44,11 +56,6 @@ parser.add_argument('-i', '--input',
                          'file OR directory containing those files. '
                          'Accepted formats: .csv/.png/.jpeg/.jpg '
                          'or directory containing those.')
-
-#parser.add_argument('-bm', '--benchmark',
- #                   action="store_true",
-  #                  default=False,
-   #                 help='Get performance metrics for DNAvi')
 
 parser.add_argument('-l', '--ladder',
                     type=check_ladder,
@@ -199,8 +206,5 @@ if len(files_to_check) > 1:
                  include_marker=args.include, image_input=False,
                  save_dir=save_dir, marker_lane=marker_lane,
                  nuc_dict=nuc_dict, paired=paired)
-    exit()
 
-print("")
-print("--- DONE. Results in same folder as input file.")
 # END OF SCRIPT

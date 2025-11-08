@@ -5,16 +5,20 @@ Author: Anja Hess \n
 Date: 2025-AUG-06 \n
 
 """
-import datetime
 import os
+import sys
+import time
+import shutil
+import statistics
+import datetime
 import numpy as np
 import pandas as pd
-import sys
-import statistics
-from scipy.signal import find_peaks
 import scipy.stats as stats
 import scikit_posthocs as sp
-import time
+from scipy.signal import find_peaks
+
+from src.constants import LOGFILE_NAME
+
 script_path = os.path.dirname(os.path.abspath(__file__))
 """Local directory of DNAvi analyze_electrophero module"""
 maindir = script_path.split("/src")[0]
@@ -25,7 +29,7 @@ sys.path.insert(0, f"{maindir}/src")
 sys.path.insert(0, f"{maindir}/src")
 from constants import (YLABEL, YCOL, XCOL, XLABEL, DISTANCE, MIN_PEAK_HEIGHT_FACTOR, MAX_PEAK_WIDTH_FACTOR,
                        HALO_FACTOR, PEAK_PROMINENCE, NUC_DICT, BACKGROUND_SUBSTRACTION_STATS,
-                       INTERPOLATE_FUNCTION, LOGFILE_NAME)
+                       INTERPOLATE_FUNCTION)
 from plotting import lineplot, ladderplot, peakplot, gridplot, stats_plot
 from data_checks import check_file
 import logging
@@ -355,11 +359,11 @@ def parse_meta_to_long(df, metafile, sample_col="sample", source_file="",
     meta = pd.read_csv(metafile, header=0)
     try:
         meta["ID"] = meta["SAMPLE"]
-    except:
+    except Exception as exception:
+        logging.exception(exception)
         error = "Metafile misformatted."
         print(error)
         exit()
-
     samples = df[sample_col].unique().tolist()
     n_samples = len(samples)
     n_meta = len(meta.ID)
@@ -750,7 +754,7 @@ def run_stats(df, variable="", category="", paired=False, alpha=0.05):
 
         print(f"--- The {test_performed} was performed "
               f"(alpha={alpha}), p = {p_value}, so the result is {'SIGNIFICANT' if signi else 'NOT significant'}")
-        exit()
+
         # Add to data storage
         stats_data.append([peak, test_performed,p_value, signi, results,
                              unique_peak, average_dict, mode_dict,
@@ -945,10 +949,9 @@ def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
     # Save the metrics to log file
     ######################################################################
     t1 = time.time()
-    with open(f"{save_dir}{LOGFILE_NAME}", "w") as log_file:
-        log_file.write(f"--- DNAvi RUN LOG {datetime.UTC} ---\n")
-        log_file.write(f"DNAvi Start time\t{t1}\n")
-        log_file.write(f"DNAvi Nuc Fractions: \t{nuc_dict}\n")
+    logging.info(f"--- DNAvi RUN LOG {datetime.UTC} ---\n")
+    logging.info(f"DNAvi Start time\t{t1}\n")
+    logging.info(f"DNAvi Nuc Fractions: \t{nuc_dict}\n")
 
     print("------------------------------------------------------------")
     print("        Calculating basepair positions based on ladder")
@@ -1000,9 +1003,8 @@ def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
     print("------------------------------------------------------------")
     print(f" Finished basic analysis and statistics in {t_mod2-t1} ")
     print("------------------------------------------------------------")
-    with open(f"{save_dir}{LOGFILE_NAME}", "a") as log_file:
-        log_file.write(f"Basic module ends\t{t_mod2}\n")
-        log_file.write(f"Basic module total time\t{t_mod2-t1}\n")
+    logging.info(f"Basic module ends\t{t_mod2}\n")
+    logging.info(f"Basic module total time\t{t_mod2-t1}\n")
     #####################################################################
     # 5. Plot raw data (samples seperated)
     #####################################################################
@@ -1016,8 +1018,18 @@ def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
     print("------------------------------------------------------------")
     print(f" Finished plotting in {t_plot2-t_plot1} ")
     print("------------------------------------------------------------")
-    with open(f"{save_dir}{LOGFILE_NAME}", "a") as log_file:
-        log_file.write(f"Plot module total time\t{t_plot2 - t_plot1}\n")
-        log_file.write(f"DNAVI TOTAL TIME\t{t_plot2 - t1}\n")
+    logging.info(f"Plot module total time\t{t_plot2 - t_plot1}\n")
+    logging.info(f"DNAVI TOTAL TIME\t{t_plot2 - t1}\n")
+
+    #########################################################################
+    # Copy the log file for the user..
+    #########################################################################
+    print("")
+    print("--- DONE. Results in same folder as input file.")
+    logging.info(f"--- RUN SUCCESSFULLY FINISHED , {datetime.datetime.now()}")
+    #########################################################################
+    # Copy the log file for the user..
+    #########################################################################
+    shutil.copy(f'{os.getcwd()}/{LOGFILE_NAME}', f'{save_dir}/{LOGFILE_NAME}')
     # END OF FUNCTION
 # END OF SCRIPT
