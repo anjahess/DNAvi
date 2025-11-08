@@ -181,6 +181,21 @@ for file in files_to_check:
                  save_dir=save_dir, marker_lane=marker_lane,
                  nuc_dict=nuc_dict)
 
+#########################################################################
+# Merge the results (for multi-file processing)
+#########################################################################
+if len(files_to_check) > 1:
+    # Get the all signal tables
+    signal_tables = [file for file in glob.glob(csv_path+"/*/signal_table.csv")]
+    merge_file = merge_tables(signal_tables, save_dir=csv_path+"merged.csv", meta_dict=meta_dict)
+    # And analyze all together
+    print("--- Multiple files - collecting & merging all results")
+    epg_analysis(merge_file, ladder_path, meta_path, run_id=run_id,
+                 include_marker=args.include, image_input=False,
+                 save_dir=save_dir, marker_lane=marker_lane,
+                 nuc_dict=nuc_dict)
+    exit()
+
 print("")
 print("--- DONE. Results in same folder as input file.")
 # END OF SCRIPT
