@@ -16,11 +16,12 @@ logo=r"""Welcome to
  """
 print(logo)
 import os
+import glob
 import argparse
 from src.data_checks import (check_input, check_ladder, check_meta, check_name,
                              check_marker_lane, check_config, check_interval,
                              generate_meta_dict)
-from src.analyze_electrophero import epg_analysis
+from src.analyze_electrophero import epg_analysis, merge_tables
 from src.constants import ACCEPTED_FORMATS, NUC_DICT
 from src.analyze_gel import analyze_gel
 #########################################################################
@@ -161,12 +162,9 @@ for file in files_to_check:
     # Optional: transform from image
     if not file.endswith(".csv"):
         # IMAGES GO HERE, then defines save_dir
-        signal_table, save_dir, error = analyze_gel(file, run_id=run_id,
-                                                    marker_lane=marker_lane)
+        signal_table, save_dir = analyze_gel(file, run_id=run_id,
+                                            marker_lane=marker_lane)
         image_input = True
-        if error:
-            print(error)
-            exit(1)
     else:
         # FILE ALREADY IN SIGNAL TABLE FORMAT
         signal_table = file

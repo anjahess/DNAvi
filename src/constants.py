@@ -75,9 +75,24 @@ LADDER_DICT = {"HSD5000": [15, 100, 250, 400, 600,
                        200, 300, 400, 500, 600,
                        700, 1000]}
 """Dictionary with standardized peak size options (beta)"""
-
+# Step size = 200 bp (default) (excl < 100bp)
+NUC_DICT = {"Mononucleosomal (100-200 bp)": (100,200),
+            "Dinucleosomal (201-400 bp)":(201,400),
+            "Trinucleosomal (401-600 bp)": (401,600),
+            "Tetranucleosomal (601-800 bp)": (601,800),
+            "Pentanucleosomal (801-1000 bp)": (801,1000),
+            "Hexanucleosomal (1001-1200 bp)": (1001, 1200),
+            "Heptanucleosomal (1201-1400 bp)": (1201, 1400),
+            "Octanucleosomal (1401-1600 bp)": (1401, 1600),
+            "Nonanucleosomal (1601-1800 bp)": (1601, 1800),
+            "Decanucleosomal (1801-2000 bp)": (1801, 2000),
+            "Polynucleosomal (2001-7000 bp)": (2001, 7000),
+            "Non-mono (> 250 bp)": (251, None),
+            "Oligo (> 1250 bp)": (1250, None),
+            "Mitochondrial/TF":(None,100)
+            }
 # Step size = 250 bp
-NUC_DICT = {"Mononucleosomal (100-250 bp)": (100,250),
+NUC_DICT_250 = {"Mononucleosomal (100-250 bp)": (100,250),
             "Dinucleosomal (251-500 bp)":(251,500),
             "Trinucleosomal (501-750 bp)": (501,750),
             "Tetranucleosomal (751-1000 bp)": (751,1000),

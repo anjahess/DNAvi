@@ -98,6 +98,8 @@ def gridplot(df, x, y, save_dir="", title="", y_label="", x_label="",
                      palette=PALETTE[:len(df[hue].unique())],
                      hue=hue)
         # Add labels
+        #plt.axvline(x=100)
+        #plt.axvline(x=50000)
         plt.ylabel(y_label)
         plt.xlabel(x_label)
         plt.title(f"{title} by {col}")

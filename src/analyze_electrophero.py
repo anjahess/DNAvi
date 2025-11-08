@@ -40,8 +40,6 @@ def merge_tables(signal_tables, save_dir="", meta_dict=False):
     :return: will save the composite to
     """
 
-    print(meta_dict)
-
     merged_df = []
 
     for table in signal_tables:
@@ -689,18 +687,29 @@ def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="b
     #####################################################################
     peak_info = []
     for sample in df["sample"].unique():
-        # 2.1 Select data for only this sample
+        # Select data for only this sample
         sub_df = df[df["sample"] == sample]
-        # 2.2 Get mean bp for the sample
+
+        ##################################################################
+        # 2.1 Nucleosomal fractions
+        ##################################################################
         nuc_df = nuc_fractions(sub_df, unit=unit, size_unit=size_unit,
                                nuc_dict=nuc_dict)
         for nuc_feature in nuc_df.index:
-            percentage = nuc_df.loc[nuc_feature,"percent"]
-            peak_info.append([sample, nuc_feature, "", percentage,])
+            percentage = nuc_df.loc[nuc_feature, "percent"]
+            start = nuc_df.loc[nuc_feature, "start"]
+            end = nuc_df.loc[nuc_feature, "end"]
+            peak_info.append([sample, nuc_feature, start, end, "", percentage,])
+
+        ##################################################################
+        # 2.2 Get mean bp for the sample
+        ##################################################################
         mean_bp = mean_from_histogram(sub_df, unit=unit, size_unit=size_unit)
         peak_info.append([sample, "average_size", np.nan, mean_bp])
 
+        ##################################################################
         # 2.3 Add to array and find peaks
+        ##################################################################
         array = np.array(sub_df[unit].values.tolist())
 
         max_peak = array.max()
@@ -710,6 +719,8 @@ def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="b
                               prominence=PEAK_PROMINENCE)
 
         bp_positions = sub_df[size_unit].values.tolist()
+
+
         # Plot the peaks for each sample
         peakplot(array, peaks, str(sample), "sample", str(sample), save_dir,
                  y_label=unit, size_values=bp_positions)
@@ -729,7 +740,7 @@ def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="b
             if peak == max_peak:
                 peak_info.append([sample, "max_peak", peak, bp])
 
-    peak_columns = ["sample", "peak_id","peak_fluorescence", metric_unit]
+    peak_columns = ["sample", "peak_id", "From [bp]", "To [bp]", "peak_fluorescence", metric_unit]
     peak_df = pd.DataFrame(peak_info, columns=peak_columns)
 
     ######################################################################

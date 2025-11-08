@@ -389,7 +389,8 @@ def check_config(filename):
 
 
 def compute_nuc_intervals(start, step=200, total_steps=10,
-                          prefixes=["Mono", "Di", "Tri", "Tetra", "Penta", "Hexa", "Hepta", "Octa", "Nona", "Deca"]):
+                          prefixes=["Mono", "Di", "Tri", "Tetra", "Penta", "Hexa",
+                                    "Hepta", "Octa", "Nona", "Deca"]):
     """
 
     Compute interpretable nucleosomaal intervals in format them
@@ -405,13 +406,13 @@ def compute_nuc_intervals(start, step=200, total_steps=10,
     #####################################################################
     # 1. Define list range and add the name for each
     #####################################################################
-    max_list = (total_steps * step) + step
+    max_list = (total_steps * step)
     nuc_dict = {}
-    for i, size in enumerate(range(start, max_list, step+1)):
+    for i, size in enumerate(range(start, max_list, step)):
         interval_name = prefixes[i]
-        print(interval_name)
         start_1based = size + 1
         end = size + step
+        print(interval_name, start_1based, end)
         nuc_dict[f"{interval_name}({start_1based}-{end}bp)"] = (start_1based, end)
 
     #####################################################################
