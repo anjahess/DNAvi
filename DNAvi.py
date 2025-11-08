@@ -107,6 +107,11 @@ parser.add_argument('-iv', '--interval',
                          'fractions',
                     required=False)
 
+parser.add_argument('-p', '--paired',
+                    action="store_true",
+                    default=False,
+                    help='Perform paired statistical testing')
+
 parser.add_argument("--verbose", help="increase output verbosity",
                     action="store_true")
 
@@ -117,8 +122,9 @@ parser.add_argument('-v', '--version', action='version', version="v0.1")
 #########################################################################
 args = parser.parse_args()
 save_dir = None
-meta_dict = False
 files_to_check = None
+meta_dict = False
+paired = False
 nuc_dict = NUC_DICT
 csv_path, ladder_path, meta_path, run_id, marker_lane \
     = args.input, args.ladder, args.meta, args.name, args.marker_lane #args.benchmark
@@ -132,7 +138,8 @@ if args.interval:
     nuc_dict = args.interval
 if args.config:
     nuc_dict = args.config
-
+if args.paired:
+    paired = True
 #########################################################################
 # Decide: folder or single file processing
 #########################################################################
@@ -177,7 +184,7 @@ for file in files_to_check:
     epg_analysis(signal_table, ladder_path, meta_path, run_id=run_id,
                  include_marker=args.include, image_input=image_input,
                  save_dir=save_dir, marker_lane=marker_lane,
-                 nuc_dict=nuc_dict)
+                 nuc_dict=nuc_dict, paired=paired)
 
 #########################################################################
 # Merge the results (for multi-file processing)
@@ -191,7 +198,7 @@ if len(files_to_check) > 1:
     epg_analysis(merge_file, ladder_path, meta_path, run_id=run_id,
                  include_marker=args.include, image_input=False,
                  save_dir=save_dir, marker_lane=marker_lane,
-                 nuc_dict=nuc_dict)
+                 nuc_dict=nuc_dict, paired=paired)
     exit()
 
 print("")

@@ -12,7 +12,7 @@ import pandas as pd
 import sys
 import statistics
 from scipy.signal import find_peaks
-from scipy.stats import kruskal, ttest_ind, mannwhitneyu
+import scipy.stats as stats
 import scikit_posthocs as sp
 import time
 script_path = os.path.dirname(os.path.abspath(__file__))
@@ -558,31 +558,68 @@ def nuc_fractions(df, unit="", size_unit="", nuc_dict=NUC_DICT):
     return fraction_df
     # END OF FUNCTION
 
-def run_kruskal(df, variable="", category=""):
+def vartest(stats_groups, alpha=0.05):
+    """
+    For validating that the ANOVA is used in normally ditr scenarios
+    :param stats_groups:
+    :param alpah:
+    :return:
     """
 
-    Function to perform scipy.stats' the non-parametric \
-    Kruskal Wallis Test to infer statistical significance for the difference \
+    stat, p = stats.levene(*stats_groups)
+    # If you wanna look at the variances:
+    # print([np.var(x, ddof=1) for x in stats_groups])
+    if p < alpha:
+        return False
+    return True
+
+def normality(stats_groups, alpha=0.05):
+    """
+
+    While Shapiro's test does not confirm the sample
+    stems from a normal distribution, we can at least reject
+    this hypothesis and argue for the necessity to perform a
+    non-parametric test.
+
+    :param stats_groups:
+    :param alpha: float
+    :return:
+    """
+    for i, group in enumerate(stats_groups):
+        s, p = stats.shapiro(group)
+        print(f"--- Shapiro-Wilk for group #{i} p-val: {round(p,ndigits=2)}")
+        # reject null hypothesis that this is from normal distribution
+        if p < alpha:
+            return False
+    return True
+    # END OF FUNCTION
+
+
+def run_stats(df, variable="", category="", paired=False, alpha=0.05):
+    """
+
+    Function to perform statistical tests (parametric or
+    non-parametric) infer significance for the difference \
     in mean base pair fragment size for patients/samples from different groups
 
     :param df: pandas.DataFrame
     :param variable: continuous variable
     :param category: categorical variable
+    :param paired: boolean
     :return: statistics per group in a dataframe
 
     """
 
-    test_performed = "Kruskal Wallis"
-    kruskal_data = []
+    stats_data = []
     n_groups = len(df[category].unique())
-    #####################################################################
-    # 1. Collect numerical values for each identified peak (or av/max)
-    # for each group of the cond. variable
-    #####################################################################
+
+    ######################################################################
+    # 1. Collect values for each identified peak (or av/max)
+    ######################################################################
     for peak in df["peak_id"].unique():
         sub_df = df[df["peak_id"] == peak]
-        kruskal_groups = []
-        kruskal_dict = {}
+        stats_groups = []
+        stats_dict = {}
         names = []
         p_value = signi = results = None
         unique_peak = False
@@ -593,74 +630,146 @@ def run_kruskal(df, variable="", category=""):
             group_data = sub_df[sub_df[category] == group][variable]
             group_data = list(group_data)
             if not group_data:
-                print(f"No data found for Kruskal group {group}.")
+                print(f"No data found for group {group}.")
                 continue
-            kruskal_groups.append(group_data)
-            kruskal_dict.update({str(group): group_data})
+            stats_groups.append(group_data)
+            stats_dict.update({str(group): group_data})
             average_dict.update({str(group): float(statistics.mode(group_data))})
             mode_dict.update({str(group): float(statistics.mode(group_data))})
             median_dict.update({str(group): float(statistics.median(group_data))})
             names.append(str(group))
 
-        ##################################################################
-        # 2. Run Kruskal Wallis Test or ttest dep on sample size
-        ##################################################################
-        if len(names) == 2 and n_groups == 2: # only if that's the max
-            test_performed = "Student's t - test (independent)"
-            stats, p_value = ttest_ind(kruskal_groups[0], kruskal_groups[1])
-            if p_value < 0.05:
-                signi = True
-            else:
-                signi = False
-        else:
-            try:
-                stats, p_value = kruskal(*kruskal_groups)
-            except ValueError:
-                print("Skipping Kruskal stats since "
-                      f"peak {peak} only shows in one group of groups ({names})"
-                      f"with values:", kruskal_groups)
-                stats = p_value = 1
-                unique_peak = True
-                test_performed = "None (peak unique to group)"
+        ######################################################################
+        # 2. Test normality
+        ######################################################################
+        assume_normal = normality(stats_groups)
+        print(f"--- Normality distribution assumed: {assume_normal}")
+        assume_equal_var = vartest(stats_groups)
+        print(f"--- Equal variances assumed: {assume_equal_var}")
+        ######################################################################
+        # 3. Quick pre-test if you have qual sample sizes (paired)
+        ######################################################################
+        if paired:
+            group_sizes = [len(e) for e in stats_groups]
+            all_same = group_sizes.count(group_sizes[0]) == len(group_sizes)
+            if not all_same:
+                print(f"--- Chose paired, but unequal sample sizes: {group_sizes}. "
+                      f"Please assure equal sample sizes in each group and try again.")
+                exit()
 
-            # 2. If the Kruskal says groups are different do a posthoc
+        if len(names) == 2 and n_groups == 2: # only if that's the max
+            ###################################################################
+            # 2.1 Less than 3 groups
+            ###################################################################
+            if assume_normal and not paired:
+                test_performed = "Student's t - test (independent, "
+                if assume_equal_var:
+                    s, p_value = stats.ttest_ind(stats_groups[0], stats_groups[1],
+                                                 equal_var=True)
+                    test_performed += "assume equal variance)"
+                else:
+                    s, p_value = stats.ttest_ind(stats_groups[0], stats_groups[1],
+                                                 equal_var=False)
+                    test_performed += "unequal variance)"
+                if p_value < alpha:
+                    signi = True
+                else:
+                    signi = False
+
+            if assume_normal and paired:
+                test_performed = "Student's t - test (paired)"
+                s, p_value = stats.ttest_rel(stats_groups[0], stats_groups[1])
+                if p_value < alpha:
+                    signi = True
+                else:
+                    signi = False
+
+            if not assume_normal and not paired:
+                test_performed = "Mann Whitney U - test (independent)"
+                s, p_value = stats.mannwhitneyu(stats_groups[0], stats_groups[1])
+                if p_value < alpha:
+                    signi = True
+                else:
+                    signi = False
+
+            if not assume_normal and paired:
+                test_performed = "Wilcoxon signed-rank test (paired)"
+                s, p_value = stats.wilcoxon(stats_groups[0], stats_groups[1])
+                if p_value < alpha:
+                    signi = True
+                else:
+                    signi = False
+
+        else:
+            ##################################################################
+            # 2. Run Kruskal Wallis Test for multiple groups (non-parametric)
+            ##################################################################
+            if not assume_normal or not assume_equal_var:
+                test_performed = "Kruskal-Wallis"
+                try:
+                    s, p_value = stats.kruskal(*stats_groups)
+                except ValueError:
+                    print("Skipping Kruskal stats since "
+                          f"peak {peak} only shows in one group of groups ({names})"
+                          f"with values:", stats_groups)
+                    s = p_value = 1
+                    unique_peak = True
+                    test_performed = "None (peak unique to group)"
+
+            if assume_normal and assume_equal_var:
+                test_performed = "one-way ANOVA"
+                try:
+                    s, p_value = stats.f_oneway(*stats_groups)
+                except ValueError:
+                    print("Skipping Anova",
+                          f"peak {peak} only shows in one group of groups ({names})"
+                          f"with values:", stats_groups)
+                    s = p_value = 1
+                    unique_peak = True
+                    test_performed = "None (peak unique to group)"
+
+            # 2. If the Kruskal/ANOVA says groups are different do a posthoc
             if p_value < 0.05:
                 signi = True
                 p_adjust_test = 'bonferroni'
-                if len(kruskal_groups) < 3:
-                    results = sp.posthoc_conover([kruskal_groups[0],
-                                                  kruskal_groups[1]],
+                if len(stats_groups) < 3:
+                    results = sp.posthoc_conover([stats_groups[0],
+                                                  stats_groups[1]],
                                                  p_adjust=p_adjust_test)
                 else:
-                    # Asarray - to avoid errors w/ n>2 and unequal numbers
-                    kruskal_groups_for_posthoc = np.asarray(kruskal_groups, dtype="object")
-                    results = sp.posthoc_conover(kruskal_groups_for_posthoc,
+                    # As array - to avoid errors w/ n>2 and unequal numbers
+                    stats_groups_for_posthoc = np.asarray(stats_groups, dtype="object")
+                    results = sp.posthoc_conover(stats_groups_for_posthoc,
                                                  p_adjust=p_adjust_test)
                 results.columns = names
                 results["condition"] = names
                 results.set_index("condition", inplace=True)
-                test_performed = f"Kruskal Wallis with {p_adjust_test}"
+                test_performed += f" with {p_adjust_test} correction"
             else:
                 signi = False
 
+        print(f"--- The {test_performed} was performed "
+              f"(alpha={alpha}), p = {p_value}, so the result is {'SIGNIFICANT' if signi else 'NOT significant'}")
+        exit()
         # Add to data storage
-        kruskal_data.append([peak, test_performed,p_value, signi, results,
-                             unique_peak, average_dict, mode_dict, median_dict, kruskal_dict])
+        stats_data.append([peak, test_performed,p_value, signi, results,
+                             unique_peak, average_dict, mode_dict,
+                           median_dict, stats_dict])
 
     #####################################################################
     # 2. Generate df from storage
     #####################################################################
-    kruskal_df = pd.DataFrame(kruskal_data,
+    stats_df = pd.DataFrame(stats_data,
                               columns=["peak_name",
                                        "test_performed", "p_value",
                                        "p<0.05", "posthoc_p_values",
                                        "unique_peak",
                                        "average", "modal", "median",
                                        "groups"])
-    return kruskal_df
+    return stats_df
 
 def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="bp_pos",
-              metric_unit="bp_or_frac", nuc_dict=NUC_DICT):
+              metric_unit="bp_or_frac", nuc_dict=NUC_DICT, paired=False):
     """
 
     Compute and output basic statistics for DNA size distributions
@@ -669,6 +778,7 @@ def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="b
     :param save_dir: string, where to save the statistics to
     :param unit: string (y-variable)
     :param size_unit: string (x-variable)
+    :param paired: bool, whether measurements were paired
     :return: will save three dataframes as .csv files in stats \
     directory: basic_statistics.csv, peak_statistics.csv, \
     group_statistics_by_CATEGORICAL-VAR.csv)
@@ -760,9 +870,9 @@ def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="b
                   f"Please add a category in metadata file and try again.")
             exit()
         peak_df[categorical_variable] = peak_df["sample"].map(sample2cat)
-        kruskal_df = run_kruskal(peak_df, variable=metric_unit,
-                                 category=categorical_variable)
-        kruskal_df.to_csv(f"{save_dir}group_statistics_by_{categorical_variable}.csv")
+        stats_df = run_stats(peak_df, variable=metric_unit,
+                             category=categorical_variable, paired=paired)
+        stats_df.to_csv(f"{save_dir}group_statistics_by_{categorical_variable}.csv")
         # END LOOP
 
     peak_df.to_csv(full_stats_dir)
@@ -772,7 +882,7 @@ def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="b
 
 def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
                  include_marker=False, image_input=False, save_dir=False, marker_lane=0,
-                 nuc_dict=NUC_DICT):
+                 nuc_dict=NUC_DICT, paired=False):
     """
     Core function to analyze DNA distribution from a signal table.
 
@@ -784,6 +894,7 @@ def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
     :param include_marker: bool, whether to include the marker in the analysis
     :param image_input: bool, whether to the signal table was generated based on an image
     :param save_dir: bool or str, where to save the statistics to. Default: False
+    :param paired: bool, whether to perform a paired statistical analysis
     :return: run analysis and plotting functions, create multiple outputs in the result folder
 
     """
@@ -881,7 +992,7 @@ def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
     print("------------------------------------------------------------")
     print("        Performing statistical analysis")
     print("------------------------------------------------------------")
-    epg_stats(df, save_dir=stats_dir, nuc_dict=nuc_dict)
+    epg_stats(df, save_dir=stats_dir, nuc_dict=nuc_dict, paired=paired)
 
     # Time the basic modules
     t_mod2 = time.time()
