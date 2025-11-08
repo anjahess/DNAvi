@@ -13,6 +13,7 @@ import os
 from csv import Sniffer
 import pandas as pd
 from werkzeug.utils import secure_filename
+import logging
 
 def check_marker_lane(input_nr):
     """
@@ -22,7 +23,8 @@ def check_marker_lane(input_nr):
     """
     try:
         int(input_nr)
-    except:
+    except Exception as exception:
+        logging.exception(exception)
         print(f'Marker lane number must be an integer (full number) not ({input_nr})')
         exit()
 
@@ -100,13 +102,15 @@ def check_file(filename):
     ######################################################################
     try:
         delim = detect_delim(filename, num_rows=4)
-    except:
+    except Exception as exception:
+        logging.exception(exception)
         print(f"--- {filename} seems to have less than 4 rows. "
               f"Not plausible. Please check your input file.")
         exit()
     try:
         df = pd.read_csv(filename, header=0, delimiter=delim)
-    except:
+    except Exception as exception:
+        logging.exception(exception)
         print("--- Error reading your (generated) CSV file,"
               "please check your input file.")
         exit()
@@ -163,13 +167,15 @@ def check_ladder(filename):
     ######################################################################
     try:
         delim = detect_delim(filename, num_rows=3)
-    except:
+    except Exception as exception:
+        logging.exception(exception)
         print(f"--- {filename} seems to have less than 4 rows. "
               f"Not plausible. Please check your input file.")
         exit()
     try:
         df = pd.read_csv(filename, header=0, delimiter=delim)
-    except:
+    except Exception as exception:
+        logging.exception(exception)
         print("--- Error reading your ladder file,"
               "please check it and try again.")
         exit()
@@ -272,9 +278,11 @@ def check_meta(filename):
     df = pd.read_csv(filename, header=0)
     try:
         df["ID"] = df["SAMPLE"]
-    except:
+    except Exception as exception:
+        logging.exception(exception)
         print("Metafile misformatted. Make sure first column is 'SAMPLE'")
         exit()
+
     if df["SAMPLE"].isnull().values.any():
         print("--- Meta table contains NaNs in SAMPLE column,"
               "Make sure every sample has a name and try again.")
@@ -310,13 +318,15 @@ def check_config(filename):
     ######################################################################
     try:
         delim = detect_delim(filename, num_rows=2)
-    except:
+    except Exception as exception:
+        logging.exception(exception)
         print(f"--- {filename} seems to have less than 2 rows. "
               f"Not plausible. Please check your input file.")
         exit()
     try:
         df = pd.read_csv(filename, header=0, delimiter=delim)
-    except:
+    except Exception as exception:
+        logging.exception(exception)
         print("--- Error reading your ladder file,"
               "please check it and try again.")
         exit()
@@ -325,7 +335,8 @@ def check_config(filename):
     ######################################################################
     try:
         print(df)
-    except:
+    except Exception as exception:
+        logging.exception(exception)
         print("Metafile misformatted. Make sure first column is called"
               "'name', the second is 'start', and the third is 'end'")
         exit()
@@ -342,7 +353,8 @@ def check_config(filename):
     try:
         df["start"] = df["start"].astype(int)
         df["end"] = df["end"].astype(int)
-    except:
+    except Exception as exception:
+        logging.exception(exception)
         print("--- Non-integers in start/end. Make sure only integers are there.")
         exit()
     if df.duplicated(subset=["name"]).any():
@@ -491,7 +503,6 @@ def generate_meta_dict(meta_path, files=[]):
 
     meta_df = pd.read_csv(meta_path)
     meta_dict = {}
-
     toplevel_dir = f"{os.path.dirname(meta_path)}/"
 
     for file in files:
@@ -508,8 +519,4 @@ def generate_meta_dict(meta_path, files=[]):
             meta_dict[file] = file_meta_name
     return meta_dict
     # END OF FUNCTION
-
-
-
-
 # END OF SCRIPT
