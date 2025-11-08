@@ -30,6 +30,40 @@ from plotting import lineplot, ladderplot, peakplot, gridplot, stats_plot
 from data_checks import check_file
 import logging
 
+
+def merge_tables(signal_tables, save_dir="", meta_dict=False):
+    """
+    Function to create a composite from multiple image outputs \
+    (Multi-image processing)
+    :param signal_tables: list of directories to signal tables created from gel images
+    :param save_dir: str
+    :return: will save the composite to
+    """
+
+    print(meta_dict)
+
+    merged_df = []
+
+    for table in signal_tables:
+        file_id =table.rsplit("/signal_table.csv")[0].rsplit("/")[-1]
+        file = [e for e in meta_dict if file_id in e][0]
+        meta = pd.read_csv(meta_dict[file])
+
+        df = pd.read_csv(table)
+        print(df)
+        # Add sample names
+        df.columns = ["Ladder"] + meta["SAMPLE"].values.tolist()
+        print(df)
+        if type(merged_df) == list:
+            merged_df = df
+        else:
+            df.drop(columns="Ladder", inplace=True)
+            merged_df = pd.concat([merged_df, df], axis=1)
+    merged_df.to_csv(save_dir, index=False)
+    return save_dir
+
+
+
 def wide_to_long(df, id_var="pos", var_name="sample", value_name="value"):
     """
 
