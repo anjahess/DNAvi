@@ -275,7 +275,20 @@ def check_meta(filename):
     ######################################################################
     # 3. Check nomenclature, NANs and duplicates in the index
     ######################################################################
-    df = pd.read_csv(filename, header=0)
+    try:
+        delim = detect_delim(filename, num_rows=4)
+    except Exception as exception:
+        logging.exception(exception)
+        print(f"--- {filename} seems to have less than 4 rows. "
+              f"Not plausible. Please check your input file.")
+        exit()
+    try:
+        df = pd.read_csv(filename, delimiter=delim, header=0)
+    except Exception as e:
+        logging.exception(e)
+        print("Metafile misformatted. Make sure your fields do not contain commata.")
+        exit()
+
     try:
         df["ID"] = df["SAMPLE"]
     except Exception as exception:
