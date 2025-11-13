@@ -88,6 +88,14 @@ parser.add_argument('-incl', '--include',
                     help='Include marker bands into analysis and plotting.',
                     required=False)
 
+parser.add_argument('-un', '--unnormalized',
+                    action="store_true",
+                    default=False,
+                    help='Do not perform min/max normalization. ATTENTION: will be DNA-concentration sensitive.',
+                    required=False)
+
+
+
 parser.add_argument('-ml', '--marker_lane',
                     type=check_marker_lane,
                     metavar='<int>',
@@ -132,6 +140,7 @@ save_dir = None
 files_to_check = None
 meta_dict = False
 paired = False
+normalize = True
 nuc_dict = NUC_DICT
 csv_path, ladder_path, meta_path, run_id, marker_lane \
     = args.input, args.ladder, args.meta, args.name, args.marker_lane #args.benchmark
@@ -147,6 +156,8 @@ if args.config:
     nuc_dict = args.config
 if args.paired:
     paired = True
+if args.unnormalized:
+    normalize = False
 #########################################################################
 # Decide: folder or single file processing
 #########################################################################
@@ -191,7 +202,7 @@ for file in files_to_check:
     epg_analysis(signal_table, ladder_path, meta_path, run_id=run_id,
                  include_marker=args.include, image_input=image_input,
                  save_dir=save_dir, marker_lane=marker_lane,
-                 nuc_dict=nuc_dict, paired=paired)
+                 nuc_dict=nuc_dict, paired=paired, normalize=normalize)
 
 #########################################################################
 # Merge the results (for multi-file processing)
@@ -205,6 +216,6 @@ if len(files_to_check) > 1:
     epg_analysis(merge_file, ladder_path, meta_path, run_id=run_id,
                  include_marker=args.include, image_input=False,
                  save_dir=save_dir, marker_lane=marker_lane,
-                 nuc_dict=nuc_dict, paired=paired)
+                 nuc_dict=nuc_dict, paired=paired, normalize=normalize)
 
 # END OF SCRIPT
