@@ -19,7 +19,7 @@ Each peak should be connected to a base pair value in **descending** order, as e
 The name, which you may choose, has to be the **same for all peaks of a ladder**.
 
 
-Changing the position of the DNA ladder in the data
+My marker is not in the first lane - What can I do?
 ^^^^^^^^^^^^^^^^^^
 
 If your input is a table, simply *rename* the column with the marker intensities to *Ladder*.
@@ -33,6 +33,59 @@ This works for images as well.
     python3 DNAvi.py -i electropherogram.csv -l ladder.csv -m meta.csv --marker_lane 3
 
 E.g. with above code the 3rd lane/column will be used as DNA marker.
+
+
+
+
+Ladder processing in DNAvi
+^^^^^^^^^^^^^^^^^^
+
+Overview
+""""""""""""""""""""""""""
+
+DNAvi utilizes SciPy's *find_peaks()* function to detect DNA size marker bands. You can directly evaluate the output of
+this function in the ladder plot provided in the **QC folder.**
+
+        .. image:: _static/peak_detected.png
+          :width: 400
+          :alt: Gel lanes
+
+To manually adjust peak detection parameters, please refer to the :doc:`/Advanced`.
+Based on the annotation file, DNAvi will assign actual base pair positions to the data:
+
+        .. image:: _static/ladder_interpol.png
+          :width: 400
+          :alt: Gel lanes
+
+
+
+Handling of missing or extra ladder peaks
+""""""""""""""""""""""""""
+
+If DNAvi detects *more* or *less* peaks in your image/signal table than expected from the ladder annotation file, it will
+throw an error, and take a note in the log file.
+
+This is how the error message looks like:
+
+.. code-block::
+
+    Inconsistent number of peaks between ladder file (10 bands) and the actual data in gel image/table ladder (11 bands).
+    Please check /.../qc/ to see what peaks are missing or whether your ladder is in the wrong position or if this is NOT a gel image.
+
+
+Curvature correction
+""""""""""""""""""""""""""
+
+
+In gel images, DNAvi does not perform an extra curvature correction for the lanes.
+However, since only the center of the band is used to derive the marker profile, DNAvi's marker detection is likely robust to slight
+angle deviations at the edge of the marker bands:
+
+.. image:: _static/ladder_profile.png
+  :width: 400
+  :alt: Gel lanes
+
+
 
 
 Handling marker bands
@@ -92,7 +145,7 @@ Alternatively, keep the file unchanged and run DNAvi with the **--include** argu
 
 .. code-block::
 
-   python3 DNAvi.py -i tests/electropherogram.csv -l tests/ladder.csv -m tests/metadata.csv **--include**
+   python3 DNAvi.py -i tests/electropherogram.csv -l tests/ladder.csv -m tests/metadata.csv --include
 
 This will result in the markers being included, without the need to change the ladder file:
 
