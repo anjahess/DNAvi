@@ -33,7 +33,7 @@ logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
                     datefmt='%m-%d %H:%M',
                     filename=f'{os.getcwd()}/{LOGFILE_NAME}',
-                    filemode='w')
+                    filemode='w', force=True)
 logging.info(f"--- RUN STARTED, {datetime.datetime.now()}")
 
 #########################################################################

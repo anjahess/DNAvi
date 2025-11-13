@@ -99,8 +99,12 @@ NUC_DICT = {"Mononucleosomal (100-200 bp)": (100,200),
             "Polynucleosomal (2001-7000 bp)": (2001, 7000),
             "Non-mono (> 250 bp)": (251, None),
             "Oligo (> 1250 bp)": (1250, None),
-            "Mitochondrial/TF":(None,100)
+            "Mitochondrial/TF":(None,100),
+            "Short (100-400 bp)":(100,400),
+            "Long (> 401 bp)":(401,None),
+            "potential gDNA (>1kB)":(1001, None)
             }
+
 # Step size = 250 bp
 NUC_DICT_250 = {"Mononucleosomal (100-250 bp)": (100,250),
             "Dinucleosomal (251-500 bp)":(251,500),

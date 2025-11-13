@@ -11,14 +11,10 @@ import time
 import shutil
 import statistics
 import datetime
-import numpy as np
-import pandas as pd
-import scipy.stats as stats
+import logging
 import scikit_posthocs as sp
 from scipy.signal import find_peaks
-
 from src.constants import LOGFILE_NAME
-
 script_path = os.path.dirname(os.path.abspath(__file__))
 """Local directory of DNAvi analyze_electrophero module"""
 maindir = script_path.split("/src")[0]
@@ -32,101 +28,8 @@ from constants import (YLABEL, YCOL, XCOL, XLABEL, DISTANCE, MIN_PEAK_HEIGHT_FAC
                        INTERPOLATE_FUNCTION)
 from plotting import lineplot, ladderplot, peakplot, gridplot, stats_plot
 from data_checks import check_file
-import logging
+from utils import *
 
-
-def merge_tables(signal_tables, save_dir="", meta_dict=False):
-    """
-    Function to create a composite from multiple image outputs \
-    (Multi-image processing)
-    :param signal_tables: list of directories to signal tables created from gel images
-    :param save_dir: str
-    :return: will save the composite to
-    """
-
-    merged_df = []
-
-    for table in signal_tables:
-        file_id =table.rsplit("/signal_table.csv")[0].rsplit("/")[-1]
-        file = [e for e in meta_dict if file_id in e][0]
-        meta = pd.read_csv(meta_dict[file])
-
-        df = pd.read_csv(table)
-        print(df)
-        # Add sample names
-        df.columns = ["Ladder"] + meta["SAMPLE"].values.tolist()
-        print(df)
-        if type(merged_df) == list:
-            merged_df = df
-        else:
-            df.drop(columns="Ladder", inplace=True)
-            merged_df = pd.concat([merged_df, df], axis=1)
-    merged_df.to_csv(save_dir, index=False)
-    return save_dir
-
-
-
-def wide_to_long(df, id_var="pos", var_name="sample", value_name="value"):
-    """
-
-    Function to transfer wide dataframe to long format
-
-    :param df: pandas.DataFrame in wide format
-    :param id_var: str,  the column of the wide dataframe containing the id variable
-    :param var_name: str, the new column in the long dataframe containing the variable name
-    :param value_name: str, the new column in the long dataframe containing the value
-    :return: pandas.DataFrame
-
-    """
-
-    df["id"] = df.index
-    df_long = pd.melt(df,
-                      id_vars=["id", id_var],
-                      var_name=var_name,
-                      value_name=value_name)
-    del df_long["id"]
-    return df_long
-
-
-def integrate(df, ladders_present=""):
-    """
-
-    Beta: a function that in the future will allow help handling \
-    resulting "gaps" when using multiple ladders within the same signal table.
-
-    NOTE: Not implemented yet.
-
-    :param df: pandas dataframe
-    :param ladders_present: list of strings
-    :return: a new pandas dataframe that does not have nan values despite multiple ladders
-    
-    """
-
-    merged_df = []
-    #####################################################################
-    # 1. Slice dataframe by column, and unify the y-axis label
-    #####################################################################
-    for i, ladder in enumerate(ladders_present):
-        current = df.columns.get_loc(ladder)
-        try:
-            next = df.columns.get_loc(ladders_present[i + 1])
-        except IndexError:
-            next = None
-
-        if i == 0:
-            sub_df = df.iloc[:,:next]
-        else:
-            sub_df = df.iloc[:,current:next]
-        sub_df.rename(columns={ladder: "ladder"}, inplace=True)
-        #################################################################
-        # 2. Merge dataframes (on="ladder")
-        #################################################################
-        if type(merged_df) == list:
-            merged_df = sub_df
-        else:
-            merged_df = pd.merge(merged_df, sub_df, on="ladder", how="outer")
-
-    return merged_df
 
 def peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL,
                    ladder_dir="", ladder_type="custom", marker_lane=0):
@@ -453,66 +356,6 @@ def remove_marker_from_df(df, peak_dict="", on=""):
         df = df[(df[on] > lower_marker) & (df[on] < upper_marker)]
     return df
 
-
-def normalize(df, peak_dict="", include_marker=False):
-    """
-
-    Function to normalize the raw DNA fluorescence intensity \
-    to a value between 0 abd 1.
-
-    :param df: pandas.DataFrame
-    :param peak_dict: dict, previously generated with peak2basepairs
-    :param include_marker: bool, whether to include markers
-    :return: pd.DataFrame, now with normalized DNA fluorescence intensity
-
-    """
-
-    ######################################################################
-    # 1. Define ladder and remove markers
-    ######################################################################
-    ladder_field = [e for e in df.columns if "adder" in e][0]
-    if not include_marker:
-        df = remove_marker_from_df(df, peak_dict=peak_dict, on=ladder_field)
-
-    ######################################################################
-    # 2. Normalize to a value between 0-1 Remove the marker
-    ######################################################################
-    result = df.copy()
-    for feature_name in df.columns:
-        if "Ladder" in feature_name:
-            continue
-        max_value = df[feature_name].max()
-        min_value = df[feature_name].min()
-        result[feature_name] = ((df[feature_name] - min_value) /
-                                (max_value - min_value))
-
-    return result
-    # END OF FUNCTION
-
-
-def mean_from_histogram(df, unit="", size_unit=""):
-    """
-
-    Function to estimate the mean size of a patient/samples' DNA
-    fragments (in base pairs) based on the fluorescence signal table.
-    Strategy is to create a histogram and next infer the metrics.
-
-    :param df: pandas.DataFrame
-    :param unit: str, usually normalized fluorescence unit
-    :param size_unit: str, fragment size unit (base pairs)
-    :return: float, average fragment size
-
-    """
-
-
-    # Estimate the mean bp from the histogram (frequency rescaled 0-100)
-    df["counts"] = df[unit] * 100
-    df["product"] = df[size_unit] * df["counts"]
-    mean_bp = df["product"].sum() / df["counts"].sum()
-
-    return mean_bp
-    # END OF FUNCTION
-
 def nuc_fractions(df, unit="", size_unit="", nuc_dict=NUC_DICT):
     """
 
@@ -552,54 +395,24 @@ def nuc_fractions(df, unit="", size_unit="", nuc_dict=NUC_DICT):
         # Crop df to nuc range
         if start and end:
             sub_df = df[(df[size_unit] > start) & (df[size_unit] <= end)]
+
+        # Calculate area under each nucleosomal mode
+        auc = np.trapz(sub_df[unit])
+
+        # Calculate fraction of signal
         fraction_signal_range = sub_df[unit].sum() / sum_all
-        fraction_df.append([range, start, end, fraction_signal_range,
+        fraction_df.append([range, start, end, auc, fraction_signal_range,
                             round(fraction_signal_range * 100,1)])
 
-    fraction_df = pd.DataFrame(fraction_df, columns=["name", "start",
-                                                     "end", "fraction_dna",
+    fraction_df = pd.DataFrame(fraction_df, columns=["name", "start", "end",
+                                                     "auc", "fraction_dna",
                                                      "percent"]).set_index("name")
     return fraction_df
     # END OF FUNCTION
 
-def vartest(stats_groups, alpha=0.05):
-    """
-    For validating that the ANOVA is used in normally ditr scenarios
-    :param stats_groups:
-    :param alpah:
-    :return:
-    """
 
-    stat, p = stats.levene(*stats_groups)
-    # If you wanna look at the variances:
-    # print([np.var(x, ddof=1) for x in stats_groups])
-    if p < alpha:
-        return False
-    return True
-
-def normality(stats_groups, alpha=0.05):
-    """
-
-    While Shapiro's test does not confirm the sample
-    stems from a normal distribution, we can at least reject
-    this hypothesis and argue for the necessity to perform a
-    non-parametric test.
-
-    :param stats_groups:
-    :param alpha: float
-    :return:
-    """
-    for i, group in enumerate(stats_groups):
-        s, p = stats.shapiro(group)
-        print(f"--- Shapiro-Wilk for group #{i} p-val: {round(p,ndigits=2)}")
-        # reject null hypothesis that this is from normal distribution
-        if p < alpha:
-            return False
-    return True
-    # END OF FUNCTION
-
-
-def run_stats(df, variable="", category="", paired=False, alpha=0.05):
+def run_stats(df, variable="", category="", paired=False, alpha=0.05,
+              region_id="region_id"):
     """
 
     Function to perform statistical tests (parametric or
@@ -620,8 +433,8 @@ def run_stats(df, variable="", category="", paired=False, alpha=0.05):
     ######################################################################
     # 1. Collect values for each identified peak (or av/max)
     ######################################################################
-    for peak in df["peak_id"].unique():
-        sub_df = df[df["peak_id"] == peak]
+    for peak in df[region_id].unique():
+        sub_df = df[df[region_id] == peak]
         stats_groups = []
         stats_dict = {}
         names = []
@@ -644,12 +457,28 @@ def run_stats(df, variable="", category="", paired=False, alpha=0.05):
             names.append(str(group))
 
         ######################################################################
+        # Check in enough groups
+        ######################################################################
+        if len(stats_groups) == 1:
+            print("Skipping Statistics since "
+                  f"peak {peak} only shows in one group of groups ({names})"
+                  f"with values:", stats_groups)
+            s = p_value = 1
+            unique_peak = True
+            test_performed = "None (peak unique to group)"
+            stats_data.append([peak, test_performed, p_value, signi, results,
+                               unique_peak, average_dict, mode_dict,
+                               median_dict, stats_dict])
+            continue
+
+
+        ######################################################################
         # 2. Test normality
         ######################################################################
         assume_normal = normality(stats_groups)
-        print(f"--- Normality distribution assumed: {assume_normal}")
+        logging.info(f"--- Normality distribution assumed: {assume_normal}")
         assume_equal_var = vartest(stats_groups)
-        print(f"--- Equal variances assumed: {assume_equal_var}")
+        logging.info(f"--- Equal variances assumed: {assume_equal_var}")
         ######################################################################
         # 3. Quick pre-test if you have qual sample sizes (paired)
         ######################################################################
@@ -752,11 +581,14 @@ def run_stats(df, variable="", category="", paired=False, alpha=0.05):
             else:
                 signi = False
 
-        print(f"--- The {test_performed} was performed "
-              f"(alpha={alpha}), p = {p_value}, so the result is {'SIGNIFICANT' if signi else 'NOT significant'}")
+        info=(f"--- The {test_performed} was performed "
+              f"(alpha={alpha}), p = {p_value}, "
+              f"so the result is {'SIGNIFICANT' if signi else 'NOT significant'}")
+        print(info)
+        logging.info(info)
 
         # Add to data storage
-        stats_data.append([peak, test_performed,p_value, signi, results,
+        stats_data.append([peak, test_performed, p_value, signi, results,
                              unique_peak, average_dict, mode_dict,
                            median_dict, stats_dict])
 
@@ -772,8 +604,44 @@ def run_stats(df, variable="", category="", paired=False, alpha=0.05):
                                        "groups"])
     return stats_df
 
+def normalize(df, peak_dict="", include_marker=False):
+    """
+
+    Function to normalize the raw DNA fluorescence intensity \
+    to a value between 0 abd 1.
+
+    :param df: pandas.DataFrame
+    :param peak_dict: dict, previously generated with peak2basepairs
+    :param include_marker: bool, whether to include markers
+    :return: pd.DataFrame, now with normalized DNA fluorescence intensity
+
+    """
+
+    ######################################################################
+    # 1. Define ladder and remove markers
+    ######################################################################
+    ladder_field = [e for e in df.columns if "adder" in e][0]
+    if not include_marker:
+        df = remove_marker_from_df(df, peak_dict=peak_dict, on=ladder_field)
+
+    ######################################################################
+    # 2. Normalize to a value between 0-1 Remove the marker
+    ######################################################################
+    result = df.copy()
+    for feature_name in df.columns:
+        if "Ladder" in feature_name:
+            continue
+        max_value = df[feature_name].max()
+        min_value = df[feature_name].min()
+        result[feature_name] = ((df[feature_name] - min_value) /
+                                (max_value - min_value))
+
+    return result
+    # END OF FUNCTION
+
+
 def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="bp_pos",
-              metric_unit="bp_or_frac", nuc_dict=NUC_DICT, paired=False):
+              metric_unit="value", nuc_dict=NUC_DICT, paired=False, region_id="region_id"):
     """
 
     Compute and output basic statistics for DNA size distributions
@@ -792,48 +660,78 @@ def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="b
     # 1. Basic stats
     #####################################################################
     df["sample"].astype(object) # Make sure all sample names are type obj
-    basic_stats = df.describe()
-    basic_stats.to_csv(f"{save_dir}basic_statistics.csv")
+    distr_stats = distribution_stats(df, save_dir=f"{save_dir}basic_statistics.csv",
+                       unit=unit, size_unit=size_unit)
     full_stats_dir = f"{save_dir}peak_statistics.csv"
 
     #####################################################################
     # 2. Average bp size, peak positions, and peak size per sample
     #####################################################################
+    print("--- Nucleosomal fractions & peak analysis")
+
+    # Initiate the dataframe (will be used for statistics)
     peak_info = []
+    peak_columns = ["sample", region_id, "From [bp]", "To [bp]", "AUC", metric_unit, "unit"]
+
     for sample in df["sample"].unique():
         # Select data for only this sample
         sub_df = df[df["sample"] == sample]
 
         ##################################################################
-        # 2.1 Nucleosomal fractions
+        # 2.1 Skew, AUC, Entropy
+        ##################################################################
+        entropy = distr_stats.loc[sample]["Entropy"]
+        peak_info.append([sample, "Entropy", np.nan, np.nan, np.nan,
+                          entropy, "nats"])
+        skew = distr_stats.loc[sample]["Skewness"]
+        peak_info.append([sample, "Skewness", np.nan, np.nan, np.nan,
+                          skew, "Skewness"])
+        auc_total = distr_stats.loc[sample]["AUC"]
+        peak_info.append([sample, "AUC (total)", np.nan, np.nan, np.nan,
+                          auc_total, "NFU x position"])
+        ##################################################################
+        # 2.2 Nucleosomal fractions with AUC
         ##################################################################
         nuc_df = nuc_fractions(sub_df, unit=unit, size_unit=size_unit,
                                nuc_dict=nuc_dict)
         for nuc_feature in nuc_df.index:
+            auc = nuc_df.loc[nuc_feature, "auc"]
             percentage = nuc_df.loc[nuc_feature, "percent"]
             start = nuc_df.loc[nuc_feature, "start"]
             end = nuc_df.loc[nuc_feature, "end"]
-            peak_info.append([sample, nuc_feature, start, end, "", percentage,])
-
+            peak_info.append([sample, nuc_feature, start, end, auc,
+                              percentage, "percent total DNA (%)"])
         ##################################################################
-        # 2.2 Get mean bp for the sample
+        # 2.3 Short-to-long fragment ratio
         ##################################################################
-        mean_bp = mean_from_histogram(sub_df, unit=unit, size_unit=size_unit)
-        peak_info.append([sample, "average_size", np.nan, mean_bp])
-
+        nuc_fractions_avail = nuc_df.index.tolist()
+        if "Short (100-400 bp)" in nuc_fractions_avail and "Long (> 401 bp)" in nuc_fractions_avail:
+            short = nuc_df.loc["Short (100-400 bp)"]["percent"]
+            long = nuc_df.loc["Long (> 401 bp)"]["percent"]
+            s2l_ratio = short/long
+            peak_info.append([sample, "short-to-long fragment ratio", np.nan, np.nan, np.nan,
+                              s2l_ratio, "ratio (short/long fragments)"])
         ##################################################################
-        # 2.3 Add to array and find peaks
+        # 2.4 Mean, median, mode bp
+        ##################################################################
+        mean_bp, median_bp, mode_bp = mean_from_histogram(
+            sub_df, unit=unit, size_unit=size_unit)
+        peak_info.append([sample, "average_size", np.nan, np.nan, np.nan,
+                          round(mean_bp,2), "bp"])
+        peak_info.append([sample, "modal_size", np.nan, np.nan, np.nan,
+                          mode_bp, "bp"])
+        peak_info.append([sample, "median_size", np.nan, np.nan, np.nan,
+                          median_bp, "bp"])
+        ##################################################################
+        # 2.5 Peaks
         ##################################################################
         array = np.array(sub_df[unit].values.tolist())
-
         max_peak = array.max()
         min_peak_height = max_peak * 0.2 # Define min peak height
         peaks, _ = find_peaks(array, distance=DISTANCE,  # n pos apart
                               height=min_peak_height, # minimum height
                               prominence=PEAK_PROMINENCE)
-
         bp_positions = sub_df[size_unit].values.tolist()
-
 
         # Plot the peaks for each sample
         peakplot(array, peaks, str(sample), "sample", str(sample), save_dir,
@@ -846,21 +744,25 @@ def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="b
             print("Ignoring this sample.")
             continue
         max_peak = max(peak_list)
-
         # 2.4 Assign the basepair position for each peak
         for i, peak in enumerate(peak_list):
             bp = sub_df.loc[sub_df[unit] == peak, size_unit].iloc[0]
-            peak_info.append([sample, i, peak, bp])
+            peak_info.append([sample, f"peak_{i}",np.nan, np.nan, np.nan,
+                              round(bp,2), "bp"])
             if peak == max_peak:
-                peak_info.append([sample, "max_peak", peak, bp])
+                peak_info.append([sample, "max_peak", np.nan, np.nan,np.nan,
+                                  round(bp,2), "bp"])
 
-    peak_columns = ["sample", "peak_id", "From [bp]", "To [bp]", "peak_fluorescence", metric_unit]
+    #####################################################################
+    # Create the nucleosome & peak dataframe
+    #####################################################################
     peak_df = pd.DataFrame(peak_info, columns=peak_columns)
 
     ######################################################################
     # 3. Optional: Grouped stats (Mean sizes)
     ######################################################################
     cols_no_stats = [size_unit, "sample", unit]
+
     for categorical_variable in [c for c in df.columns if c not in
                                                           cols_no_stats]:
         print(f"--- Stats by {categorical_variable}")
@@ -879,8 +781,12 @@ def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="b
         stats_df.to_csv(f"{save_dir}group_statistics_by_{categorical_variable}.csv")
         # END LOOP
 
+    ######################################################################
+    # 4. Save the group-annotated statistics & plot
+    ######################################################################
     peak_df.to_csv(full_stats_dir)
-    stats_plot(full_stats_dir, cols_not_to_plot=peak_columns)
+    stats_plot(full_stats_dir, cols_not_to_plot=peak_columns, region_id=region_id,
+               y=metric_unit)
     # END OF FUNCTION
 
 
@@ -1026,7 +932,7 @@ def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
     #########################################################################
     print("")
     print("--- DONE. Results in same folder as input file.")
-    logging.info(f"--- RUN SUCCESSFULLY FINISHED , {datetime.datetime.now()}")
+    logging.info(f"--- RUN  FINISHED SUCCESSFULLY, {datetime.datetime.now()}")
     #########################################################################
     # Copy the log file for the user..
     #########################################################################
