@@ -12,7 +12,9 @@ import shutil
 import statistics
 import datetime
 import logging
+import numpy as np
 import scikit_posthocs as sp
+from numpy.ma.extras import average
 from scipy.signal import find_peaks
 from src.constants import LOGFILE_NAME
 script_path = os.path.dirname(os.path.abspath(__file__))
@@ -24,7 +26,7 @@ sys.path.insert(0, maindir)
 sys.path.insert(0, f"{maindir}/src")
 sys.path.insert(0, f"{maindir}/src")
 from constants import (YLABEL, YCOL, XCOL, XLABEL, DISTANCE, MIN_PEAK_HEIGHT_FACTOR, MAX_PEAK_WIDTH_FACTOR,
-                       HALO_FACTOR, PEAK_PROMINENCE, NUC_DICT, BACKGROUND_SUBSTRACTION_STATS,
+                       PEAK_PROMINENCE, NUC_DICT, BACKGROUND_SUBSTRACTION_STATS, ARTIFICIAL_MAX,
                        INTERPOLATE_FUNCTION)
 from plotting import lineplot, ladderplot, peakplot, gridplot, stats_plot
 from data_checks import check_file
@@ -152,13 +154,19 @@ def peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL,
                 peak_col.append(peak_dict[i][0][peak_counter])
                 peak_counter += 1
             else:
-                peak_col.append(np.nan)
+                # Add an artificial last position
+                if n == len(array)-1:
+                    peak_col.append(ARTIFICIAL_MAX)
+                else:
+                    peak_col.append(np.nan)
 
         #################################################################
         # 1.5 Interpolate missing positions between the peaks
         #################################################################
         s = pd.Series(peak_col)
-        interpolated =  s.interpolate(method=INTERPOLATE_FUNCTION)
+        # inside: don't add values beyond the max marker lane (since we dont have a size ref there)
+        interpolated = s.interpolate(method=INTERPOLATE_FUNCTION,
+                                     limit_area="inside")
         df[ladder + "_interpol"] = interpolated
         return_df[ladder] = interpolated
 
@@ -307,7 +315,7 @@ def parse_meta_to_long(df, metafile, sample_col="sample", source_file="",
     # END OF FUNCTION
 
 
-def remove_marker_from_df(df, peak_dict="", on=""):
+def remove_marker_from_df(df, peak_dict="", on="", correct_for_variant_samples=False):
     """
 
     Function to remove marker from dataframe including a halo, meaning \
@@ -329,32 +337,77 @@ def remove_marker_from_df(df, peak_dict="", on=""):
         if peak_dict[0][1][0] == peak_dict[0][0][0]: # if == lowest bp val
             print(f"Only lower marker {peak_dict[0][1][0]} bp.")
             lower_marker = peak_dict[0][1][0]
-            lower_marker = lower_marker + (lower_marker * (HALO_FACTOR * 3))
+            ###############################################################
+            # 0. Define first valley
+            ###############################################################
+            valley_lists = []
+            for sample in [e for e in df.columns if e != on]:
+                mins, _ = find_peaks(df[sample] * -1, distance=DISTANCE)
+                valley_list = [df[on][e] for e in mins.tolist() if df[on][e] > lower_marker]
+                valley_lists.append(valley_list)
+                first_relevant_valley = valley_list[0]
+                if correct_for_variant_samples:  # crop for each sample individually
+                    df[sample][df[on] < first_relevant_valley] = np.nan
+                else:
+                    break
+            for val in valley_list:
+                if val > lower_marker:
+                    break
+            lower_marker = val
             df = df[(df[on] > lower_marker)]
             return df
         else:
             print(f"Only higher marker {peak_dict[0][1][0]} bp."
                   f"(Not plausible but may be okay to crop view)")
             upper_marker = peak_dict[0][1][0]
-            upper_marker = upper_marker - (upper_marker * HALO_FACTOR)
             df = df[(df[on] < upper_marker)]
             return df
     else:
         upper_marker = peak_dict[0][1][0]
         lower_marker = peak_dict[0][1][1]
 
+        ######################################################################
+        # 0. Define first and last valley (dynamically remove markers)
+        ######################################################################
+        valley_lists = []
+        last_valley_list = []
+        for sample in [e for e in df.columns if e != on]:
+            mins, _ = find_peaks(df[sample] * -1, distance=DISTANCE)
+            valley_list = [df[on][e] for e in mins.tolist() if df[on][e] > lower_marker
+                           and df[on][e] < upper_marker]
+            valley_lists.append(valley_list)
+            last_valley = valley_list[-1]
+            last_valley_list.append(last_valley)
+            first_relevant_valley = valley_list[0]
+            if correct_for_variant_samples:  # crop for each sample individually
+                df[sample][df[on] < first_relevant_valley] = np.nan
+                df[sample][df[on] > last_valley] = np.nan
+            else:
+                break
         ###################################################################
         # 2. Calculate the halo to crop left/right from the marker band
         # (relative so this will work with different ladders)
         # Max crop: you cannot crop too much above or beyond marker to not
         # cause the df to be too small/empty
         ###################################################################
-        lower_marker = lower_marker + (lower_marker * (HALO_FACTOR*3))
-        upper_marker = upper_marker - (upper_marker * HALO_FACTOR)
-        print(f"--- Excluding marker peaks from analysis (factor: {HALO_FACTOR})")
+        # Determine first valley
+        potential_valleys = []
+        for sample in valley_lists:
+            for val in sample:
+                if val > lower_marker:
+                    potential_valleys.append(val)
+                    break
+        # Choose the valley as a cutoff - will be a compromise if samples are very variable in conc.
+        lower_marker = average(potential_valleys)
+        upper_marker = max(last_valley_list)
+        print(f"--- Excluding marker peaks from analysis")
         logging.info("_ Excluding marker peaks from analysis")
-        df = df[(df[on] > lower_marker) & (df[on] < upper_marker)]
+        if not correct_for_variant_samples:
+            df = df[(df[on] > lower_marker) &(df[on] < upper_marker)]
+    # If normalization
+    df.dropna(inplace=True)
     return df
+    # END OF FUNCTION
 
 def nuc_fractions(df, unit="", size_unit="", nuc_dict=NUC_DICT):
     """
@@ -604,7 +657,8 @@ def run_stats(df, variable="", category="", paired=False, alpha=0.05,
                                        "groups"])
     return stats_df
 
-def normalize(df, peak_dict="", include_marker=False):
+def marker_and_normalize(df, peak_dict="", include_marker=False, normalize=True,
+                         normalize_to=False, correct=False):
     """
 
     Function to normalize the raw DNA fluorescence intensity \
@@ -622,10 +676,28 @@ def normalize(df, peak_dict="", include_marker=False):
     ######################################################################
     ladder_field = [e for e in df.columns if "adder" in e][0]
     if not include_marker:
-        df = remove_marker_from_df(df, peak_dict=peak_dict, on=ladder_field)
+        df = remove_marker_from_df(df, peak_dict=peak_dict, on=ladder_field,
+                                   correct_for_variant_samples=correct)
+        if not normalize:
+            return df
 
     ######################################################################
-    # 2. Normalize to a value between 0-1 Remove the marker
+    # 2. Optional: Normalize to a reference sample
+    ######################################################################
+    if normalize_to:
+        result = df.copy()
+        if normalize_to not in df.columns:
+            print(f"--- Warning: '{normalize_to}' is not a valid sample name.")
+            print(f"--- Please choose one of these: {df.columns.tolist()}")
+            logging.warning(f"--- {normalize_to} is not a valid sample name.")
+
+        for feature_name in df.columns:
+            if "Ladder" in feature_name:
+                continue
+            result[feature_name] = df[feature_name]/ df[normalize_to]
+        return result
+    ######################################################################
+    # 3. Optional: Normalize to a value between 0-1
     ######################################################################
     result = df.copy()
     for feature_name in df.columns:
@@ -792,7 +864,8 @@ def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="b
 
 def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
                  include_marker=False, image_input=False, save_dir=False, marker_lane=0,
-                 nuc_dict=NUC_DICT, paired=False):
+                 nuc_dict=NUC_DICT, paired=False, normalize=True, normalize_to=False,
+                 correct=False):
     """
     Core function to analyze DNA distribution from a signal table.
 
@@ -805,6 +878,8 @@ def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
     :param image_input: bool, whether to the signal table was generated based on an image
     :param save_dir: bool or str, where to save the statistics to. Default: False
     :param paired: bool, whether to perform a paired statistical analysis
+    :param normalize: bool, whether to perform min-max normalization
+    :param normalize_to: str of False, name of sample to which all other samples are normalized to
     :return: run analysis and plotting functions, create multiple outputs in the result folder
 
     """
@@ -822,7 +897,10 @@ def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
 
     logging.info(f"DNA file: {path_to_file}, Ladder file: {path_to_ladder},"
                  f"Meta file: {path_to_meta}")
-
+    logging.info(f"Min-Max Normalization: {normalize}")
+    logging.info(f"Include marker: {include_marker}")
+    logging.info(f"Correct for concentration-variances: {correct}")
+    logging.info(f"Paired analysis: {paired}")
     #####################################################################
     # 1. Create results dir and define inputs
     #####################################################################
@@ -865,26 +943,24 @@ def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
     peak_dict = peak2basepairs(df, qc_dir, ladder_dir=path_to_ladder,
                                marker_lane=marker_lane)
     df = pd.read_csv(basepair_translation_file, header=0, index_col=0)
-
+    # Only use data within maximum marker size
+    df.dropna(inplace=True)
     #####################################################################
     # 4. Height-normalize the data (default)
     #####################################################################
+    print("------------------------------------------------------------")
+    print(f"        Height-normalizing data: {normalize} \n"
+          f"        Keeping markers: {include_marker}")
+    print("------------------------------------------------------------")
+    df = marker_and_normalize(df, peak_dict=peak_dict, include_marker=include_marker,
+                      normalize=normalize, normalize_to=normalize_to, correct=correct)
 
-    print("------------------------------------------------------------")
-    print("        Height-normalizing data and removing markers        ")
-    print("------------------------------------------------------------")
-    normalized_df = normalize(df, peak_dict=peak_dict, include_marker=
-                              include_marker)
-    # All downstream ana on height-norm data WITHOUT marker (unless
-    # --include argument was set)
-    df = normalized_df
     #####################################################################
     # 5. Add the metadata
     #####################################################################
     df = split_and_long_by_ladder(df)
-    print(df)
-    if path_to_meta:
 
+    if path_to_meta:
         print("------------------------------------------------------------")
         print("        Parsing metadata ")
         print("------------------------------------------------------------")
