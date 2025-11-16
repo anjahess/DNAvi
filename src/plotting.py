@@ -196,14 +196,19 @@ def stats_plot(path_to_df, cols_not_to_plot=None, region_id="region_id",
         #################################################################
         # Create the grid plot
         #################################################################
-        print("--- Creating the plot")
-        g = sns.FacetGrid(plot_df, col=region_id, col_wrap=4, hue=categorical_var,
+        g = sns.FacetGrid(plot_df, col=region_id, col_wrap=6, hue=categorical_var,
                           sharex=True, sharey=False, palette=PALETTE)
+
         if categorical_var == "sample":
             g.map(sns.barplot, categorical_var, y, palette=PALETTE)
+
         g.map(sns.violinplot, categorical_var, y, inner_kws=dict(box_width=5, whis_width=2, color="black"),
               edgecolor="black", alpha=.7)
         g.map(sns.stripplot, categorical_var, y, color="white", linewidth=1, edgecolor="black")
+
+        # Rotate x-axis labels
+        [plt.setp(ax.get_xticklabels(), rotation=90) for ax in g.axes.flat]
+
         plt.savefig(path_to_df.replace(".csv", f"_{categorical_var}.pdf"),
                     bbox_inches='tight')
         plt.close()
