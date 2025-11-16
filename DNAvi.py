@@ -94,7 +94,12 @@ parser.add_argument('-un', '--unnormalized',
                     help='Do not perform min/max normalization. ATTENTION: will be DNA-concentration sensitive.',
                     required=False)
 
-
+parser.add_argument('-nt', '--normalize_to',
+                    type=check_name,
+                    metavar='<sample_name>',
+                    nargs='?',
+                    help='Name of the sample to normalize all values to.',
+                    required=False)
 
 parser.add_argument('-ml', '--marker_lane',
                     type=check_marker_lane,
@@ -127,6 +132,13 @@ parser.add_argument('-p', '--paired',
                     default=False,
                     help='Perform paired statistical testing')
 
+parser.add_argument('-cor', '--correct',
+                    action="store_true",
+                    default=False,
+                    help='Perform correction for samples with '
+                         'highly variant concentrations (e.g., dilution series)')
+
+
 parser.add_argument("--verbose", help="increase output verbosity",
                     action="store_true")
 
@@ -141,6 +153,8 @@ files_to_check = None
 meta_dict = False
 paired = False
 normalize = True
+normalize_to = False
+correct = False
 nuc_dict = NUC_DICT
 csv_path, ladder_path, meta_path, run_id, marker_lane \
     = args.input, args.ladder, args.meta, args.name, args.marker_lane #args.benchmark
@@ -150,6 +164,9 @@ marker_lane = marker_lane - 1 #transfer to 0-based format
 if args.interval and args.config:
     print("Cannot use both interval and nuc_dict arguments.")
     exit(1)
+if args.unnormalized and args.normalize_to:
+    print("Cannot use both --unnormalized and --normalize_to.")
+    exit(1)
 if args.interval:
     nuc_dict = args.interval
 if args.config:
@@ -158,6 +175,13 @@ if args.paired:
     paired = True
 if args.unnormalized:
     normalize = False
+if args.normalize_to:
+    normalize_to = args.normalize_to
+if args.correct:
+    correct = args.correct
+if args.correct and args.include:
+    print("Cannot use both --include and --correct.")
+    exit(1)
 #########################################################################
 # Decide: folder or single file processing
 #########################################################################
@@ -202,7 +226,8 @@ for file in files_to_check:
     epg_analysis(signal_table, ladder_path, meta_path, run_id=run_id,
                  include_marker=args.include, image_input=image_input,
                  save_dir=save_dir, marker_lane=marker_lane,
-                 nuc_dict=nuc_dict, paired=paired, normalize=normalize)
+                 nuc_dict=nuc_dict, paired=paired, normalize=normalize,
+                 normalize_to=normalize_to, correct=correct)
 
 #########################################################################
 # Merge the results (for multi-file processing)
@@ -216,6 +241,7 @@ if len(files_to_check) > 1:
     epg_analysis(merge_file, ladder_path, meta_path, run_id=run_id,
                  include_marker=args.include, image_input=False,
                  save_dir=save_dir, marker_lane=marker_lane,
-                 nuc_dict=nuc_dict, paired=paired, normalize=normalize)
+                 nuc_dict=nuc_dict, paired=paired, normalize=normalize,
+                 normalize_to=normalize_to, correct=correct)
 
 # END OF SCRIPT
