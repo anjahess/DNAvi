@@ -14,7 +14,7 @@ import logging
 # BAND DETECTION SETTINGS
 ########################################################################################################################
 # Peak detection ladder
-DISTANCE = 10 # 20 pos apart min
+DISTANCE = 20 #pos apart min
 """Minimum required distance of two peaks to be discriminated."""
 logging.info("--- DNAvi constants:", DISTANCE)
 
@@ -40,10 +40,10 @@ logging.info(BACKGROUND_SUBSTRACTION_STATS)
 """Int, fraction of max peak to be removed from dataset for statistical testing \
 higher -> lower sens but pot better discrimination, lower -> sens up, more noise """
 
-# Marker band cropping
-HALO_FACTOR=0.35 # factor to calc bp to crop from markers
-logging.info(HALO_FACTOR)
-"""Float [0-1] factor by which the marker will be multiplied to define cropping range when removing marker peaks"""
+# Marker band cropping (DEPRECATED - is now determined dynamically - less prone to inter-arry var.)
+#HALO_FACTOR=0.5 # factor to calc bp to crop from markers
+#logging.info(HALO_FACTOR)
+#"""Float [0-1] factor by which the marker will be multiplied to define cropping range when removing marker peaks"""
 
 
 
@@ -65,12 +65,12 @@ YLABEL = "Sample Intensity [Normalized FU]"
 XLABEL = "Size [bp]"
 """Standardized x label name"""
 
-PALETTE = ["cadetblue","#fbc27b", "#d56763", "darkgrey", "#85ada3", "#eacdcb", "#a7c6c9", "#2d435b",
+PALETTE = ["cadetblue","#fbc27b", "#d56763", "darkgrey","#a7c6c9", "#2d435b",
            "#d56763", "darkred", "#477b80", 'grey', "#d56763", "#bfcfcd", "#fbc27b", "#fbc27b", "#477b80",
-           "#2d435b", 'lightslategrey',  "#eacdcb", "#bfcfcd", "#2d435b", "#986960", "#f1e8d7", "#d56763",
+           "#2d435b", 'lightslategrey',"#bfcfcd", "#2d435b", "#986960", "#f1e8d7", "#d56763",
            "#fcd2a1", "#477b80", "#bfcfcd", "#d56763", "#fcd2a1", "#477b80", "#2d435b", "#477b80", "#2d435b",
            "#986960", "#f1e8d7", "#d56763", "#fcd2a1", "#477b80", 'lightgrey', "lightblue", "#fbc27b",
-           "#fbc27b", 'lightslategrey', "#85ada3", "#d56763", "#fcd2a1", "#477b80", "#eacdcb", "#bfcfcd",
+           "#fbc27b", 'lightslategrey', "#85ada3", "#d56763", "#fcd2a1", "#477b80", "#bfcfcd",
            "#2d435b", "#986960", "#f1e8d7", "#d56763", "#fcd2a1", "#477b80"]
 """Standardized color palette"""
 
@@ -102,7 +102,8 @@ NUC_DICT = {"Mononucleosomal (100-200 bp)": (100,200),
             "Mitochondrial/TF":(None,100),
             "Short (100-400 bp)":(100,400),
             "Long (> 401 bp)":(401,None),
-            "potential gDNA (>1kB)":(1001, None)
+            "potential gDNA (>1kB)":(1001, 5000),
+            "potential gDNA (>5kB)":(5001, None)
             }
 
 # Step size = 250 bp
