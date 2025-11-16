@@ -21,8 +21,6 @@ def vartest(stats_groups, alpha=0.05):
     """
 
     stat, p = stats.levene(*stats_groups)
-    # If you wanna look at the variances:
-    # print([np.var(x, ddof=1) for x in stats_groups])
     if p < alpha:
         return False
     return True
@@ -94,14 +92,13 @@ def distribution_stats(df, save_dir="", unit="normalized_fluorescent_units", siz
     :return: basic stats dataframe
 
     """
-
     pivoted = df.pivot(index=size_unit, columns=sample_unit, values=unit)
     #####################################################################
     # 1. Skewness, Entropy, AUC
     #####################################################################
     skewness = pivoted.skew()
     entropy = pivoted.apply(stats.entropy, axis=0)
-    auc = pivoted.apply(np.trapz, axis=0)
+    auc = pivoted.apply((lambda x: np.trapz(x, pivoted.index)))
 
     #####################################################################
     # 2. Mean, median, modal fragment size
