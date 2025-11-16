@@ -40,13 +40,6 @@ logging.info(BACKGROUND_SUBSTRACTION_STATS)
 """Int, fraction of max peak to be removed from dataset for statistical testing \
 higher -> lower sens but pot better discrimination, lower -> sens up, more noise """
 
-# Marker band cropping (DEPRECATED - is now determined dynamically - less prone to inter-arry var.)
-#HALO_FACTOR=0.5 # factor to calc bp to crop from markers
-#logging.info(HALO_FACTOR)
-#"""Float [0-1] factor by which the marker will be multiplied to define cropping range when removing marker peaks"""
-
-
-
 ########################################################################################################################
 # OTHER SETTINGS
 ########################################################################################################################
