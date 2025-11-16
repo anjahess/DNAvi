@@ -40,6 +40,11 @@ logging.info(BACKGROUND_SUBSTRACTION_STATS)
 """Int, fraction of max peak to be removed from dataset for statistical testing \
 higher -> lower sens but pot better discrimination, lower -> sens up, more noise """
 
+ARTIFICIAL_MAX=50000
+logging.info(ARTIFICIAL_MAX)
+"""Int, artificial maximum base-pair position to interpolate positions beyond upper marker \
+ or in cases where there is no upper marker."""
+
 ########################################################################################################################
 # OTHER SETTINGS
 ########################################################################################################################
