@@ -100,8 +100,9 @@ NUC_DICT = {"Mononucleosomal (100-200 bp)": (100,200),
             "Mitochondrial/TF":(None,100),
             "Short (100-400 bp)":(100,400),
             "Long (> 401 bp)":(401,None),
-            "potential gDNA (>1kB)":(1001, 5000),
-            "potential gDNA (>5kB)":(5001, None)
+            "potential gDNA (1-5kB)":(1001, 5000),
+            "likely gDNA (>2.5kB)": (2501, None),
+            "very likely gDNA (>5kB)":(5001, None),
             }
 
 # Step size = 250 bp
