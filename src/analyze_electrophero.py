@@ -315,7 +315,8 @@ def parse_meta_to_long(df, metafile, sample_col="sample", source_file="",
     # END OF FUNCTION
 
 
-def remove_marker_from_df(df, peak_dict="", on="", correct_for_variant_samples=False):
+def remove_marker_from_df(df, peak_dict="", on="", correct_for_variant_samples=False,
+                          halo=False):
     """
 
     Function to remove marker from dataframe including a halo, meaning \
@@ -365,47 +366,41 @@ def remove_marker_from_df(df, peak_dict="", on="", correct_for_variant_samples=F
     else:
         upper_marker = peak_dict[0][1][0]
         lower_marker = peak_dict[0][1][1]
-
         ######################################################################
         # 0. Define first and last valley (dynamically remove markers)
         ######################################################################
-        valley_lists = []
-        last_valley_list = []
+        first_valleys = []
+        last_valleys = []
         for sample in [e for e in df.columns if e != on]:
             mins, _ = find_peaks(df[sample] * -1, distance=DISTANCE)
-            valley_list = [df[on][e] for e in mins.tolist() if df[on][e] > lower_marker
-                           and df[on][e] < upper_marker]
-            valley_lists.append(valley_list)
-            last_valley = valley_list[-1]
-            last_valley_list.append(last_valley)
-            first_relevant_valley = valley_list[0]
-            if correct_for_variant_samples:  # crop for each sample individually
-                df[sample][df[on] < first_relevant_valley] = np.nan
-                df[sample][df[on] > last_valley] = np.nan
+            valley_list = [df[on][e] for e in mins.tolist() if lower_marker < df[on][e] < upper_marker]
+            first_valleys.append(valley_list[0])
+            last_valleys.append(valley_list[-1])
+            if correct_for_variant_samples:
+                df[sample][df[on] < valley_list[0]] = np.nan
+                df[sample][df[on] > valley_list[-1]] = np.nan
             else:
                 break
         ###################################################################
-        # 2. Calculate the halo to crop left/right from the marker band
-        # (relative so this will work with different ladders)
-        # Max crop: you cannot crop too much above or beyond marker to not
-        # cause the df to be too small/empty
+        # 2. Remove
         ###################################################################
-        # Determine first valley
-        potential_valleys = []
-        for sample in valley_lists:
-            for val in sample:
-                if val > lower_marker:
-                    potential_valleys.append(val)
-                    break
-        # Choose the valley as a cutoff - will be a compromise if samples are very variable in conc.
-        lower_marker = average(potential_valleys)
-        upper_marker = max(last_valley_list)
-        print(f"--- Excluding marker peaks from analysis")
-        logging.info("_ Excluding marker peaks from analysis")
+        lower_marker = max(first_valleys)
+        upper_marker = min(last_valleys)
+        print("--- Auto-detected marker cropping borders:", lower_marker,
+              "and" , upper_marker)
+
+        ###################################################################
+        # (HALO: prev mode - left for recap purpose)
+        ###################################################################
+        if halo:
+            # Prev more
+            lower_marker = lower_marker + (lower_marker * 0.2)
+            upper_marker = upper_marker - (upper_marker * 0.1)
+            logging.info("_ HALO - Excluding marker peaks from analysis")
         if not correct_for_variant_samples:
             df = df[(df[on] > lower_marker) &(df[on] < upper_marker)]
-    # If normalization
-    df.dropna(inplace=True)
+        if correct_for_variant_samples:
+            df.dropna(inplace=True)
     return df
     # END OF FUNCTION
 
@@ -541,14 +536,16 @@ def run_stats(df, variable="", category="", paired=False, alpha=0.05,
             if not all_same:
                 print(f"--- Chose paired, but unequal sample sizes: {group_sizes}. "
                       f"Please assure equal sample sizes in each group and try again.")
-                exit()
+                logging.warning(f"--- Chose paired, but unequal sample sizes: {group_sizes}. "
+                      f"Please assure equal sample sizes in each group and try again.")
+                continue
 
         if len(names) == 2 and n_groups == 2: # only if that's the max
             ###################################################################
             # 2.1 Less than 3 groups
             ###################################################################
             if assume_normal and not paired:
-                test_performed = "Student's t - test (independent, "
+                test_performed = "Student's t - test (independent) "
                 if assume_equal_var:
                     s, p_value = stats.ttest_ind(stats_groups[0], stats_groups[1],
                                                  equal_var=True)
@@ -634,10 +631,10 @@ def run_stats(df, variable="", category="", paired=False, alpha=0.05,
             else:
                 signi = False
 
-        info=(f"--- The {test_performed} was performed "
-              f"(alpha={alpha}), p = {p_value}, "
-              f"so the result is {'SIGNIFICANT' if signi else 'NOT significant'}")
-        print(info)
+        info=(f"--- {peak} - {test_performed}: p = {round(p_value,2)}, "
+              f" ({'SIGNIFICANT' if signi else 'NOT significant'})")
+        if signi:
+            print(info)
         logging.info(info)
 
         # Add to data storage
