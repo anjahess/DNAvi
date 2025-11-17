@@ -185,7 +185,6 @@ def stats_plot(path_to_df, cols_not_to_plot=None, region_id="region_id",
                                    index=stats_info.peak_name).to_dict()
             plot_df["p_val"] = plot_df[region_id].map(stats_dict)
             plot_df["stars"] = plot_df["p_val"].apply(p2stars)
-            #df.dropna(subset=["p_val"], inplace=True)
             plot_df[region_id] = (plot_df[region_id].astype(str) + " \n p=" +
                              plot_df["p_val"].astype(str)) + " (" + plot_df["stars"] + ")"
         # Check all peaks are there
@@ -198,10 +197,9 @@ def stats_plot(path_to_df, cols_not_to_plot=None, region_id="region_id",
         #################################################################
         g = sns.FacetGrid(plot_df, col=region_id, col_wrap=6, hue=categorical_var,
                           sharex=True, sharey=False, palette=PALETTE)
-
         if categorical_var == "sample":
-            g.map(sns.barplot, categorical_var, y, palette=PALETTE)
-
+            g.map(sns.barplot, categorical_var, y, palette=PALETTE,
+                  )
         g.map(sns.violinplot, categorical_var, y, inner_kws=dict(box_width=5, whis_width=2, color="black"),
               edgecolor="black", alpha=.7)
         g.map(sns.stripplot, categorical_var, y, color="white", linewidth=1, edgecolor="black")
