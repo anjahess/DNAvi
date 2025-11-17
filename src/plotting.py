@@ -196,8 +196,7 @@ def stats_plot(path_to_df, cols_not_to_plot=None, region_id="region_id",
         # Create the grid plot
         #################################################################
         g = sns.FacetGrid(plot_df, col=region_id, col_wrap=4, hue=categorical_var,
-                          sharex=True, sharey=False, palette=PALETTE,
-                          aspect=1.5)
+                          sharex=True, sharey=False, palette=PALETTE)
 
         if categorical_var == "sample":
             g = sns.FacetGrid(plot_df, col=region_id, col_wrap=4, hue=categorical_var,
