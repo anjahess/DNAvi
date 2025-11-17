@@ -31,7 +31,7 @@ PEAK_PROMINENCE=(0.2, None)
 logging.info(PEAK_PROMINENCE)
 
 # Constants for basepair annotation
-INTERPOLATE_FUNCTION="quadratic"
+INTERPOLATE_FUNCTION="linear"
 """Function to interpolate missing base pair values based on user-annotated values """
 logging.info(INTERPOLATE_FUNCTION)
 
@@ -40,7 +40,7 @@ logging.info(BACKGROUND_SUBSTRACTION_STATS)
 """Int, fraction of max peak to be removed from dataset for statistical testing \
 higher -> lower sens but pot better discrimination, lower -> sens up, more noise """
 
-ARTIFICIAL_MAX=50000
+ARTIFICIAL_MAX=100000
 logging.info(ARTIFICIAL_MAX)
 """Int, artificial maximum base-pair position to interpolate positions beyond upper marker \
  or in cases where there is no upper marker."""
@@ -100,9 +100,11 @@ NUC_DICT = {"Mononucleosomal (100-200 bp)": (100,200),
             "Mitochondrial/TF":(None,100),
             "Short (100-400 bp)":(100,400),
             "Long (> 401 bp)":(401,None),
+            "Tape %cfDNA (50-700 bp)":(50, 700),
             "potential gDNA (1-5kB)":(1001, 5000),
-            "likely gDNA (>2.5kB)": (2501, None),
+            "likely gDNA (>3.5kB)": (3501, None),
             "very likely gDNA (>5kB)":(5001, None),
+            "very very likely gDNA (>8kB)":(8001, None),
             }
 
 # Step size = 250 bp
