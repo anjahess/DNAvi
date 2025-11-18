@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/1025068693.svg)](https://doi.org/10.5281/zenodo.17642352)
+
 DNAvi: integration, analysis, and visualization of cell-free DNA fragment traces
 ===========
 
