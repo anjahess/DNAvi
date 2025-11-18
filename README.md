@@ -133,32 +133,44 @@ Which will result in a display of command line arguments with additional explana
      |  _ |  \ | |  / \__   _(_)
      | | | |  \| | / _ \ \ / / |
      | |_| | |\  |/ ___ \ V /| |
-     |____/|_| \_/_/   \_\_/ |_|
-
-    usage: DNAvi.py [-h] [-i [<input-file-or-folder>]] -l [<ladder-file>] [-m [<metadata-file>]] [-n [<run-name>]] [-incl]
-                    [-ml <int>] [--verbose] [-v]
-
+     |____/|_| \_/_/   \_\_/ |_| 
+     
+    usage: DNAvi.py [-h] [-i [<input-file-or-folder>]] -l [<ladder-file>] [-m [<metadata-file>]] [-n [<run-name>]] [-c [<config-file>]] [-iv [<(start,step)>]]
+                    [-p] [-un] [-nt [<sample_name>]] [-ml <int>] [-incl] [-cor] [--verbose] [-v]
+    
     Analyse Electropherogram data e.g. for cell-free DNA from liquid biopsies
-
+    
     options:
       -h, --help            show this help message and exit
       -i [<input-file-or-folder>], --input [<input-file-or-folder>]
-                            Path to electropherogram table file or image file OR directory containing those files. Accepted formats:
-                            .csv/.png/.jpeg/.jpg or directory containing those.
+                            Path to electropherogram table file or image file OR directory containing those files. Accepted formats: .csv/.png/.jpeg/.jpg or
+                            directory containing those.
       -l [<ladder-file>], --ladder [<ladder-file>]
                             Path to ladder table file. Accepted format: .csv
       -m [<metadata-file>], --meta [<metadata-file>]
-                            Path to metadata table file containing grouping information for input file (e.g. age, sex, disease).
-                            Accepted format: .csv
+                            Path to metadata table file containing grouping information for input file (e.g. age, sex, disease). Accepted format: .csv
       -n [<run-name>], --name [<run-name>]
                             Name of your run/experiment. Will define output folder name
-      -incl, --include      Include marker bands into analysis and plotting.
+      -c [<config-file>], --config [<config-file>]
+                            Define nucleosomal fractions with this path to a configuration file containing custom (nucleosome) intervals for statistics.
+                            Accepted format: tab-separated text files (.txt)
+      -iv [<(start,step)>], --interval [<(start,step)>]
+                            Auto-generate nucleosomal size intervals by providing (start,step), e.g. start at 100 and increase by 200 bp
+      -p, --paired          Perform paired statistical testing
+      -un, --unnormalized   Do not perform min/max normalization. ATTENTION: will be DNA-concentration sensitive.
+      -nt [<sample_name>], --normalize_to [<sample_name>]
+                            Name of the sample to normalize all values to. ATTENTION: will be DNA-concentration sensitive.
       -ml <int>, --marker_lane <int>
-                            Change the lane selected as the DNA marker/ladder, default is first lane (1)
+                            Change the lane selected as the DNA marker/ladder, default is first lane (1). Using this will force to use the specified column
+                            even if other columns are called Ladder already.
+      -incl, --include      Include marker bands into analysis and plotting.
+      -cor, --correct       Perform advanced automatic marker lane detection in samples with highly variant concentrations (e.g., dilution series), so that
+                            the marker borders will be determined for each sample individually
       --verbose             increase output verbosity
       -v, --version         show program's version number and exit
+    
+    Version: 0.2, created by Anja Hess <github.com/anjahess>.
 
-      Version: 0.1, created by Anja Hess <anja.hess@mail.de>, MPIMG
 
 
 ## 6. Acknowledgements
