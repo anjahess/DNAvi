@@ -83,11 +83,27 @@ parser.add_argument('-n', '--name',
                          'Will define output folder name',
                     required=False)
 
-parser.add_argument('-incl', '--include',
+
+parser.add_argument('-c', '--config',
+                    type=check_config,
+                    metavar='<config-file>',
+                    nargs='?',  # single file
+                    help='Define nucleosomal fractions with this path to a configuration file containing custom '
+                         '(nucleosome) intervals for statistics. '
+                         'Accepted format: tab-separated text files (.txt)',
+                    required=False)
+
+parser.add_argument('-iv', '--interval',
+                    type=check_interval,
+                    metavar='<(start,step)>',
+                    nargs='?',  # single file
+                    help='Auto-generate nucleosomal size intervals by providing (start,step), e.g. start at 100 and increase by 200 bp',
+                    required=False)
+
+parser.add_argument('-p', '--paired',
                     action="store_true",
                     default=False,
-                    help='Include marker bands into analysis and plotting.',
-                    required=False)
+                    help='Perform paired statistical testing')
 
 parser.add_argument('-un', '--unnormalized',
                     action="store_true",
@@ -100,7 +116,8 @@ parser.add_argument('-nt', '--normalize_to',
                     type=check_name,
                     metavar='<sample_name>',
                     nargs='?',
-                    help='Name of the sample to normalize all values to.',
+                    help='Name of the sample to normalize all values to. '
+                         'ATTENTION: will be DNA-concentration sensitive.',
                     required=False)
 
 parser.add_argument('-ml', '--marker_lane',
@@ -112,33 +129,18 @@ parser.add_argument('-ml', '--marker_lane',
                          'specified column even if other columns are called Ladder already.',
                     required=False)
 
-parser.add_argument('-c', '--config',
-                    type=check_config,
-                    metavar='<config-file>',
-                    nargs='?',  # single file
-                    help='Path to configuration file containing custom '
-                         '(nucleosome) intervals for statistics. '
-                         'Accepted format: tab-separated text files (.txt)',
-                    required=False)
-
-parser.add_argument('-iv', '--interval',
-                    type=check_interval,
-                    metavar='<(start,step)>',
-                    nargs='?',  # single file
-                    help='Interval (start,step) for auto-generated nucleosomal '
-                         'fractions',
-                    required=False)
-
-parser.add_argument('-p', '--paired',
+parser.add_argument('-incl', '--include',
                     action="store_true",
                     default=False,
-                    help='Perform paired statistical testing')
+                    help='Include marker bands into analysis and plotting.',
+                    required=False)
 
 parser.add_argument('-cor', '--correct',
                     action="store_true",
                     default=False,
-                    help='Perform correction for samples with '
-                         'highly variant concentrations (e.g., dilution series)')
+                    help='Perform advanced automatic marker lane detection in samples with '
+                         'highly variant concentrations (e.g., dilution series), so that the marker borders will be determined '
+                         'for each sample individually')
 
 parser.add_argument("--verbose", help="increase output verbosity",
                     action="store_true")
@@ -161,6 +163,9 @@ csv_path, ladder_path, meta_path, run_id, marker_lane \
     = args.input, args.ladder, args.meta, args.name, args.marker_lane
 marker_lane = marker_lane - 1 # transfer to 0-based format
 
+if args.verbose:
+    logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)
 if args.interval and args.config:
     print("Cannot use both interval and nuc_dict arguments.")
     exit(1)
