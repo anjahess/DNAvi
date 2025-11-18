@@ -392,7 +392,7 @@ def remove_marker_from_df(df, peak_dict="", on="", correct_for_variant_samples=F
         ###################################################################
         # (HALO: prev mode - left for recap purpose)
         ###################################################################
-        if HALO_FACTOR != 1:
+        if HALO_FACTOR != 0:
             # Prev more
             lower_marker = lower_marker + (lower_marker * (HALO_FACTOR*2))
             upper_marker = upper_marker - (upper_marker * (HALO_FACTOR))
