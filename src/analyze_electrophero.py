@@ -689,7 +689,7 @@ def marker_and_normalize(df, peak_dict="", include_marker=False, normalize=True,
             print(f"--- Warning: '{normalize_to}' is not a valid sample name.")
             print(f"--- Please choose one of these: {df.columns.tolist()}")
             logging.warning(f"--- {normalize_to} is not a valid sample name.")
-
+            exit()
         for feature_name in df.columns:
             if "Ladder" in feature_name:
                 continue
