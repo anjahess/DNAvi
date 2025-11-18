@@ -1,4 +1,4 @@
-Ladders (DNA Size standards)
+Ladders (DNA size standards)
 ===================
 
 
@@ -130,11 +130,24 @@ To exclude markers, change the peak name in the **ladder file** to a string cont
      - 15
      - HSD5000
 
-DNAvi will now **exclude** the peaks at 10,000 and 15 base pairs from its analysis:
+DNAvi will now **exclude** the peaks at 10,000 and 15 base pairs from its analysis with a certain safety-range
+that will be automatically determined based on the first sample:
 
 .. image:: _static/example_nomarker.png
   :width: 400
   :alt: No marker
+
+
+
+How to exclude markers for each sample individually
+""""""""""""""""""""""""""
+
+Usually, it is sufficient to estimate the lower and upper marker cropping
+from the first sample. However, in some cases with very different DNA concentration (e.g., dilution series),
+it may be desired to determine the border for each sample individually. To do so, simply run DNAvi adding the **- - correct**
+parameter.
+
+
 
 
 How to include marker peaks

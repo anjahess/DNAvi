@@ -237,20 +237,21 @@ This will result in a display of command line arguments with additional explanat
                             Path to metadata table file containing grouping information for input file (e.g. age, sex, disease). Accepted format: .csv
       -n [<run-name>], --name [<run-name>]
                             Name of your run/experiment. Will define output folder name
-      -incl, --include      Include marker bands into analysis and plotting.
+      -c [<config-file>], --config [<config-file>]
+                            Define nucleosomal fractions with this path to a configuration file containing custom (nucleosome) intervals for statistics.
+                            Accepted format: tab-separated text files (.txt)
+      -iv [<(start,step)>], --interval [<(start,step)>]
+                            Auto-generate nucleosomal size intervals by providing (start,step), e.g. start at 100 and increase by 200 bp
+      -p, --paired          Perform paired statistical testing
       -un, --unnormalized   Do not perform min/max normalization. ATTENTION: will be DNA-concentration sensitive.
       -nt [<sample_name>], --normalize_to [<sample_name>]
-                            Name of the sample to normalize all values to.
+                            Name of the sample to normalize all values to. ATTENTION: will be DNA-concentration sensitive.
       -ml <int>, --marker_lane <int>
                             Change the lane selected as the DNA marker/ladder, default is first lane (1). Using this will force to use the specified column
                             even if other columns are called Ladder already.
-      -c [<config-file>], --config [<config-file>]
-                            Path to configuration file containing custom (nucleosome) intervals for statistics. Accepted format: tab-separated text files
-                            (.txt)
-      -iv [<(start,step)>], --interval [<(start,step)>]
-                            Interval (start,step) for auto-generated nucleosomal fractions
-      -p, --paired          Perform paired statistical testing
-      -cor, --correct       Perform correction for samples with highly variant concentrations (e.g., dilution series)
+      -incl, --include      Include marker bands into analysis and plotting.
+      -cor, --correct       Perform advanced automatic marker lane detection in samples with highly variant concentrations (e.g., dilution series), so that
+                            the marker borders will be determined for each sample individually
       --verbose             increase output verbosity
       -v, --version         show program's version number and exit
 

@@ -55,8 +55,12 @@ Let's have a look at an example where cell-free DNA from two groups (Control vs.
 The metadata-based evaluation allows to answer biological questions (see also next section).
 
 
-**Note**: DNAvi will choose the statistical test based on your group data distribution (normal/non-normal), variance (equal variance),
-group size (2 or more).
+**Note**: DNAvi will choose the statistical test based on your group data distribution, by doing different tests:
+
+- Shapiro-Wilk test (can the hypothesis of a normal distribution be rejected),
+- Levene test (can we assume all input samples are from populations with equal variances)
+- Group size determination (2 or more)
+
 
 
 .. image:: _static/example_stats_condition.jpg
@@ -72,3 +76,14 @@ group size (2 or more).
 **Result:** In this example, the **average_size**, **max_peak**, and also the **first peak** size do show a statistical difference
 between the two groups, as the Kruskal Wallis test computed a *p* value **< 0.05**. **Unique peaks** refer to peaks that only occur in one group,
 but not in the other. Because they are unique to a group, no statistical comparison is performed for those peaks.
+
+
+Paired analyses
+^^^^^^^^^^^^^^^^^^
+
+In case your samples are related (e.g. different time points of the same individual are to be compared), you will need to tell DNAvi to run
+the appropriate statistical test by adding the command line option **- - paired**.
+
+DNAvi will then either perform a
+- Student's t - test (paired) - if normal distribution is assumed
+- Wilcoxon signed-rank test (paired) - if the hypothesis of a normal distribution is rejected
