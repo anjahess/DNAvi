@@ -1,8 +1,3 @@
-.. DNAvi documentation master file, created by
-   sphinx-quickstart on Thu Jul 24 15:51:52 2025.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Installation
 ===================
 
@@ -18,7 +13,8 @@ Installation and testing of DNAvi has been performed for **Windows 10** and **Ub
     Windows 10 Pro, Version 22H2        with Python 3.12.0 and Python 3.13
     Ubuntu 24.04.2 LTS                  with Python 3.13.5
 
-Download dependencies
+
+Dependencies
 ^^^^^^^^^^^^^^^^^^
 
 Please make sure you have installed **python => 3.13**. `Download Python <https://www.python.org/downloads/>`_.
@@ -29,10 +25,44 @@ Please make sure you have installed **python => 3.13**. `Download Python <https:
    >> Python 3.13.5
 
 
-Next, download the required packages ...
+
+Install through pip (recommended)
+^^^^^^^^^^^^^^^^^^
+
+You need python 3.12 or higher.
+
+.. code-block::
+
+    pip install dnavi
+
+
+
+Test if the installation worked
+""""""""""""""""""""""""""
+
+.. code-block::
+
+   dnavi --version
+
+    Welcome to
+          ____  _   _    _        _
+         |  _ |  \ | |  / \__   _(_)
+         | | | |  \| | / _ \ \ / / |
+         | |_| | |\  |/ ___ \ V /| |
+         |____/|_| \_/_/   \_\_/ |_|
+
+    v0.0.0.1
+
+Nice! You are ready to use DNAvi. Go to :doc:`/Quickstart` to try an example!
+
+
+
+Step-by-step (alternative)
+^^^^^^^^^^^^^^^^^^
+
+First download the required packages ...
 
 **Option 1:** Through pip.
-
 
 * Note: the first time running DNAvi may take a bit longer due to matplotlib configuring
 
@@ -54,7 +84,7 @@ Next, download the required packages ...
 
 
 Install DNAvi
-^^^^^^^^^^^^^^^^^^
+""""""""""""""""""""""""""
 
 Next, download the repository.
 
@@ -74,7 +104,7 @@ Unpack or move the DNAvi folder to your location of choice and you're ready to s
 
 
 Test if the installation worked
-^^^^^^^^^^^^^^^^^^
+""""""""""""""""""""""""""
 
 Go to DNAvi and call DNAvi.py to confirm it has been installed successfully:
 
@@ -83,15 +113,13 @@ Go to DNAvi and call DNAvi.py to confirm it has been installed successfully:
    cd /path/to/DNAvi
    python3 DNAvi.py --version
 
+    Welcome to
+          ____  _   _    _        _
+         |  _ |  \ | |  / \__   _(_)
+         | | | |  \| | / _ \ \ / / |
+         | |_| | |\  |/ ___ \ V /| |
+         |____/|_| \_/_/   \_\_/ |_|
 
-   Welcome to
-     ____  _   _    _        _
-    |  _ |  \ | |  / \__   _(_)
-    | | | |  \| | / _ \ \ / / |
-    | |_| | |\  |/ ___ \ V /| |
-    |____/|_| \_/_/   \_\_/ |_|
-
-   v0.1
-
+    v0.0.0.1
 
 Nice! You are ready to use DNAvi. Go to :doc:`/Quickstart` to try an example!

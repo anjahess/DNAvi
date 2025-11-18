@@ -11,6 +11,14 @@ or automated gel electrophoresis device output tables (electropherograms). The t
 
 ## 2. Installation
 
+### With pip (recommended)
+
+    pip install dnavi
+
+Done! You can move to Quick start.
+
+### From github (alternative)
+
 Please make sure you have installed **python => 3.12**. Next, download the required packages:
 
 Python packages:
@@ -35,11 +43,10 @@ Through *github CLI*:
 
 Or through *zip download*:
 
-    Go to <Code> (top right), then click 'Download ZIP'. 
-    
+    Go to <Code> (top right), then click 'Download ZIP'.
 
 Unpack or move the DNAvi folder to your location of choice and you're ready to start.
-
+        
 
 ## 3. Quick start
 
@@ -54,8 +61,18 @@ Windows: **Windows Symbol -> search cmd.exe -> Click cmd.exe**
 
 In this example we will run DNAvi on a test electropherogram signal table provided in this package:
 
-    cd DNAvi/
+    cd path/to/DNAvi/
+
+Hint: to find where DNAvi is installed type "pip show dnavi".
+    
+    dnavi -i tests/electropherogram.csv -l tests/ladder.csv -m tests/metadata.csv
+
+Or, if you installed from github:
+
+    
+
     python3 DNAvi.py -i tests/electropherogram.csv -l tests/ladder.csv -m tests/metadata.csv
+
 
 
 This will result in the following output:
@@ -115,7 +132,7 @@ two experiments, and we can see the integrated profile plot for each expeirment 
 If you have multiple gel images or csv files to process, just put them into a folder and point DNAvi to that folder: \
 **! Attention:** Run together only files that have the **same DNA ladder**.
 
-    python3 DNAvi.py -i /path/to/folder -l ladder.csv
+    dnavi -i /path/to/folder -l ladder.csv
 
 
 ## 5. Help and documentation
@@ -123,7 +140,8 @@ If you have multiple gel images or csv files to process, just put them into a fo
 
 If you need help, simply run
 
-    python3 DNAvi.py --help
+    dnavi --help
+
 
 Which will result in a display of command line arguments with additional explanaitons:
 

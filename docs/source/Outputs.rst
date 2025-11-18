@@ -10,7 +10,7 @@ If you wish to specify your output folder's name you can do so with the **-n/--n
 
 .. code-block::
 
-    python3 DNAvi.py -i /path/to/input/files -l ladder.csv -m meta.csv --name YOUR_NAME
+    dnavi -i /path/to/input/files -l ladder.csv -m meta.csv --name YOUR_NAME
 
 The folder will contain the inputs you have submitted to DNAvi prior to the analysis.
 The results folder contains two sub-directories, called QC and plots.

@@ -36,7 +36,7 @@ Just type:
 
 .. code-block::
 
-    python3 DNAvi.py -i tests/electropherogram.csv -l tests/ladder.csv -m tests/metadata.csv
+    dnavi -i tests/electropherogram.csv -l tests/ladder.csv -m tests/metadata.csv
 
 Alternatively, you can find all input files are provided here for download as well:
 
@@ -44,6 +44,14 @@ Alternatively, you can find all input files are provided here for download as we
 * **ladder.csv**: DNA size marker annotation :download:`example <_static/ladder.csv>` .
 * **meta.csv**: Metadata file DNA ladder annotation :download:`example <_static/metadata.csv>` .
 
+
+Note: if you installed through github, please use:
+
+.. code-block::
+
+    python3 DNAvi.py -i tests/electropherogram.csv -l tests/ladder.csv -m tests/metadata.csv
+
+python3 DNAvi.py is used in analogy to **dnavi**
 
 
 Watch DNAvi work
@@ -207,7 +215,7 @@ To see all DNAvi commands run:
 
 .. code-block::
 
-    python3 DNAvi.py --help
+    dnavi --help
 
 
 This will result in a display of command line arguments with additional explanations:
@@ -221,7 +229,7 @@ This will result in a display of command line arguments with additional explanat
      | |_| | |\  |/ ___ \ V /| |
      |____/|_| \_/_/   \_\_/ |_|
 
-    usage: DNAvi.py [-h] [-i [<input-file-or-folder>]] -l [<ladder-file>] [-m [<metadata-file>]] [-n [<run-name>]] [-incl] [-un] [-nt [<sample_name>]]
+    usage: dnavi [-h] [-i [<input-file-or-folder>]] -l [<ladder-file>] [-m [<metadata-file>]] [-n [<run-name>]] [-incl] [-un] [-nt [<sample_name>]]
                     [-ml <int>] [-c [<config-file>]] [-iv [<(start,step)>]] [-p] [-cor] [--verbose] [-v]
 
     Analyse Electropherogram data e.g. for cell-free DNA from liquid biopsies
@@ -266,7 +274,7 @@ comes with downloading DNAvi. Simply type:
 
 .. code-block::
 
-    python3 DNAvi.py -i tests/gel.png -l tests/ladder.csv -m tests/metadata_gel.csv
+    dnavi -i tests/gel.png -l tests/ladder.csv -m tests/metadata_gel.csv
 
 
 Watch DNAvi work:
@@ -380,7 +388,7 @@ We provide an example, you can simply type:
 
 .. code-block::
 
-    python3 DNAvi.py -i tests/multifolder -l tests/ladder.csv -m tests/metadata_multi.csv
+    dnavi -i tests/multifolder -l tests/ladder.csv -m tests/metadata_multi.csv
 
 
 **Note**: If processing multiple files, your metadata file needs to specify the file name in a separate column.

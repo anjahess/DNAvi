@@ -30,7 +30,7 @@ This works for images as well.
 
 .. code-block::
 
-    python3 DNAvi.py -i electropherogram.csv -l ladder.csv -m meta.csv --marker_lane 3
+    dnavi -i electropherogram.csv -l ladder.csv -m meta.csv --marker_lane 3
 
 E.g. with above code the 3rd lane/column will be used as DNA marker.
 
@@ -158,7 +158,7 @@ Alternatively, keep the file unchanged and run DNAvi with the **--include** argu
 
 .. code-block::
 
-   python3 DNAvi.py -i tests/electropherogram.csv -l tests/ladder.csv -m tests/metadata.csv --include
+   dnavi -i tests/electropherogram.csv -l tests/ladder.csv -m tests/metadata.csv --include
 
 This will result in the markers being included, without the need to change the ladder file:
 
@@ -203,7 +203,7 @@ will be size-annotated with the **gDNA** ladder.
 
 .. code-block::
 
-    python3 DNAvi.py -i tests/electropherogram_multiladder.csv -l tests/ladder.csv -m tests/metadata.csv
+    dnavi -i tests/electropherogram_multiladder.csv -l tests/ladder.csv -m tests/metadata.csv
 
 
 .. image:: _static/example_multiladder.png
