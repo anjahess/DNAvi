@@ -1,11 +1,9 @@
-sample,peak_id,peak_fluorescence,bp,CONDITION,AGE
-Sample_1,average_size,,973.9,Control,12
-Sample_1,max_peak,1.0,1282.6,Control,12
-Sample_1,0,0.9,152.0,Control,12
-…,…,…,…,…,…
-Sample_1,5,1.0,1282.6,Control,12
-Sample_2,average_size,,1385.5,Control,15
-Sample_2,max_peak,1.0,161.2,Control,15
-Sample_2,0,1.0,161.2,Control,15
-…,…,…,…,…,…
-Sample_2,6,0.3,4250.0,Control,15
+sample,region_id,From [bp],To [bp],AUC,value,unit,CONDITION
+Sample_1,Mononucleosomal (100-200 bp),100,200,73.8961612203105,10.6,percent total DNA (%),Control
+Sample_1,Dinucleosomal (201-400 bp),201,400,115.647800412261,15,percent total DNA (%),Control
+Sample_1,modal_size,-,-,-,1282.6,bp,Control
+Sample_1,median_size,-,-,-,820.7,bp,Control
+Sample_1,average_size,-,-,-,962.91,bp,Control
+Sample_1,likely gDNA (>3.5kB),3501,,0,0,percent total DNA (%),Control
+…,…,…,…,…,…,…,…
+Sample_2,Mononucleosomal (100-200 bp),100,200,72.414924632541,11.5,percent total DNA (%),Treat

@@ -16,21 +16,35 @@ logo=r"""Welcome to
  """
 print(logo)
 import os
+import glob
 import argparse
+import logging
+import datetime
 from src.data_checks import (check_input, check_ladder, check_meta, check_name,
                              check_marker_lane, check_config, check_interval,
                              generate_meta_dict)
-from src.analyze_electrophero import epg_analysis
-from src.constants import ACCEPTED_FORMATS, NUC_DICT
+from src.analyze_electrophero import epg_analysis, merge_tables
+from src.constants import ACCEPTED_FORMATS, NUC_DICT, LOGFILE_NAME
 from src.analyze_gel import analyze_gel
+
+#########################################################################
+# Initiate Logging (save to working dir)
+#########################################################################
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
+                    datefmt='%m-%d %H:%M',
+                    filename=f'{os.getcwd()}/{LOGFILE_NAME}',
+                    filemode='w', force=True)
+logging.info(f"--- RUN STARTED, {datetime.datetime.now()}")
+
 #########################################################################
 # Initiate Parser
 #########################################################################
 parser = argparse.ArgumentParser(description=
                                  'Analyse Electropherogram data '
                                  'e.g. for cell-free DNA from liquid biopsies',
-                                 epilog=f"""Version: 0.1, created by 
-                                 Anja Hess <anja.hess@mail.de>, MPIMG""")
+                                 epilog=f"""Version: 0.2, created by 
+                                 Anja Hess <github.com/anjahess>.""")
 
 #########################################################################
 # Add arguments
@@ -43,11 +57,6 @@ parser.add_argument('-i', '--input',
                          'file OR directory containing those files. '
                          'Accepted formats: .csv/.png/.jpeg/.jpg '
                          'or directory containing those.')
-
-#parser.add_argument('-bm', '--benchmark',
- #                   action="store_true",
-  #                  default=False,
-   #                 help='Get performance metrics for DNAvi')
 
 parser.add_argument('-l', '--ladder',
                     type=check_ladder,
@@ -74,10 +83,41 @@ parser.add_argument('-n', '--name',
                          'Will define output folder name',
                     required=False)
 
-parser.add_argument('-incl', '--include',
+
+parser.add_argument('-c', '--config',
+                    type=check_config,
+                    metavar='<config-file>',
+                    nargs='?',  # single file
+                    help='Define nucleosomal fractions with this path to a configuration file containing custom '
+                         '(nucleosome) intervals for statistics. '
+                         'Accepted format: tab-separated text files (.txt)',
+                    required=False)
+
+parser.add_argument('-iv', '--interval',
+                    type=check_interval,
+                    metavar='<(start,step)>',
+                    nargs='?',  # single file
+                    help='Auto-generate nucleosomal size intervals by providing (start,step), e.g. start at 100 and increase by 200 bp',
+                    required=False)
+
+parser.add_argument('-p', '--paired',
                     action="store_true",
                     default=False,
-                    help='Include marker bands into analysis and plotting.',
+                    help='Perform paired statistical testing')
+
+parser.add_argument('-un', '--unnormalized',
+                    action="store_true",
+                    default=False,
+                    help='Do not perform min/max normalization. '
+                         'ATTENTION: will be DNA-concentration sensitive.',
+                    required=False)
+
+parser.add_argument('-nt', '--normalize_to',
+                    type=check_name,
+                    metavar='<sample_name>',
+                    nargs='?',
+                    help='Name of the sample to normalize all values to. '
+                         'ATTENTION: will be DNA-concentration sensitive.',
                     required=False)
 
 parser.add_argument('-ml', '--marker_lane',
@@ -89,48 +129,64 @@ parser.add_argument('-ml', '--marker_lane',
                          'specified column even if other columns are called Ladder already.',
                     required=False)
 
-parser.add_argument('-c', '--config',
-                    type=check_config,
-                    metavar='<config-file>',
-                    nargs='?',  # single file
-                    help='Path to configuration file containing custom '
-                         '(nucleosome) intervals for statistics. '
-                         'Accepted format: tab-separated text files (.txt)',
+parser.add_argument('-incl', '--include',
+                    action="store_true",
+                    default=False,
+                    help='Include marker bands into analysis and plotting.',
                     required=False)
 
-parser.add_argument('-iv', '--interval',
-                    type=check_interval,
-                    metavar='<(start,step)>',
-                    nargs='?',  # single file
-                    help='Interval (start,step) for auto-generated nucleosomal '
-                         'fractions',
-                    required=False)
+parser.add_argument('-cor', '--correct',
+                    action="store_true",
+                    default=False,
+                    help='Perform advanced automatic marker lane detection in samples with '
+                         'highly variant concentrations (e.g., dilution series), so that the marker borders will be determined '
+                         'for each sample individually')
 
 parser.add_argument("--verbose", help="increase output verbosity",
                     action="store_true")
 
-parser.add_argument('-v', '--version', action='version', version="v0.1")
+parser.add_argument('-v', '--version', action='version', version="v0.2")
 
 #########################################################################
 # Args to variables
 #########################################################################
 args = parser.parse_args()
 save_dir = None
+files_to_check = None
 meta_dict = False
+paired = False
+normalize = True
+normalize_to = False
+correct = False
 nuc_dict = NUC_DICT
 csv_path, ladder_path, meta_path, run_id, marker_lane \
-    = args.input, args.ladder, args.meta, args.name, args.marker_lane #args.benchmark
+    = args.input, args.ladder, args.meta, args.name, args.marker_lane
+marker_lane = marker_lane - 1 # transfer to 0-based format
 
-marker_lane = marker_lane - 1 #transfer to 0-based format
-
+if args.verbose:
+    logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)
 if args.interval and args.config:
     print("Cannot use both interval and nuc_dict arguments.")
+    exit(1)
+if args.unnormalized and args.normalize_to:
+    print("Cannot use both --unnormalized and --normalize_to.")
     exit(1)
 if args.interval:
     nuc_dict = args.interval
 if args.config:
     nuc_dict = args.config
-
+if args.paired:
+    paired = True
+if args.unnormalized:
+    normalize = False
+if args.normalize_to:
+    normalize_to = args.normalize_to
+if args.correct:
+    correct = args.correct
+if args.correct and args.include:
+    print("Cannot use both --include and --correct.")
+    exit(1)
 #########################################################################
 # Decide: folder or single file processing
 #########################################################################
@@ -160,12 +216,9 @@ for file in files_to_check:
     # Optional: transform from image
     if not file.endswith(".csv"):
         # IMAGES GO HERE, then defines save_dir
-        signal_table, save_dir, error = analyze_gel(file, run_id=run_id,
-                                                    marker_lane=marker_lane)
+        signal_table, save_dir = analyze_gel(file, run_id=run_id,
+                                            marker_lane=marker_lane)
         image_input = True
-        if error:
-            print(error)
-            exit(1)
     else:
         # FILE ALREADY IN SIGNAL TABLE FORMAT
         signal_table = file
@@ -178,8 +231,22 @@ for file in files_to_check:
     epg_analysis(signal_table, ladder_path, meta_path, run_id=run_id,
                  include_marker=args.include, image_input=image_input,
                  save_dir=save_dir, marker_lane=marker_lane,
-                 nuc_dict=nuc_dict)
+                 nuc_dict=nuc_dict, paired=paired, normalize=normalize,
+                 normalize_to=normalize_to, correct=correct)
 
-print("")
-print("--- DONE. Results in same folder as input file.")
+#########################################################################
+# Merge the results (for multi-file processing)
+#########################################################################
+if len(files_to_check) > 1:
+    # Get the all signal tables
+    signal_tables = [file for file in glob.glob(csv_path+"/*/signal_table.csv")]
+    merge_file = merge_tables(signal_tables, save_dir=csv_path+"merged.csv", meta_dict=meta_dict)
+    # And analyze all together
+    print("--- Multiple files - collecting & merging all results")
+    epg_analysis(merge_file, ladder_path, meta_path, run_id=run_id,
+                 include_marker=args.include, image_input=False,
+                 save_dir=save_dir, marker_lane=marker_lane,
+                 nuc_dict=nuc_dict, paired=paired, normalize=normalize,
+                 normalize_to=normalize_to, correct=correct)
+
 # END OF SCRIPT
