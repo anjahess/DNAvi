@@ -40,6 +40,14 @@ logging.info(BACKGROUND_SUBSTRACTION_STATS)
 """Int, fraction of max peak to be removed from dataset for statistical testing \
 higher -> lower sens but pot better discrimination, lower -> sens up, more noise """
 
+HALO_FACTOR=1
+logging.info(HALO_FACTOR)
+"""Int, an optional addition to remove more base-pair positions if automatic marker cropping is either \
+insufficient or if a smaller window of the DNA data shall be analysed. \
+Default value is 1 (= no additional cropping, only auto-detection). \ 
+It is suggested to start with values of 0.1 - 0.2 (10-20%)."""
+
+
 ARTIFICIAL_MAX=100000
 logging.info(ARTIFICIAL_MAX)
 """Int, artificial maximum base-pair position to interpolate positions beyond upper marker \

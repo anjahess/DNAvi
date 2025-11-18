@@ -14,9 +14,7 @@ import datetime
 import logging
 import numpy as np
 import scikit_posthocs as sp
-from numpy.ma.extras import average
 from scipy.signal import find_peaks
-from src.constants import LOGFILE_NAME
 script_path = os.path.dirname(os.path.abspath(__file__))
 """Local directory of DNAvi analyze_electrophero module"""
 maindir = script_path.split("/src")[0]
@@ -27,7 +25,7 @@ sys.path.insert(0, f"{maindir}/src")
 sys.path.insert(0, f"{maindir}/src")
 from constants import (YLABEL, YCOL, XCOL, XLABEL, DISTANCE, MIN_PEAK_HEIGHT_FACTOR, MAX_PEAK_WIDTH_FACTOR,
                        PEAK_PROMINENCE, NUC_DICT, BACKGROUND_SUBSTRACTION_STATS, ARTIFICIAL_MAX,
-                       INTERPOLATE_FUNCTION)
+                       INTERPOLATE_FUNCTION, LOGFILE_NAME, HALO_FACTOR)
 from plotting import lineplot, ladderplot, peakplot, gridplot, stats_plot
 from data_checks import check_file
 from utils import *
@@ -315,8 +313,7 @@ def parse_meta_to_long(df, metafile, sample_col="sample", source_file="",
     # END OF FUNCTION
 
 
-def remove_marker_from_df(df, peak_dict="", on="", correct_for_variant_samples=False,
-                          halo=False):
+def remove_marker_from_df(df, peak_dict="", on="", correct_for_variant_samples=False):
     """
 
     Function to remove marker from dataframe including a halo, meaning \
@@ -326,6 +323,9 @@ def remove_marker_from_df(df, peak_dict="", on="", correct_for_variant_samples=F
     :param df: pandas.DataFrame
     :param peak_dict: dict, previously generated with peak2basepairs
     :param on: str denoting column based on which dataframe will be cut
+    :param correct_for_variant_samples: bool - if this option is chosen, each sample will
+    be checked individually for end of the marker peaks and cropped based on this information.
+    Defaults to False, meaning that the marker halo is estimated from the first sample.
     :return: pd.DataFrame, cleared from marker-associated data points
 
     """
@@ -392,11 +392,13 @@ def remove_marker_from_df(df, peak_dict="", on="", correct_for_variant_samples=F
         ###################################################################
         # (HALO: prev mode - left for recap purpose)
         ###################################################################
-        if halo:
+        if HALO_FACTOR != 1:
             # Prev more
-            lower_marker = lower_marker + (lower_marker * 0.2)
-            upper_marker = upper_marker - (upper_marker * 0.1)
-            logging.info("_ HALO - Excluding marker peaks from analysis")
+            lower_marker = lower_marker + (lower_marker * (HALO_FACTOR*2))
+            upper_marker = upper_marker - (upper_marker * (HALO_FACTOR))
+            logging.info(f"_ HALO FACTOR ADDED {HALO_FACTOR}"
+                         f"- Excluding marker peaks from {lower_marker}"
+                         f"- to {upper_marker}.")
         if not correct_for_variant_samples:
             df = df[(df[on] > lower_marker) &(df[on] < upper_marker)]
         if correct_for_variant_samples:
