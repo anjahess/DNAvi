@@ -32,23 +32,29 @@ Format of the constats.py file
     MIN_PEAK_HEIGHT_FACTOR=0.2
     """Factor by which to multiply the maximum peak height to set the minimum peak height to be detected. """
 
-    MAX_PEAK_WIDTH_FACTOR=0.1
+    MAX_PEAK_WIDTH_FACTOR=1
     """Fraction of entire gel length to set the maximum accepted peak width - ONLY FOR THE LADDER, not for sample peaks"""
 
-    PEAK_PROMINENCE=(0.3, None)
+    PEAK_PROMINENCE=(0.2, None)
     """Tuple, minimum peak prominence """
 
     # Constants for basepair annotation
-    INTERPOLATE_FUNCTION="quadratic"
+    INTERPOLATE_FUNCTION="linear"
     """Function to interpolate missing base pair values based on user-annotated values """
 
     BACKGROUND_SUBSTRACTION_STATS=0.1
     """Int, fraction of max peak to be removed from dataset for statistical testing \
     higher -> lower sens but pot better discrimination, lower -> sens up, more noise """
 
-    # Marker band cropping
-    HALO_FACTOR=0.35 # factor to calc bp to crop from markers
-    """Float [0-1] factor by which the marker will be multiplied to define cropping range when removing marker peaks"""
+    HALO_FACTOR=0
+    """Int, an optional addition to remove more base-pair positions if automatic marker cropping is either \
+    insufficient or if a smaller window of the DNA data shall be analysed. \
+    Default value is 0 (= no additional cropping, only auto-detection). \
+    It is suggested to start with values of 0.1 (will add 10% on top of the marker position)."""
+
+    ARTIFICIAL_MAX=100000
+    """Int, artificial maximum base-pair position to interpolate positions beyond upper marker \
+     or in cases where there is no upper marker."""
 
 
 Example: Adjusting Peak (Band) calling parameters

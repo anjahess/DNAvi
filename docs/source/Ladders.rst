@@ -1,4 +1,4 @@
-Ladders
+Ladders (DNA Size standards)
 ===================
 
 
