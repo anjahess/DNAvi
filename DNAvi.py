@@ -43,8 +43,8 @@ logging.info(f"--- RUN STARTED, {datetime.datetime.now()}")
 parser = argparse.ArgumentParser(description=
                                  'Analyse Electropherogram data '
                                  'e.g. for cell-free DNA from liquid biopsies',
-                                 epilog=f"""Version: 0.1, created by 
-                                 Anja Hess <anja.hess@mail.de>, MPIMG""")
+                                 epilog=f"""Version: 0.2, created by 
+                                 Anja Hess <github.com/anjahess>.""")
 
 #########################################################################
 # Add arguments
@@ -143,7 +143,7 @@ parser.add_argument('-cor', '--correct',
 parser.add_argument("--verbose", help="increase output verbosity",
                     action="store_true")
 
-parser.add_argument('-v', '--version', action='version', version="v0.1")
+parser.add_argument('-v', '--version', action='version', version="v0.2")
 
 #########################################################################
 # Args to variables
