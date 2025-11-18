@@ -44,7 +44,7 @@ HALO_FACTOR=0
 logging.info(HALO_FACTOR)
 """Int, an optional addition to remove more base-pair positions if automatic marker cropping is either \
 insufficient or if a smaller window of the DNA data shall be analysed. \
-Default value is 1 (= no additional cropping, only auto-detection). \ 
+Default value is 0 (= no additional cropping, only auto-detection). \ 
 It is suggested to start with values of 0.1 - 0.2 (10-20%)."""
 
 
