@@ -26,6 +26,7 @@ from src.data_checks import (check_input, check_ladder, check_meta, check_name,
 from src.analyze_electrophero import epg_analysis, merge_tables
 from src.constants import ACCEPTED_FORMATS, NUC_DICT, LOGFILE_NAME
 from src.analyze_gel import analyze_gel
+
 #########################################################################
 # Initiate Logging (save to working dir)
 #########################################################################
@@ -91,7 +92,8 @@ parser.add_argument('-incl', '--include',
 parser.add_argument('-un', '--unnormalized',
                     action="store_true",
                     default=False,
-                    help='Do not perform min/max normalization. ATTENTION: will be DNA-concentration sensitive.',
+                    help='Do not perform min/max normalization. '
+                         'ATTENTION: will be DNA-concentration sensitive.',
                     required=False)
 
 parser.add_argument('-nt', '--normalize_to',
@@ -138,7 +140,6 @@ parser.add_argument('-cor', '--correct',
                     help='Perform correction for samples with '
                          'highly variant concentrations (e.g., dilution series)')
 
-
 parser.add_argument("--verbose", help="increase output verbosity",
                     action="store_true")
 
@@ -157,9 +158,8 @@ normalize_to = False
 correct = False
 nuc_dict = NUC_DICT
 csv_path, ladder_path, meta_path, run_id, marker_lane \
-    = args.input, args.ladder, args.meta, args.name, args.marker_lane #args.benchmark
-
-marker_lane = marker_lane - 1 #transfer to 0-based format
+    = args.input, args.ladder, args.meta, args.name, args.marker_lane
+marker_lane = marker_lane - 1 # transfer to 0-based format
 
 if args.interval and args.config:
     print("Cannot use both interval and nuc_dict arguments.")
