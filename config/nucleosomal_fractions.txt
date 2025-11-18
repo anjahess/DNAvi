@@ -1,0 +1,15 @@
+name	start	end
+Mononucleosomal(100-250 bp)	100	250
+Dinucleosomal(251-500 bp)	251	500
+Trinucleosomal(501-750 bp)	501	750
+Tetranucleosomal(751-1000 bp)	751	1000
+Pentanucleosomal(1000-1250 bp)	1001	1250
+Hexanucleosomal(1251-1500 bp)	1251	1500
+Heptanucleosomal(1501-1750 bp)	1501	1750
+Octanucleosomal(1751-2000 bp)	1751	2000
+Nonanucleosomal(2001-2250 bp)	2001	2250
+Decanucleosomal(=> 2250 bp)	2250	None
+Polynucleosomal(=> 750 bp)	751	None
+Non-mono(> 250 bp)	250	None
+Oligo(> 1250 bp)	1250	None
+Mitochondrial_or_TF(<100bp)	None	100
