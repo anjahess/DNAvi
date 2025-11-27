@@ -35,8 +35,16 @@ This table contains information on average sizes and individual peaks. Let's hav
    :widths: 30, 30, 30, 30, 30, 30, 30, 30
    :header-rows: 1
 
+Rationale for adding peaks to the statistical evaluation (beyond nucleosomal fractions):
+^^^^^^^^^^^^^^^^^^
 
-For each sample, peak metrics are provided:
+Our rationale is to catch the rare cases in which for example profiles are compared across species with larger nucleosomal differences,e.g. if the user defined the mononucleosomal interval from 100-200 bp but  species A's mononucleosomal peak is at 140 bp and species B’s mononucleosomal peak is at 210 bp. In this case, DNAvi reports there is a lower mononucleosomal fraction in B, which is technically true but biologically not correct. Since both peaks would be the first peaks in their respective sample (peak # 0) DNAvi would still compare them against each other.
+
+
+List of metrics:
+^^^^^^^^^^^^^^^^^^
+
+For each sample, these metrics are provided:
     • **average_size** : the average fragment size in bp, estimated from the signal table (histogram)
     • **median_size** : the median in bp, estimated from the signal table (histogram)
     • **mode** : the mode value in bp, estimated from the signal table (histogram)
