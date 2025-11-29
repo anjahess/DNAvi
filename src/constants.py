@@ -70,6 +70,7 @@ YLABEL = "Sample Intensity [Normalized FU]"
 """Standardized y labe name"""
 XLABEL = "Size [bp]"
 """Standardized x label name"""
+XLABEL_PRIOR_SIZE= "Size"
 
 PALETTE = ["cadetblue","#fbc27b", "#d56763", "darkgrey","#a7c6c9", "#2d435b",
            "#d56763", "darkred", "#477b80", 'grey', "#d56763", "#bfcfcd", "#fbc27b", "#fbc27b", "#477b80",
