@@ -25,7 +25,7 @@ sys.path.insert(0, f"{maindir}/src")
 sys.path.insert(0, f"{maindir}/src")
 from constants import (YLABEL, YCOL, XCOL, XLABEL, DISTANCE, MIN_PEAK_HEIGHT_FACTOR, MAX_PEAK_WIDTH_FACTOR,
                        PEAK_PROMINENCE, NUC_DICT, BACKGROUND_SUBSTRACTION_STATS, ARTIFICIAL_MAX,
-                       INTERPOLATE_FUNCTION, LOGFILE_NAME, HALO_FACTOR)
+                       INTERPOLATE_FUNCTION, LOGFILE_NAME, HALO_FACTOR, XLABEL_PRIOR_SIZE)
 from plotting import lineplot, ladderplot, peakplot, gridplot, stats_plot
 from data_checks import check_file
 from utils import *
@@ -123,11 +123,6 @@ def peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL,
             print("--- Found markers: {}".format(markers))
         peak_dict[i] = [peak_annos, markers]
         ladder2type.update({ladder: i})
-        #################################################################
-        # 1.3 Plot intermed results
-        #################################################################
-        peakplot(array, peaks, ladder_id, i, i, qc_save_dir,
-                 y_label=y_label)
         ##################################################################
         # ---- SANITY CHECK ----- equals nr of detected peaks?
         ##################################################################
@@ -141,6 +136,13 @@ def peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL,
                      f"wrong position or if this is NOT a gel image.")
             print(error)
             exit()
+
+        #################################################################
+        # 1.3 Plot intermed results
+        #################################################################
+        peakplot(array, peaks, parsed_ladders[i], i, i, qc_save_dir,
+                 y_label=y_label, x_label=f"{XLABEL_PRIOR_SIZE} (before annotation)",
+                 size_values=peak_annos)
 
         #################################################################
         # 1.4 Integrate bp information into the df
@@ -806,7 +808,7 @@ def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="b
 
         # Plot the peaks for each sample
         peakplot(array, peaks, str(sample), "sample", str(sample), save_dir,
-                 y_label=unit, size_values=bp_positions)
+                 y_label=YLABEL, x_label=XLABEL_PRIOR_SIZE, size_values=bp_positions)
 
         # Get the fluorescence val for each peak
         peak_list = [array[e] for e in peaks.tolist()]
