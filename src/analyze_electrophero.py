@@ -714,7 +714,8 @@ def marker_and_normalize(df, peak_dict="", include_marker=False, normalize=True,
 
 
 def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="bp_pos",
-              metric_unit="value", nuc_dict=NUC_DICT, paired=False, region_id="region_id"):
+              metric_unit="value", nuc_dict=NUC_DICT, paired=False, region_id="region_id",
+              cut=False):
     """
 
     Compute and output basic statistics for DNA size distributions
@@ -859,14 +860,14 @@ def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="b
     ######################################################################
     peak_df.to_csv(full_stats_dir)
     stats_plot(full_stats_dir, cols_not_to_plot=peak_columns, region_id=region_id,
-               y=metric_unit)
+               y=metric_unit, cut=cut)
     # END OF FUNCTION
 
 
 def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
                  include_marker=False, image_input=False, save_dir=False, marker_lane=0,
                  nuc_dict=NUC_DICT, paired=False, normalize=True, normalize_to=False,
-                 correct=False):
+                 correct=False, cut=False):
     """
     Core function to analyze DNA distribution from a signal table.
 
@@ -978,7 +979,8 @@ def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
     print("------------------------------------------------------------")
     print("        Performing statistical analysis")
     print("------------------------------------------------------------")
-    epg_stats(df, save_dir=stats_dir, nuc_dict=nuc_dict, paired=paired)
+    epg_stats(df, save_dir=stats_dir, nuc_dict=nuc_dict, paired=paired,
+              cut=cut)
 
     # Time the basic modules
     t_mod2 = time.time()

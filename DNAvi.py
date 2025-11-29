@@ -142,6 +142,12 @@ parser.add_argument('-cor', '--correct',
                          'highly variant concentrations (e.g., dilution series), so that the marker borders will be determined '
                          'for each sample individually')
 
+parser.add_argument('-cut', '--cut',
+                    action="store_true",
+                    default=False,
+                    help='Limit violin plots to data range')
+
+
 parser.add_argument("--verbose", help="increase output verbosity",
                     action="store_true")
 
@@ -158,6 +164,7 @@ paired = False
 normalize = True
 normalize_to = False
 correct = False
+cut = False
 nuc_dict = NUC_DICT
 csv_path, ladder_path, meta_path, run_id, marker_lane \
     = args.input, args.ladder, args.meta, args.name, args.marker_lane
@@ -187,6 +194,8 @@ if args.correct:
 if args.correct and args.include:
     print("Cannot use both --include and --correct.")
     exit(1)
+if args.cut:
+    cut = True
 #########################################################################
 # Decide: folder or single file processing
 #########################################################################
@@ -232,7 +241,7 @@ for file in files_to_check:
                  include_marker=args.include, image_input=image_input,
                  save_dir=save_dir, marker_lane=marker_lane,
                  nuc_dict=nuc_dict, paired=paired, normalize=normalize,
-                 normalize_to=normalize_to, correct=correct)
+                 normalize_to=normalize_to, correct=correct, cut=cut)
 
 #########################################################################
 # Merge the results (for multi-file processing)
@@ -247,6 +256,6 @@ if len(files_to_check) > 1:
                  include_marker=args.include, image_input=False,
                  save_dir=save_dir, marker_lane=marker_lane,
                  nuc_dict=nuc_dict, paired=paired, normalize=normalize,
-                 normalize_to=normalize_to, correct=correct)
+                 normalize_to=normalize_to, correct=correct, cut=cut)
 
 # END OF SCRIPT

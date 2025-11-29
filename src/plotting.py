@@ -147,7 +147,7 @@ def p2stars(p):
 
 
 def stats_plot(path_to_df, cols_not_to_plot=None, region_id="region_id",
-               y="value"):
+               y="value", cut=False):
     """
     Plot statistical results
     :param path_to_df: str
@@ -205,8 +205,12 @@ def stats_plot(path_to_df, cols_not_to_plot=None, region_id="region_id",
             g.map(sns.barplot, categorical_var, y, palette=PALETTE,
                   )
 
-        g.map(sns.violinplot, categorical_var, y, inner_kws=dict(box_width=5, whis_width=2, color="black"),
-              edgecolor="black", alpha=.7)
+        if cut:
+            g.map(sns.violinplot, categorical_var, y, inner_kws=dict(box_width=5, whis_width=2, color="black"),
+                  edgecolor="black", alpha=.7, cut=0)
+        else:
+            g.map(sns.violinplot, categorical_var, y, inner_kws=dict(box_width=5, whis_width=2, color="black"),
+                  edgecolor="black", alpha=.7)
         g.map(sns.stripplot, categorical_var, y, color="white", linewidth=1, edgecolor="black")
 
         # Rotate x-axis labels
