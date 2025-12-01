@@ -21,7 +21,7 @@ Done! You can move to Quick start.
 
 ### From github (alternative)
 
-Please make sure you have installed **python => 3.12**. Next, download the required packages:
+Please make sure you have installed **python ≥ 3.12**. Next, download the required packages:
 
 Python packages:
 
