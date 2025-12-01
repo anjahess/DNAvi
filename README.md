@@ -8,8 +8,8 @@ DNAvi: integration, analysis, and visualization of cell-free DNA fragment traces
 
 
 ## 1. Description
-DNAvi is an open-access software to integrate, analyze and visualize multiple cell-free DNA fragmentation profiles from liquid biopsies. It uses either gel images
-or automated gel electrophoresis device output tables (electropherograms). The tool was tested on a 32 GB memory local PC on Ubuntu 24.04.2 LTS, as well as on Windows 10 and MAC-OS.
+DNAvi is an open-source software to integrate, analyze and visualize multiple cell-free DNA fragmentation profiles from liquid biopsies. It uses either gel images
+or automated gel electrophoresis device output tables (electropherograms). The tool was tested on a 32 GB memory local PC on Ubuntu 24.04.2 LTS, as well as on Windows 10 and macOS.
 
 ## 2. Installation
 
@@ -21,7 +21,7 @@ Done! You can move to Quick start.
 
 ### From github (alternative)
 
-Please make sure you have installed **python => 3.12**. Next, download the required packages:
+Please make sure you have installed **python ≥ 3.12**. Next, download the required packages:
 
 Python packages:
 
@@ -55,7 +55,7 @@ Unpack or move the DNAvi folder to your location of choice and you're ready to s
 ### 3.1 Open the termial
 
 Linux: **Ctrl+Alt+T** \
-MAC: **Launchpad -> Search Terminal -> Click on Terminal** \
+macOS: **Launchpad -> Search Terminal -> Click on Terminal** \
 Windows: **Windows Symbol -> search cmd.exe -> Click cmd.exe** 
 
 
@@ -201,7 +201,7 @@ Special thanks to [Yara Matani](https://github.com/yaramt) and [Philine Guckelbe
 
 **Anja Hess<sup>1,2,3</sup>, Dominik Seelow<sup>1</sup>, and Helene Kretzmer<sup>2,4</sup>: 
 DNAvi: Integration, statistics, and visualization of cell-free DNA fragment traces (2025).**
-1. Center of Genomic Medicine, Berlin Institute of Health at Charité Universitätsmedizin Berlin, Berlin, Germany 
-2. Max Planck Institute for Molecular Genetics, Berlin, Germany
-3. Department of Biology, Chemistry and Pharmacy, Freie Universität Berlin, Berlin, Germany
-4. Digital Health Cluster, Hasso Plattner Institute for Digital Engineering, Digital Engineering Faculty, University of Potsdam, Potsdam, Germany
+1. [Center of Genomic Medicine](https://www.bihealth.org/de/forschung/sektionen/exploratory-diagnostic-sciences-eds/center-of-genomic-medicine), Berlin Institute of Health at Charité Universitätsmedizin Berlin, Berlin, Germany
+2. [Max Planck Institute for Molecular Genetics](https://www.molgen.mpg.de/), Berlin, Germany
+3. [Department of Biology, Chemistry and Pharmacy](https://www.bcp.fu-berlin.de/), Freie Universität Berlin, Berlin, Germany
+4. [Digital Health Cluster](https://hpi.de/forschung/cluster/digital-health/), Hasso Plattner Institute for Digital Engineering, Digital Engineering Faculty, University of Potsdam, Potsdam, Germany
