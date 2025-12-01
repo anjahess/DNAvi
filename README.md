@@ -9,7 +9,7 @@ DNAvi: integration, analysis, and visualization of cell-free DNA fragment traces
 
 ## 1. Description
 DNAvi is an open-source software to integrate, analyze and visualize multiple cell-free DNA fragmentation profiles from liquid biopsies. It uses either gel images
-or automated gel electrophoresis device output tables (electropherograms). The tool was tested on a 32 GB memory local PC on Ubuntu 24.04.2 LTS, as well as on Windows 10 and MAC-OS.
+or automated gel electrophoresis device output tables (electropherograms). The tool was tested on a 32 GB memory local PC on Ubuntu 24.04.2 LTS, as well as on Windows 10 and macOS.
 
 ## 2. Installation
 
@@ -55,7 +55,7 @@ Unpack or move the DNAvi folder to your location of choice and you're ready to s
 ### 3.1 Open the termial
 
 Linux: **Ctrl+Alt+T** \
-MAC: **Launchpad -> Search Terminal -> Click on Terminal** \
+macOS: **Launchpad -> Search Terminal -> Click on Terminal** \
 Windows: **Windows Symbol -> search cmd.exe -> Click cmd.exe** 
 
 
