@@ -147,7 +147,7 @@ def p2stars(p):
 
 
 def stats_plot(path_to_df, cols_not_to_plot=None, region_id="region_id",
-               y="value"):
+               y="value", cut=False):
     """
     Plot statistical results
     :param path_to_df: str
@@ -205,8 +205,12 @@ def stats_plot(path_to_df, cols_not_to_plot=None, region_id="region_id",
             g.map(sns.barplot, categorical_var, y, palette=PALETTE,
                   )
 
-        g.map(sns.violinplot, categorical_var, y, inner_kws=dict(box_width=5, whis_width=2, color="black"),
-              edgecolor="black", alpha=.7)
+        if cut:
+            g.map(sns.violinplot, categorical_var, y, inner_kws=dict(box_width=5, whis_width=2, color="black"),
+                  edgecolor="black", alpha=.7, cut=0)
+        else:
+            g.map(sns.violinplot, categorical_var, y, inner_kws=dict(box_width=5, whis_width=2, color="black"),
+                  edgecolor="black", alpha=.7)
         g.map(sns.stripplot, categorical_var, y, color="white", linewidth=1, edgecolor="black")
 
         # Rotate x-axis labels
@@ -218,7 +222,7 @@ def stats_plot(path_to_df, cols_not_to_plot=None, region_id="region_id",
 
 
 
-def peakplot(array, peaks, ladder_id, ref, i, qc_save_dir, y_label="",
+def peakplot(array, peaks, ladder_id, ref, i, qc_save_dir, y_label="",x_label="",
              size_values=""):
     """
 
@@ -231,8 +235,10 @@ def peakplot(array, peaks, ladder_id, ref, i, qc_save_dir, y_label="",
     :param i: int, index of the ladder (potentially multiple)
     :param qc_save_dir: str, path to folder to save the figure to
     :param y_label: str, y label name
+    :param x_label: str, x label name
     :return: plots are generated and saved to disk.
     """
+
 
     plt.plot(array)
     plt.plot(peaks, array[peaks], "x")
@@ -241,14 +247,19 @@ def peakplot(array, peaks, ladder_id, ref, i, qc_save_dir, y_label="",
     max_x = len(array) # relative val for label
     center_factor = max_x * 0.035 # labels look prettier when up
     if size_values:
-        for x, y in zip(peaks, array[peaks]):
-            real_pos = round(size_values[x])
-            plt.annotate(f"{real_pos} bp", xy=(x-center_factor, y+0.02))
+        for i, (x, y) in enumerate(zip(peaks, array[peaks])):
+            if type(x) != np.int64:
+                print(x, type(x))
+                real_pos = round(size_values[x])
+            else:
+                real_pos = size_values[i]
+            plt.annotate(f"{real_pos} bp", xy=(x-center_factor, y+0.04),
+                         size=7)
     plt.plot(np.zeros_like(array), "--", color="gray")
-    plt.title(ladder_id + f" {ref}")
+    plt.title(ladder_id)
     plt.xlim(10 ^ 0, None)
     plt.ylabel(y_label)
-    plt.xlabel("Relative position in gel (arbitrary units)")
+    plt.xlabel(x_label)
     plt.savefig(f"{qc_save_dir}peaks_{i}_{ref}.pdf")
     plt.close()
 

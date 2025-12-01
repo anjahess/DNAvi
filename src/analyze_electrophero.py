@@ -25,7 +25,7 @@ sys.path.insert(0, f"{maindir}/src")
 sys.path.insert(0, f"{maindir}/src")
 from constants import (YLABEL, YCOL, XCOL, XLABEL, DISTANCE, MIN_PEAK_HEIGHT_FACTOR, MAX_PEAK_WIDTH_FACTOR,
                        PEAK_PROMINENCE, NUC_DICT, BACKGROUND_SUBSTRACTION_STATS, ARTIFICIAL_MAX,
-                       INTERPOLATE_FUNCTION, LOGFILE_NAME, HALO_FACTOR)
+                       INTERPOLATE_FUNCTION, LOGFILE_NAME, HALO_FACTOR, XLABEL_PRIOR_SIZE)
 from plotting import lineplot, ladderplot, peakplot, gridplot, stats_plot
 from data_checks import check_file
 from utils import *
@@ -123,11 +123,6 @@ def peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL,
             print("--- Found markers: {}".format(markers))
         peak_dict[i] = [peak_annos, markers]
         ladder2type.update({ladder: i})
-        #################################################################
-        # 1.3 Plot intermed results
-        #################################################################
-        peakplot(array, peaks, ladder_id, i, i, qc_save_dir,
-                 y_label=y_label)
         ##################################################################
         # ---- SANITY CHECK ----- equals nr of detected peaks?
         ##################################################################
@@ -141,6 +136,13 @@ def peak2basepairs(df, qc_save_dir, y_label=YLABEL, x_label=XLABEL,
                      f"wrong position or if this is NOT a gel image.")
             print(error)
             exit()
+
+        #################################################################
+        # 1.3 Plot intermed results
+        #################################################################
+        peakplot(array, peaks, parsed_ladders[i], i, i, qc_save_dir,
+                 y_label=y_label, x_label=f"{XLABEL_PRIOR_SIZE} (before annotation)",
+                 size_values=peak_annos)
 
         #################################################################
         # 1.4 Integrate bp information into the df
@@ -712,7 +714,8 @@ def marker_and_normalize(df, peak_dict="", include_marker=False, normalize=True,
 
 
 def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="bp_pos",
-              metric_unit="value", nuc_dict=NUC_DICT, paired=False, region_id="region_id"):
+              metric_unit="value", nuc_dict=NUC_DICT, paired=False, region_id="region_id",
+              cut=False):
     """
 
     Compute and output basic statistics for DNA size distributions
@@ -806,7 +809,7 @@ def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="b
 
         # Plot the peaks for each sample
         peakplot(array, peaks, str(sample), "sample", str(sample), save_dir,
-                 y_label=unit, size_values=bp_positions)
+                 y_label=YLABEL, x_label=XLABEL_PRIOR_SIZE, size_values=bp_positions)
 
         # Get the fluorescence val for each peak
         peak_list = [array[e] for e in peaks.tolist()]
@@ -857,14 +860,14 @@ def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="b
     ######################################################################
     peak_df.to_csv(full_stats_dir)
     stats_plot(full_stats_dir, cols_not_to_plot=peak_columns, region_id=region_id,
-               y=metric_unit)
+               y=metric_unit, cut=cut)
     # END OF FUNCTION
 
 
 def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
                  include_marker=False, image_input=False, save_dir=False, marker_lane=0,
                  nuc_dict=NUC_DICT, paired=False, normalize=True, normalize_to=False,
-                 correct=False):
+                 correct=False, cut=False):
     """
     Core function to analyze DNA distribution from a signal table.
 
@@ -976,7 +979,8 @@ def epg_analysis(path_to_file, path_to_ladder, path_to_meta, run_id=None,
     print("------------------------------------------------------------")
     print("        Performing statistical analysis")
     print("------------------------------------------------------------")
-    epg_stats(df, save_dir=stats_dir, nuc_dict=nuc_dict, paired=paired)
+    epg_stats(df, save_dir=stats_dir, nuc_dict=nuc_dict, paired=paired,
+              cut=cut)
 
     # Time the basic modules
     t_mod2 = time.time()
