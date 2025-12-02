@@ -47,7 +47,6 @@ insufficient or if a smaller window of the DNA data shall be analysed. \
 Default value is 0 (= no additional cropping, only auto-detection). \ 
 It is suggested to start with values of 0.1 (will add 10% on top of the marker position)."""
 
-
 ARTIFICIAL_MAX=100000
 logging.info(ARTIFICIAL_MAX)
 """Int, artificial maximum base-pair position to interpolate positions beyond upper marker \
@@ -71,6 +70,9 @@ YLABEL = "Sample Intensity [Normalized FU]"
 XLABEL = "Size [bp]"
 """Standardized x label name"""
 XLABEL_PRIOR_SIZE= "Size"
+"""Standardized x label name before interpolation"""
+ALTERNATE_FORMAT = "svg"
+"""The second format apart from .pdf to save images to"""
 
 PALETTE = ["cadetblue","#fbc27b", "#d56763", "darkgrey","#a7c6c9", "#2d435b",
            "#d56763", "darkred", "#477b80", 'grey', "#d56763", "#bfcfcd", "#fbc27b", "#fbc27b", "#477b80",

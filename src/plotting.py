@@ -16,7 +16,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 from matplotlib.ticker import ScalarFormatter
-from src.constants import PALETTE
+from src.constants import PALETTE, ALTERNATE_FORMAT
 from matplotlib.patches import Patch
 import warnings; warnings.filterwarnings("ignore")
 
@@ -49,6 +49,7 @@ def gridplot(df, x, y, save_dir="", title="", y_label="", x_label="",
     # Log scale
     plt.xscale('log')
     plt.savefig(f"{save_dir}{title}_summary.pdf", bbox_inches='tight')
+    plt.savefig(f"{save_dir}{title}_summary.{ALTERNATE_FORMAT}", bbox_inches='tight')
     plt.close()
 
     #####################################################################
@@ -88,6 +89,7 @@ def gridplot(df, x, y, save_dir="", title="", y_label="", x_label="",
                    bbox_to_anchor=(1, 1),
                    bbox_transform=plt.gcf().transFigure, loc='upper right')
         plt.savefig(f"{save_dir}cluster_by_{col}.pdf", bbox_inches="tight")
+        plt.savefig(f"{save_dir}cluster_by_{col}.{ALTERNATE_FORMAT}", bbox_inches="tight")
         plt.close()
 
         #################################################################
@@ -107,6 +109,8 @@ def gridplot(df, x, y, save_dir="", title="", y_label="", x_label="",
         plt.xscale('log')
         plt.savefig(f"{save_dir}{title}_by_{col}.pdf",
                     bbox_inches='tight')
+        plt.savefig(f"{save_dir}{title}_by_{col}.{ALTERNATE_FORMAT}",
+                    bbox_inches='tight')
         plt.close()
 
 
@@ -125,6 +129,7 @@ def gridplot(df, x, y, save_dir="", title="", y_label="", x_label="",
     plt.suptitle(f"{title}")
     plt.xscale('log')
     plt.savefig(f"{save_dir}{title}.pdf")
+    plt.savefig(f"{save_dir}{title}.{ALTERNATE_FORMAT}")
     plt.close()
     # END OF FUNCTION
 
@@ -204,19 +209,21 @@ def stats_plot(path_to_df, cols_not_to_plot=None, region_id="region_id",
                               aspect=1.5)
             g.map(sns.barplot, categorical_var, y, palette=PALETTE,
                   )
-
-        if cut:
-            g.map(sns.violinplot, categorical_var, y, inner_kws=dict(box_width=5, whis_width=2, color="black"),
-                  edgecolor="black", alpha=.7, cut=0)
         else:
-            g.map(sns.violinplot, categorical_var, y, inner_kws=dict(box_width=5, whis_width=2, color="black"),
-                  edgecolor="black", alpha=.7)
-        g.map(sns.stripplot, categorical_var, y, color="white", linewidth=1, edgecolor="black")
+            if cut:
+                g.map(sns.violinplot, categorical_var, y, inner_kws=dict(box_width=5, whis_width=2, color="black"),
+                      edgecolor="black", alpha=.7, cut=0)
+            else:
+                g.map(sns.violinplot, categorical_var, y, inner_kws=dict(box_width=5, whis_width=2, color="black"),
+                      edgecolor="black", alpha=.7)
+            g.map(sns.stripplot, categorical_var, y, color="white", linewidth=1, edgecolor="black")
 
         # Rotate x-axis labels
         [plt.setp(ax.get_xticklabels(), rotation=90) for ax in g.axes.flat]
         plt.savefig(path_to_df.replace(".csv", f"_{categorical_var}.pdf"), bbox_inches="tight")
+        plt.savefig(path_to_df.replace(".csv", f"_{categorical_var}.{ALTERNATE_FORMAT}"), bbox_inches="tight")
         plt.close()
+    plt.close()
     # END OF FUNCTION
 
 
@@ -249,11 +256,10 @@ def peakplot(array, peaks, ladder_id, ref, i, qc_save_dir, y_label="",x_label=""
     if size_values:
         for i, (x, y) in enumerate(zip(peaks, array[peaks])):
             if type(x) != np.int64:
-                print(x, type(x))
                 real_pos = round(size_values[x])
             else:
                 real_pos = size_values[i]
-            plt.annotate(f"{real_pos} bp", xy=(x-center_factor, y+0.04),
+            plt.annotate(f"{round(real_pos,1)} bp", xy=(x-center_factor, y+0.04),
                          size=7)
     plt.plot(np.zeros_like(array), "--", color="gray")
     plt.title(ladder_id)
@@ -261,6 +267,7 @@ def peakplot(array, peaks, ladder_id, ref, i, qc_save_dir, y_label="",x_label=""
     plt.ylabel(y_label)
     plt.xlabel(x_label)
     plt.savefig(f"{qc_save_dir}peaks_{i}_{ref}.pdf")
+    plt.savefig(f"{qc_save_dir}peaks_{i}_{ref}.{ALTERNATE_FORMAT}")
     plt.close()
 
     # END OF FUNCTION
@@ -327,6 +334,7 @@ def lineplot(df, x, y, save_dir="", title="", y_label="", x_label="",
     if window:
         plt.xlim(window[0], window[1])
     plt.savefig(f"{save_dir}{title}.pdf")
+    plt.savefig(f"{save_dir}{title}.{ALTERNATE_FORMAT}")
     plt.close()
     # END OF FUNCTION
 
@@ -358,5 +366,6 @@ def ladderplot(df, ladder2type, qc_save_dir, y_label="", x_label=""):
     plt.ylabel(y_label)
     plt.xlabel(x_label)
     plt.savefig(f"{qc_save_dir}peaks_all_interpolated.pdf")
+    plt.savefig(f"{qc_save_dir}peaks_all_interpolated.{ALTERNATE_FORMAT}")
     plt.close()
     # END OF FUNCTION
