@@ -188,9 +188,6 @@ Which will result in a display of command line arguments with additional explana
                             the marker borders will be determined for each sample individually
       --verbose             increase output verbosity
       -v, --version         show program's version number and exit
-    
-    Version: 0.2, created by Anja Hess <github.com/anjahess>.
-
 
 
 ## 6. Acknowledgements
