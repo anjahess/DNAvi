@@ -449,7 +449,7 @@ def nuc_fractions(df, unit="", size_unit="", nuc_dict=NUC_DICT):
             sub_df = df[(df[size_unit] > start) & (df[size_unit] <= end)]
 
         # Calculate area under each nucleosomal mode
-        auc = np.trapz(y=sub_df[unit], x=sub_df[size_unit])
+        auc = np.trapezoid(y=sub_df[unit], x=sub_df[size_unit])
 
         # Calculate fraction of signal
         fraction_signal_range = sub_df[unit].sum() / sum_all

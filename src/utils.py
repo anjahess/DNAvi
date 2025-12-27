@@ -98,7 +98,7 @@ def distribution_stats(df, save_dir="", unit="normalized_fluorescent_units", siz
     #####################################################################
     skewness = pivoted.skew()
     entropy = pivoted.apply(stats.entropy, axis=0)
-    auc = pivoted.apply((lambda x: np.trapz(x, pivoted.index)))
+    auc = pivoted.apply((lambda x: np.trapezoid(x, pivoted.index)))
 
     #####################################################################
     # 2. Mean, median, modal fragment size
