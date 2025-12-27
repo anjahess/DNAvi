@@ -43,7 +43,7 @@ logging.info(f"--- RUN STARTED, {datetime.datetime.now()}")
 parser = argparse.ArgumentParser(description=
                                  'Analyse Electropherogram data '
                                  'e.g. for cell-free DNA from liquid biopsies',
-                                 epilog=f"""Version: 0.2, created by 
+                                 epilog=f"""Version: 0.0.0.0.2, created by 
                                  Anja Hess <github.com/anjahess>.""")
 
 #########################################################################
