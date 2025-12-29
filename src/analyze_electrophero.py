@@ -345,7 +345,11 @@ def remove_marker_from_df(df, peak_dict="", on="", correct_for_variant_samples=F
             ###############################################################
             valley_lists = []
             for sample in [e for e in df.columns if e != on]:
-                mins, _ = find_peaks(df[sample] * -1, distance=DISTANCE)
+                array = df[sample] * -1
+                max_peak = array.min()
+                min_peak_height = max_peak * MIN_PEAK_HEIGHT_FACTOR  # Define min peak height
+                mins, _ = find_peaks(df[sample] * -1, distance=DISTANCE,
+                                     height=min_peak_height)
                 valley_list = [df[on][e] for e in mins.tolist() if df[on][e] > lower_marker]
                 valley_lists.append(valley_list)
                 first_relevant_valley = valley_list[0]
@@ -374,8 +378,13 @@ def remove_marker_from_df(df, peak_dict="", on="", correct_for_variant_samples=F
         first_valleys = []
         last_valleys = []
         for sample in [e for e in df.columns if e != on]:
-            mins, _ = find_peaks(df[sample] * -1, distance=DISTANCE)
-            valley_list = [df[on][e] for e in mins.tolist() if lower_marker < df[on][e] < upper_marker]
+            array=df[sample] * -1
+            max_peak = array.min()
+            min_peak_height = max_peak * MIN_PEAK_HEIGHT_FACTOR  # Define min peak height
+            mins, _ = find_peaks(df[sample] * -1, distance=DISTANCE,
+                                 height=min_peak_height)
+            valley_list = [df[on][e] for e in mins.tolist()
+                           if lower_marker < df[on][e] < upper_marker]
             first_valleys.append(valley_list[0])
             last_valleys.append(valley_list[-1])
             if correct_for_variant_samples:
@@ -390,7 +399,8 @@ def remove_marker_from_df(df, peak_dict="", on="", correct_for_variant_samples=F
         upper_marker = min(last_valleys)
         print("--- Auto-detected marker cropping borders:", lower_marker,
               "and" , upper_marker)
-
+        logging.info("--- Auto-detected marker cropping borders:", lower_marker,
+              "and" , upper_marker)
         ###################################################################
         # (HALO: prev mode - left for recap purpose)
         ###################################################################
@@ -748,6 +758,9 @@ def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="b
     peak_columns = ["sample", region_id, "From [bp]", "To [bp]", "AUC", metric_unit, "unit"]
 
     for sample in df["sample"].unique():
+
+        print(f"--- Sample {sample}")
+
         # Select data for only this sample
         sub_df = df[df["sample"] == sample]
 
@@ -779,8 +792,8 @@ def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="b
         # 2.3 Short-to-long fragment ratio
         ##################################################################
         nuc_fractions_avail = nuc_df.index.tolist()
-        if "Short (100-400 bp)" in nuc_fractions_avail and "Long (> 401 bp)" in nuc_fractions_avail:
-            short = nuc_df.loc["Short (100-400 bp)"]["percent"]
+        if "Short II (100-400 bp)" in nuc_fractions_avail and "Long (> 401 bp)" in nuc_fractions_avail:
+            short = nuc_df.loc["Short II (100-400 bp)"]["percent"]
             long = nuc_df.loc["Long (> 401 bp)"]["percent"]
             s2l_ratio = short/long
             peak_info.append([sample, "short-to-long fragment ratio", np.nan, np.nan, np.nan,
@@ -796,12 +809,13 @@ def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="b
                           mode_bp, "bp"])
         peak_info.append([sample, "median_size", np.nan, np.nan, np.nan,
                           median_bp, "bp"])
+
         ##################################################################
         # 2.5 Peaks
         ##################################################################
         array = np.array(sub_df[unit].values.tolist())
         max_peak = array.max()
-        min_peak_height = max_peak * 0.2 # Define min peak height
+        min_peak_height = max_peak * MIN_PEAK_HEIGHT_FACTOR  # Define min peak height
         peaks, _ = find_peaks(array, distance=DISTANCE,  # n pos apart
                               height=min_peak_height, # minimum height
                               prominence=PEAK_PROMINENCE)
@@ -821,7 +835,7 @@ def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="b
         # 2.4 Assign the basepair position for each peak
         for i, peak in enumerate(peak_list):
             bp = sub_df.loc[sub_df[unit] == peak, size_unit].iloc[0]
-            peak_info.append([sample, f"peak_{i}",np.nan, np.nan, np.nan,
+            peak_info.append([sample, f"peak_{i}", np.nan, np.nan, np.nan,
                               round(bp,2), "bp"])
             if peak == max_peak:
                 peak_info.append([sample, "max_peak", np.nan, np.nan,np.nan,
