@@ -758,9 +758,6 @@ def epg_stats(df, save_dir="", unit="normalized_fluorescent_units", size_unit="b
     peak_columns = ["sample", region_id, "From [bp]", "To [bp]", "AUC", metric_unit, "unit"]
 
     for sample in df["sample"].unique():
-
-        print(f"--- Sample {sample}")
-
         # Select data for only this sample
         sub_df = df[df["sample"] == sample]
 
