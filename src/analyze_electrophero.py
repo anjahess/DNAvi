@@ -503,7 +503,7 @@ def run_stats(df, variable="", category="", paired=False, alpha=0.05,
                 continue
             stats_groups.append(group_data)
             stats_dict.update({str(group): group_data})
-            average_dict.update({str(group): float(statistics.mode(group_data))})
+            average_dict.update({str(group): float(statistics.mean(group_data))})
             mode_dict.update({str(group): float(statistics.mode(group_data))})
             median_dict.update({str(group): float(statistics.median(group_data))})
             names.append(str(group))
