@@ -399,8 +399,7 @@ def remove_marker_from_df(df, peak_dict="", on="", correct_for_variant_samples=F
         upper_marker = min(last_valleys)
         print("--- Auto-detected marker cropping borders:", lower_marker,
               "and" , upper_marker)
-        logging.info("--- Auto-detected marker cropping borders:", lower_marker,
-              "and" , upper_marker)
+        logging.info(f"--- Auto-detected marker cropping borders: {lower_marker} and {upper_marker}")
         ###################################################################
         # (HALO: prev mode - left for recap purpose)
         ###################################################################
