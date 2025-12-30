@@ -255,14 +255,16 @@ def peakplot(array, peaks, ladder_id, ref, i, qc_save_dir, y_label="",x_label=""
     center_factor = max_x * 0.035 # labels look prettier when up
     if size_values:
         for i, (x, y) in enumerate(zip(peaks, array[peaks])):
-            if type(x) != np.int64:
-                real_pos = round(size_values[x])
+            if len(size_values) == len(peaks):
+                # The size values are already translated
+                real_pos = round(size_values[i])
             else:
-                real_pos = size_values[i]
+                # Still need to infer the correct peak bp
+                real_pos = round(size_values[x])
             plt.annotate(f"{round(real_pos,1)} bp", xy=(x-center_factor, y+0.04),
                          size=7)
     plt.plot(np.zeros_like(array), "--", color="gray")
-    plt.title(f"{ladder_id}, sample {sample_id}")
+    plt.title(f"{ladder_id}")
     plt.xlim(10 ^ 0, None)
     plt.ylabel(y_label)
     plt.xlabel(x_label)
