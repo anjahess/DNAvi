@@ -246,7 +246,7 @@ def peakplot(array, peaks, ladder_id, ref, i, qc_save_dir, y_label="",x_label=""
     :return: plots are generated and saved to disk.
     """
 
-
+    sample_id = i
     plt.plot(array)
     plt.plot(peaks, array[peaks], "x")
 
@@ -262,12 +262,12 @@ def peakplot(array, peaks, ladder_id, ref, i, qc_save_dir, y_label="",x_label=""
             plt.annotate(f"{round(real_pos,1)} bp", xy=(x-center_factor, y+0.04),
                          size=7)
     plt.plot(np.zeros_like(array), "--", color="gray")
-    plt.title(ladder_id)
+    plt.title(f"{ladder_id}, sample {sample_id}")
     plt.xlim(10 ^ 0, None)
     plt.ylabel(y_label)
     plt.xlabel(x_label)
-    plt.savefig(f"{qc_save_dir}peaks_{i}_{ref}.pdf")
-    plt.savefig(f"{qc_save_dir}peaks_{i}_{ref}.{ALTERNATE_FORMAT}")
+    plt.savefig(f"{qc_save_dir}peaks_{sample_id}_{ref}.pdf")
+    plt.savefig(f"{qc_save_dir}peaks_{sample_id}_{ref}.{ALTERNATE_FORMAT}")
     plt.close()
 
     # END OF FUNCTION
