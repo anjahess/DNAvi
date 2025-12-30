@@ -36,14 +36,14 @@ logging.basicConfig(level=logging.INFO,
                     filename=f'{os.getcwd()}/{LOGFILE_NAME}',
                     filemode='w', force=True)
 logging.info(f"--- RUN STARTED, {datetime.datetime.now()}")
-
+version = "0.0.0.0.3"
 #########################################################################
 # Initiate Parser
 #########################################################################
 parser = argparse.ArgumentParser(description=
                                  'Analyse Electropherogram data '
                                  'e.g. for cell-free DNA from liquid biopsies',
-                                 epilog=f"""Version: 0.0.0.0.3, created by 
+                                 epilog=f"""Version:{version}, created by 
                                  Anja Hess <github.com/anjahess>.""")
 
 #########################################################################
@@ -151,7 +151,7 @@ parser.add_argument('-cut', '--cut',
 parser.add_argument("--verbose", help="increase output verbosity",
                     action="store_true")
 
-parser.add_argument('-v', '--version', action='version', version="v0.2")
+parser.add_argument('-v', '--version', action='version', version=version)
 
 #########################################################################
 # Args to variables
