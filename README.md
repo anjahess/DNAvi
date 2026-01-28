@@ -202,3 +202,6 @@ DNAvi: Integration, statistics, and visualization of cell-free DNA fragment trac
 2. [Max Planck Institute for Molecular Genetics](https://www.molgen.mpg.de/), Berlin, Germany
 3. [Department of Biology, Chemistry and Pharmacy](https://www.bcp.fu-berlin.de/), Freie Universität Berlin, Berlin, Germany
 4. [Digital Health Cluster](https://hpi.de/forschung/cluster/digital-health/), Hasso Plattner Institute for Digital Engineering, Digital Engineering Faculty, University of Potsdam, Potsdam, Germany
+
+## 8. Source data
+Source data to the above publication is available in this repository in the sourcedata directory.

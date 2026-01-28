@@ -1,0 +1,20 @@
+Source data for Supplementary Figure 1.
+
+Please not that raw images are available from the original publications:
+1. Lin L-H, Chang K-W, Kao S-Y et al. Increased Plasma Circulating Cell-Free DNA Could Be a Potential Marker for Oral Cancer. International Journal of Molecular Sciences 2018;19:3303.
+2. Trinidad EM, Juan-Ribelles A, Pisano G et al. Evaluation of circulating tumor DNA by electropherogram analysis and methylome profiling in high-risk neuroblastomas. Front Oncol 2023;13, DOI: 10.3389/fonc.2023.1037342.
+3. Suzawa K, Yamamoto H, Ohashi K et al. Optimal method for quantitative detection of plasma EGFR T790M mutation using droplet digital PCR system. Oncology Reports 2017;37:3100–6.
+
+To reproduce results, please run with these commands:
+
+# Cells - Run with per-sample marker cropping (--correct)
+python3 DNAvi.py -i tests/electropherogram.csv -l tests/ladder.csv -m tests/metadata.csv --correct
+
+# Suzawa 2017
+python3 DNAvi.py -i tests/Suzawa_2017.png -l tests/ladder_lin_trinidad_suzawa.csv -m tests/metadata_suzawa.csv
+
+# Trinidad 2023 - Run paired!
+python3 DNAvi.py -i tests/Trinidad_2023.jpg -l tests/ladder_lin_trinidad_suzawa.csv -m tests/metadata_trinidad.csv --paired
+
+# Lin 2018
+python3 DNAvi.py -i tests/Lin_2018.jpg -l tests/ladder_lin_trinidad_suzawa.csv -m tests/metadata_lin.csv

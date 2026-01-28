@@ -1,0 +1,129 @@
+,peak_name,test_performed,p_value,p<0.05,posthoc_p_values,unique_peak,average,modal,median,groups
+0,Entropy,Kruskal-Wallis with bonferroni correction,0.0014643910485082178,True,"             Cell type A  Cell type B  Cell type C
+condition                                         
+Cell type A     1.000000     0.069309     0.000014
+Cell type B     0.069309     1.000000     0.001469
+Cell type C     0.000014     0.001469     1.000000",False,"{'Cell type A': 5.8759968372868405, 'Cell type B': 5.852657371931137, 'Cell type C': 5.550839661361324}","{'Cell type A': 5.8759968372868405, 'Cell type B': 5.852657371931137, 'Cell type C': 5.550839661361324}","{'Cell type A': 5.900571972209799, 'Cell type B': 5.850394112751744, 'Cell type C': 5.605305377649459}","{'Cell type A': [5.8759968372868405, 6.020575558687364, 5.880344740430392, 5.8891277206123664, 5.912016223807232, 5.9127085010375815], 'Cell type B': [5.852657371931137, 5.866005673056482, 5.84813085357235, 5.8055615608101085, 6.048360151767472, 5.7916342984919105], 'Cell type C': [5.550839661361324, 5.711404051829968, 5.7529726662673, 5.49914119406623, 5.659771093937594, 5.519946568158105]}"
+1,Skewness,one-way ANOVA with bonferroni correction,0.00015359493396337136,True,"             Cell type A  Cell type B  Cell type C
+condition                                         
+Cell type A     1.000000     0.198002     0.000039
+Cell type B     0.198002     1.000000     0.001672
+Cell type C     0.000039     0.001672     1.000000",False,"{'Cell type A': -0.2299416768642342, 'Cell type B': 0.18100457318394336, 'Cell type C': 1.437009132540247}","{'Cell type A': -0.2299416768642342, 'Cell type B': 0.18100457318394336, 'Cell type C': 1.437009132540247}","{'Cell type A': -0.015735960666842144, 'Cell type B': 0.40378873757296463, 'Cell type C': 1.3736161711839348}","{'Cell type A': [-0.2299416768642342, -0.230828044497198, 0.08538915483401861, -0.1168610761677029, 0.2660852572733554, 0.3106873204772048], 'Cell type B': [0.18100457318394336, 0.40157381177399987, 0.5672923231976456, 1.2075640129733816, -0.9328622929531504, 0.40600366337192934], 'Cell type C': [1.437009132540247, 1.3102232098276227, 1.558358919728187, 1.4699734466324583, 1.295715277148647, 1.2432489499704324]}"
+2,AUC (total),Kruskal-Wallis with bonferroni correction,0.004320239474094075,True,"             Cell type A  Cell type B  Cell type C
+condition                                         
+Cell type A     1.000000     0.080047     0.000344
+Cell type B     0.080047     1.000000     0.048303
+Cell type C     0.000344     0.048303     1.000000",False,"{'Cell type A': 240.91275236124642, 'Cell type B': 171.46046330335062, 'Cell type C': 114.54794872653564}","{'Cell type A': 240.91275236124642, 'Cell type B': 171.46046330335062, 'Cell type C': 114.54794872653564}","{'Cell type A': 225.10243587415545, 'Cell type B': 163.48941526687463, 'Cell type C': 122.93946707101708}","{'Cell type A': [240.91275236124642, 228.61571795741497, 221.58915379089592, 243.2663706044926, 217.79981363737554, 216.70647690531217], 'Cell type B': [171.46046330335062, 159.9129879955813, 143.99915438295105, 112.90684125918521, 321.04038069625886, 167.06584253816794], 'Cell type C': [114.54794872653564, 128.9443688663605, 128.42955805441983, 110.60530503158924, 126.19680373934128, 119.68213040269286]}"
+3,Mononucleosomal (100-200 bp),one-way ANOVA with bonferroni correction,1.3548296364138762e-10,True,"             Cell type A  Cell type B  Cell type C
+condition                                         
+Cell type A     1.000000     0.069309     0.001469
+Cell type B     0.069309     1.000000     0.000014
+Cell type C     0.001469     0.000014     1.000000",False,"{'Cell type A': 10.8, 'Cell type B': 2.3, 'Cell type C': 31.7}","{'Cell type A': 10.8, 'Cell type B': 2.3, 'Cell type C': 31.7}","{'Cell type A': 6.95, 'Cell type B': 3.8499999999999996, 'Cell type C': 27.200000000000003}","{'Cell type A': [10.8, 11.0, 7.2, 6.7, 5.1, 4.8], 'Cell type B': [2.3, 3.4, 4.1, 3.6, 7.7, 5.4], 'Cell type C': [31.7, 24.9, 25.1, 31.2, 26.6, 27.8]}"
+4,Dinucleosomal (201-400 bp),Kruskal-Wallis with bonferroni correction,0.0006271849994872388,True,"             Cell type A   Cell type B   Cell type C
+condition                                           
+Cell type A     1.000000  7.809879e-04  3.462109e-04
+Cell type B     0.000781  1.000000e+00  1.688965e-07
+Cell type C     0.000346  1.688965e-07  1.000000e+00",False,"{'Cell type A': 14.4, 'Cell type B': 1.6, 'Cell type C': 32.9}","{'Cell type A': 14.4, 'Cell type B': 1.6, 'Cell type C': 32.9}","{'Cell type A': 11.7, 'Cell type B': 1.1, 'Cell type C': 28.25}","{'Cell type A': [14.4, 10.9, 12.5, 14.8, 10.0, 8.5], 'Cell type B': [1.6, 2.2, 0.6, 0.0, 9.2, 0.5], 'Cell type C': [32.9, 28.1, 21.8, 25.3, 29.4, 28.4]}"
+5,Trinucleosomal (401-600 bp),one-way ANOVA with bonferroni correction,1.7876612932205814e-05,True,"             Cell type A  Cell type B  Cell type C
+condition                                         
+Cell type A     1.000000     0.000218     0.519376
+Cell type B     0.000218     1.000000     0.003637
+Cell type C     0.519376     0.003637     1.000000",False,"{'Cell type A': 12.8, 'Cell type B': 3.3, 'Cell type C': 10.1}","{'Cell type A': 12.8, 'Cell type B': 3.3, 'Cell type C': 10.1}","{'Cell type A': 11.8, 'Cell type B': 2.6, 'Cell type C': 10.55}","{'Cell type A': [12.8, 8.6, 12.6, 14.8, 11.0, 9.9], 'Cell type B': [3.3, 3.2, 2.0, 0.7, 7.1, 0.5], 'Cell type C': [10.1, 11.0, 5.9, 8.4, 11.7, 11.2]}"
+6,Tetranucleosomal (601-800 bp),one-way ANOVA with bonferroni correction,6.822946870497562e-07,True,"             Cell type A  Cell type B  Cell type C
+condition                                         
+Cell type A     1.000000     0.000357     0.001216
+Cell type B     0.000357     1.000000     1.000000
+Cell type C     0.001216     1.000000     1.000000",False,"{'Cell type A': 10.8, 'Cell type B': 4.6, 'Cell type C': 3.2}","{'Cell type A': 10.8, 'Cell type B': 4.6, 'Cell type C': 3.2}","{'Cell type A': 10.75, 'Cell type B': 4.05, 'Cell type C': 4.55}","{'Cell type A': [10.8, 7.5, 11.7, 12.4, 10.7, 10.1], 'Cell type B': [4.6, 4.3, 3.8, 3.0, 6.0, 2.9], 'Cell type C': [3.2, 5.1, 3.0, 4.0, 5.8, 5.4]}"
+7,Pentanucleosomal (801-1000 bp),Kruskal-Wallis with bonferroni correction,0.0005110989388394336,True,"              Cell type A  Cell type B   Cell type C
+condition                                           
+Cell type A  1.000000e+00     0.000165  3.690810e-08
+Cell type B  1.652806e-04     1.000000  1.652806e-04
+Cell type C  3.690810e-08     0.000165  1.000000e+00",False,"{'Cell type A': 9.4, 'Cell type B': 5.0, 'Cell type C': 0.0}","{'Cell type A': 9.4, 'Cell type B': 5.0, 'Cell type C': 0.0}","{'Cell type A': 9.75, 'Cell type B': 4.4, 'Cell type C': 2.95}","{'Cell type A': [9.4, 6.8, 10.4, 10.3, 10.0, 9.5], 'Cell type B': [5.0, 4.5, 4.3, 4.2, 5.3, 3.7], 'Cell type C': [0.0, 3.2, 2.9, 0.1, 3.4, 3.0]}"
+8,Hexanucleosomal (1001-1200 bp),one-way ANOVA with bonferroni correction,1.981803996205191e-08,True,"              Cell type A  Cell type B   Cell type C
+condition                                           
+Cell type A  1.000000e+00      0.00015  3.242050e-08
+Cell type B  1.495523e-04      1.00000  1.495523e-04
+Cell type C  3.242050e-08      0.00015  1.000000e+00",False,"{'Cell type A': 8.2, 'Cell type B': 4.4, 'Cell type C': 0.0}","{'Cell type A': 8.2, 'Cell type B': 4.4, 'Cell type C': 0.0}","{'Cell type A': 8.5, 'Cell type B': 4.55, 'Cell type C': 1.75}","{'Cell type A': [8.2, 6.3, 9.1, 8.3, 9.0, 8.7], 'Cell type B': [5.2, 4.6, 4.5, 4.4, 5.0, 4.4], 'Cell type C': [0.0, 2.6, 2.9, 0.0, 2.3, 1.2]}"
+9,Heptanucleosomal (1201-1400 bp),Kruskal-Wallis with bonferroni correction,0.0004836758369055567,True,"              Cell type A  Cell type B   Cell type C
+condition                                           
+Cell type A  1.000000e+00     0.000115  2.315472e-08
+Cell type B  1.151508e-04     1.000000  1.151508e-04
+Cell type C  2.315472e-08     0.000115  1.000000e+00",False,"{'Cell type A': 7.8, 'Cell type B': 4.7, 'Cell type C': 0.0}","{'Cell type A': 7.8, 'Cell type B': 4.7, 'Cell type C': 0.0}","{'Cell type A': 7.4, 'Cell type B': 4.65, 'Cell type C': 0.65}","{'Cell type A': [7.1, 5.8, 7.7, 6.8, 7.8, 7.8], 'Cell type B': [5.2, 4.7, 4.6, 4.5, 4.7, 4.6], 'Cell type C': [0.0, 2.2, 3.0, 0.0, 1.3, 0.0]}"
+10,Octanucleosomal (1401-1600 bp),Kruskal-Wallis with bonferroni correction,0.0004647638219356689,True,"              Cell type A  Cell type B   Cell type C
+condition                                           
+Cell type A  1.000000e+00     0.000087  1.622003e-08
+Cell type B  8.710130e-05     1.000000  8.710130e-05
+Cell type C  1.622003e-08     0.000087  1.000000e+00",False,"{'Cell type A': 6.0, 'Cell type B': 5.3, 'Cell type C': 0.0}","{'Cell type A': 6.0, 'Cell type B': 5.3, 'Cell type C': 0.0}","{'Cell type A': 6.95, 'Cell type B': 5.25, 'Cell type C': 0.0}","{'Cell type A': [6.7, 6.0, 7.2, 6.0, 7.3, 7.7], 'Cell type B': [5.8, 5.3, 5.3, 4.9, 5.0, 5.2], 'Cell type C': [0.0, 2.1, 3.2, 0.0, 0.0, 0.0]}"
+11,Nonanucleosomal (1601-1800 bp),Kruskal-Wallis with bonferroni correction,0.001561155905363228,True,"             Cell type A  Cell type B  Cell type C
+condition                                         
+Cell type A     1.000000     0.131336     0.000019
+Cell type B     0.131336     1.000000     0.001127
+Cell type C     0.000019     0.001127     1.000000",False,"{'Cell type A': 5.1, 'Cell type B': 5.0, 'Cell type C': 0.0}","{'Cell type A': 5.1, 'Cell type B': 5.0, 'Cell type C': 0.0}","{'Cell type A': 5.3, 'Cell type B': 5.0, 'Cell type C': 0.0}","{'Cell type A': [5.1, 5.1, 5.5, 4.6, 5.8, 6.2], 'Cell type B': [5.5, 5.0, 5.0, 4.6, 4.6, 5.0], 'Cell type C': [0.0, 1.7, 2.9, 0.0, 0.0, 0.0]}"
+12,Decanucleosomal (1801-2000 bp),Kruskal-Wallis with bonferroni correction,0.0018671988058405627,True,"             Cell type A  Cell type B  Cell type C
+condition                                         
+Cell type A     1.000000     0.230227     0.001399
+Cell type B     0.230227     1.000000     0.000039
+Cell type C     0.001399     0.000039     1.000000",False,"{'Cell type A': 4.1, 'Cell type B': 5.5, 'Cell type C': 0.0}","{'Cell type A': 4.1, 'Cell type B': 5.5, 'Cell type C': 0.0}","{'Cell type A': 4.6, 'Cell type B': 5.15, 'Cell type C': 0.0}","{'Cell type A': [4.1, 4.7, 4.5, 3.8, 4.9, 5.5], 'Cell type B': [5.5, 5.1, 5.2, 4.8, 4.6, 5.3], 'Cell type C': [0.0, 1.6, 2.7, 0.0, 0.0, 0.0]}"
+13,Polynucleosomal (2001-7000 bp),Kruskal-Wallis with bonferroni correction,0.0005071129188713245,True,"             Cell type A   Cell type B   Cell type C
+condition                                           
+Cell type A     1.000000  1.572691e-04  1.572691e-04
+Cell type B     0.000157  1.000000e+00  3.460347e-08
+Cell type C     0.000157  3.460347e-08  1.000000e+00",False,"{'Cell type A': 8.8, 'Cell type B': 56.0, 'Cell type C': 0.0}","{'Cell type A': 8.8, 'Cell type B': 56.0, 'Cell type C': 0.0}","{'Cell type A': 14.299999999999999, 'Cell type B': 58.8, 'Cell type C': 0.30000000000000004}","{'Cell type A': [8.8, 25.9, 10.7, 10.5, 17.9, 20.9], 'Cell type B': [56.0, 57.4, 60.2, 64.8, 39.2, 61.0], 'Cell type C': [0.0, 1.6, 6.8, 0.4, 0.2, 0.0]}"
+14,Non-mono (> 250 bp),one-way ANOVA with bonferroni correction,3.805289207730126e-11,True,"             Cell type A  Cell type B  Cell type C
+condition                                         
+Cell type A     1.000000     0.069309     0.001469
+Cell type B     0.069309     1.000000     0.000014
+Cell type C     0.001469     0.000014     1.000000",False,"{'Cell type A': 84.1, 'Cell type B': 97.6, 'Cell type C': 34.4}","{'Cell type A': 84.1, 'Cell type B': 97.6, 'Cell type C': 34.4}","{'Cell type A': 89.19999999999999, 'Cell type B': 95.65, 'Cell type C': 41.2}","{'Cell type A': [84.1, 85.1, 89.3, 89.1, 92.9, 93.6], 'Cell type B': [97.6, 96.3, 95.4, 95.9, 88.4, 92.6], 'Cell type C': [34.4, 49.6, 46.4, 27.9, 43.5, 38.9]}"
+15,Oligo (> 1250 bp),Kruskal-Wallis with bonferroni correction,0.0005071129188713245,True,"             Cell type A   Cell type B   Cell type C
+condition                                           
+Cell type A     1.000000  1.572691e-04  1.572691e-04
+Cell type B     0.000157  1.000000e+00  3.460347e-08
+Cell type C     0.000157  3.460347e-08  1.000000e+00",False,"{'Cell type A': 30.0, 'Cell type B': 76.8, 'Cell type C': 0.0}","{'Cell type A': 30.0, 'Cell type B': 76.8, 'Cell type C': 0.0}","{'Cell type A': 37.849999999999994, 'Cell type B': 78.1, 'Cell type C': 0.75}","{'Cell type A': [30.0, 46.2, 33.8, 30.1, 41.9, 46.3], 'Cell type B': [76.8, 76.5, 79.4, 82.6, 57.1, 80.1], 'Cell type C': [0.0, 8.7, 17.9, 0.4, 1.1, 0.0]}"
+16,Mitochondrial/TF,Kruskal-Wallis with bonferroni correction,0.0027967050585645486,True,"             Cell type A  Cell type B  Cell type C
+condition                                         
+Cell type A     1.000000     0.988591     0.001421
+Cell type B     0.988591     1.000000     0.000201
+Cell type C     0.001421     0.000201     1.000000",False,"{'Cell type A': 1.4, 'Cell type B': 0.0, 'Cell type C': 20.3}","{'Cell type A': 1.4, 'Cell type B': 0.0, 'Cell type C': 20.3}","{'Cell type A': 0.55, 'Cell type B': 0.30000000000000004, 'Cell type C': 19.4}","{'Cell type A': [1.4, 0.9, 0.5, 0.6, 0.3, 0.2], 'Cell type B': [0.0, 0.0, 0.2, 0.4, 1.3, 1.3], 'Cell type C': [20.3, 14.6, 18.5, 29.0, 17.8, 21.5]}"
+17,Short (100-400 bp),Kruskal-Wallis with bonferroni correction,0.0007606885487011675,True,"             Cell type A   Cell type B   Cell type C
+condition                                           
+Cell type A     1.000000  2.689817e-03  5.766605e-04
+Cell type B     0.002690  1.000000e+00  5.663616e-07
+Cell type C     0.000577  5.663616e-07  1.000000e+00",False,"{'Cell type A': 25.5, 'Cell type B': 3.9, 'Cell type C': 65.5}","{'Cell type A': 25.5, 'Cell type B': 3.9, 'Cell type C': 65.5}","{'Cell type A': 20.799999999999997, 'Cell type B': 5.25, 'Cell type C': 56.9}","{'Cell type A': [25.5, 22.1, 19.9, 21.7, 15.2, 13.4], 'Cell type B': [3.9, 5.8, 4.7, 3.6, 17.1, 6.0], 'Cell type C': [65.5, 53.6, 47.6, 57.3, 56.8, 57.0]}"
+18,Long (> 401 bp),Kruskal-Wallis with bonferroni correction,0.0007606885487011675,True,"             Cell type A   Cell type B   Cell type C
+condition                                           
+Cell type A     1.000000  2.689817e-03  5.766605e-04
+Cell type B     0.002690  1.000000e+00  5.663616e-07
+Cell type C     0.000577  5.663616e-07  1.000000e+00",False,"{'Cell type A': 73.0, 'Cell type B': 96.1, 'Cell type C': 13.3}","{'Cell type A': 73.0, 'Cell type B': 96.1, 'Cell type C': 13.3}","{'Cell type A': 78.55, 'Cell type B': 94.55000000000001, 'Cell type C': 22.7}","{'Cell type A': [73.0, 76.9, 79.5, 77.6, 84.4, 86.4], 'Cell type B': [96.1, 94.2, 94.9, 95.9, 81.5, 92.6], 'Cell type C': [13.3, 31.1, 33.2, 12.8, 24.7, 20.7]}"
+19,potential gDNA (>1kB),Kruskal-Wallis with bonferroni correction,0.0005110989388394336,True,"             Cell type A   Cell type B   Cell type C
+condition                                           
+Cell type A     1.000000  1.652806e-04  1.652806e-04
+Cell type B     0.000165  1.000000e+00  3.690810e-08
+Cell type C     0.000165  3.690810e-08  1.000000e+00",False,"{'Cell type A': 39.9, 'Cell type B': 83.2, 'Cell type C': 0.0}","{'Cell type A': 39.9, 'Cell type B': 83.2, 'Cell type C': 0.0}","{'Cell type A': 48.75, 'Cell type B': 84.05000000000001, 'Cell type C': 2.5}","{'Cell type A': [39.9, 53.8, 44.7, 40.0, 52.8, 56.9], 'Cell type B': [83.2, 82.2, 84.9, 88.0, 63.2, 85.6], 'Cell type C': [0.0, 11.8, 21.4, 0.4, 3.8, 1.2]}"
+20,short-to-long fragment ratio,Kruskal-Wallis with bonferroni correction,0.0007606885487011675,True,"             Cell type A   Cell type B   Cell type C
+condition                                           
+Cell type A     1.000000  2.689817e-03  5.766605e-04
+Cell type B     0.002690  1.000000e+00  5.663616e-07
+Cell type C     0.000577  5.663616e-07  1.000000e+00",False,"{'Cell type A': 0.3493150684931507, 'Cell type B': 0.04058272632674298, 'Cell type C': 4.924812030075188}","{'Cell type A': 0.3493150684931507, 'Cell type B': 0.04058272632674298, 'Cell type C': 4.924812030075188}","{'Cell type A': 0.2649768203332685, 'Cell type B': 0.05554847095724855, 'Cell type C': 2.526609165053101}","{'Cell type A': [0.3493150684931507, 0.28738621586475943, 0.25031446540880503, 0.27963917525773196, 0.1800947867298578, 0.1550925925925926], 'Cell type B': [0.04058272632674298, 0.061571125265392775, 0.04952581664910432, 0.037539103232533885, 0.2098159509202454, 0.06479481641468683], 'Cell type C': [4.924812030075188, 1.7234726688102893, 1.433734939759036, 4.476562499999999, 2.299595141700405, 2.7536231884057973]}"
+21,average_size,Kruskal-Wallis with bonferroni correction,0.0005110989388394336,True,"             Cell type A   Cell type B   Cell type C
+condition                                           
+Cell type A     1.000000  1.652806e-04  1.652806e-04
+Cell type B     0.000165  1.000000e+00  3.690810e-08
+Cell type C     0.000165  3.690810e-08  1.000000e+00",False,"{'Cell type A': 980.52, 'Cell type B': 2447.1, 'Cell type C': 411.2}","{'Cell type A': 980.52, 'Cell type B': 2447.1, 'Cell type C': 411.2}","{'Cell type A': 1188.63, 'Cell type B': 2518.49, 'Cell type C': 456.78}","{'Cell type A': [980.52, 1431.14, 1099.72, 1039.63, 1277.54, 1365.42], 'Cell type B': [2447.1, 2489.05, 2547.93, 2699.42, 1850.83, 2582.09], 'Cell type C': [411.2, 518.47, 633.62, 412.38, 501.18, 363.06]}"
+22,modal_size,Kruskal-Wallis with bonferroni correction,0.0005887552473364425,True,"             Cell type A   Cell type B   Cell type C
+condition                                           
+Cell type A     1.000000  2.023982e-04  7.110950e-04
+Cell type B     0.000202  1.000000e+00  1.096274e-07
+Cell type C     0.000711  1.096274e-07  1.000000e+00",False,"{'Cell type A': 1266.1, 'Cell type B': 6453.4, 'Cell type C': 148.3}","{'Cell type A': 1266.1, 'Cell type B': 6453.4, 'Cell type C': 148.3}","{'Cell type A': 1156.9, 'Cell type B': 6453.4, 'Cell type C': 145.3}","{'Cell type A': [1266.1, 154.4, 1146.4, 982.0, 1167.4, 1369.1], 'Cell type B': [6453.4, 6453.4, 6453.4, 6453.4, 1725.9, 6453.4], 'Cell type C': [148.3, 154.4, 125.3, 128.0, 170.5, 142.3]}"
+23,median_size,one-way ANOVA with bonferroni correction,5.163093736501196e-10,True,"             Cell type A   Cell type B   Cell type C
+condition                                           
+Cell type A     1.000000  1.572691e-04  1.572691e-04
+Cell type B     0.000157  1.000000e+00  3.460347e-08
+Cell type C     0.000157  3.460347e-08  1.000000e+00",False,"{'Cell type A': 799.5, 'Cell type B': 2197.5, 'Cell type C': 233.3}","{'Cell type A': 799.5, 'Cell type B': 2197.5, 'Cell type C': 233.3}","{'Cell type A': 984.75, 'Cell type B': 2313.6, 'Cell type C': 223.35000000000002}","{'Cell type A': [799.5, 1115.6, 913.3, 813.5, 1056.2, 1156.9], 'Cell type B': [2197.5, 2274.2, 2353.0, 2533.6, 1536.6, 2417.5], 'Cell type C': [213.4, 256.7, 233.3, 173.8, 233.3, 206.8]}"
+24,peak_0,Kruskal-Wallis,0.3225204558826247,False,,False,"{'Cell type A': 154.45, 'Cell type B': 157.58, 'Cell type C': 148.3}","{'Cell type A': 154.45, 'Cell type B': 157.58, 'Cell type C': 148.3}","{'Cell type A': 154.45, 'Cell type B': 152.94, 'Cell type C': 145.305}","{'Cell type A': [145.29, 154.45, 157.58, 981.95, 154.45, 151.36], 'Cell type B': [157.58, 148.3], 'Cell type C': [148.3, 154.45, 125.28, 128.02, 170.48, 142.31]}"
+25,peak_1,None (peak unique to group),1.0,,,True,{'Cell type A': 1266.09},{'Cell type A': 1266.09},{'Cell type A': 1167.44},"{'Cell type A': [1266.09, 359.03, 1146.44, 1167.44, 1369.12]}"
+26,max_peak,Kruskal-Wallis with bonferroni correction,0.01782370615309177,True,"             Cell type A  Cell type B  Cell type C
+condition                                         
+Cell type A     1.000000     0.174201     0.004631
+Cell type B     0.174201     1.000000     1.000000
+Cell type C     0.004631     1.000000     1.000000",False,"{'Cell type A': 1266.09, 'Cell type B': 157.58, 'Cell type C': 148.3}","{'Cell type A': 1266.09, 'Cell type B': 157.58, 'Cell type C': 148.3}","{'Cell type A': 1156.94, 'Cell type B': 152.94, 'Cell type C': 145.305}","{'Cell type A': [1266.09, 154.45, 1146.44, 981.95, 1167.44, 1369.12], 'Cell type B': [157.58, 148.3], 'Cell type C': [148.3, 154.45, 125.28, 128.02, 170.48, 142.31]}"
+27,peak_2,None (peak unique to group),1.0,,,True,{'Cell type A': 1536.64},{'Cell type A': 1536.64},{'Cell type A': 1536.64},{'Cell type A': [1536.64]}
