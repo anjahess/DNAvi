@@ -194,14 +194,10 @@ Which will result in a display of command line arguments with additional explana
 
 Special thanks to [Yara Matani](https://github.com/yaramt) and [Philine Guckelberger](https://github.com/philinegu) for testing DNAvi!
 
-## 7. Citation
 
-**Anja Hess<sup>1,2,3</sup>, Dominik Seelow<sup>1</sup>, and Helene Kretzmer<sup>2,4</sup>: 
-DNAvi: Integration, statistics, and visualization of cell-free DNA fragment traces (2025).**
-1. [Center of Genomic Medicine](https://www.bihealth.org/de/forschung/sektionen/exploratory-diagnostic-sciences-eds/center-of-genomic-medicine), Berlin Institute of Health at Charité Universitätsmedizin Berlin, Berlin, Germany
-2. [Max Planck Institute for Molecular Genetics](https://www.molgen.mpg.de/), Berlin, Germany
-3. [Department of Biology, Chemistry and Pharmacy](https://www.bcp.fu-berlin.de/), Freie Universität Berlin, Berlin, Germany
-4. [Digital Health Cluster](https://hpi.de/forschung/cluster/digital-health/), Hasso Plattner Institute for Digital Engineering, Digital Engineering Faculty, University of Potsdam, Potsdam, Germany
+## 7. Source data
+Source data to the publication below is available in this repository in the sourcedata directory.
 
-## 8. Source data
-Source data to the above publication is available in this repository in the sourcedata directory.
+## 8. Citation
+Please cite DNAvi as:
+**Hess, A., Seelow, D. & Kretzmer, H. DNAvi: Integration, statistics, and visualization of cell-free DNA fragment traces. Bioinformatics (2026) doi:10.1093/bioinformatics/btag041.**
